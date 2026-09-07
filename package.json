@@ -46,12 +46,5 @@
     "typescript-eslint": "^8.69.0",
     "unist-util-visit": "^5.1.0"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp",
-      "@resvg/resvg-js"
-    ]
-  },
-  "packageManager": "pnpm@10.28.0"
+  "packageManager": "pnpm@12.3.4"
 }

@@ -6,7 +6,7 @@
 FROM node:26-alpine AS build
 WORKDIR /app
 # Node 25+ no longer bundles Corepack; pin the pnpm major from pnpm-lock.yaml.
-RUN npm install -g pnpm@10
+RUN npm install -g pnpm@12
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
