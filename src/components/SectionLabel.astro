@@ -11,4 +11,5 @@ const { index, label, class: className } = Astro.props
 
 <div class:list={['lg:sticky lg:top-20', className]}>
   <Eyebrow index={index} label={label} />
+  <slot />
 </div>

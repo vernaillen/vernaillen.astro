@@ -11,32 +11,35 @@ const page = await getEntry('pages', 'about')
 const data = page!.data as AboutPage
 const { Content } = await render(page!)
 
-const images = await Promise.all(
-  data.images.map(async (image) => ({ ...image, asset: await localImage(image.src) })),
-)
-const validImages = images.filter((image) => image.asset)
-const photoColsClass = validImages.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'
+// The first entry of `images` is the portrait. The remaining entries fed the
+// source site's polaroid strip (project logos) and are deliberately not shown.
+const [portrait] = data.images
+const portraitAsset = portrait && (await localImage(portrait.src))
 ---
 
 <Base title={data.title} description={data.description} path="/about">
   <Masthead index="01" label="about" title={data.title} description={data.description} />
 
-  {validImages.length > 0 && (
-    <div class:list={['grid gap-px bg-(--color-border) border-b border-(--color-border)', photoColsClass]}>
-      {validImages.map((image) => (
-        <figure class="bg-(--color-bg)">
-          <Image src={image.asset!} alt={image.alt} width={480} format="avif" loading="lazy" class:list={['aspect-square w-full', image.src.includes('logo') ? 'object-contain p-8' : 'object-cover']} />
-          <figcaption class="p-3 border-t border-(--color-border) font-mono text-xs uppercase tracking-wider text-(--color-text-muted)">{image.alt}</figcaption>
-        </figure>
-      ))}
-    </div>
-  )}
-
   <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
-    <div class="lg:col-span-3 p-6 lg:p-8">
-      <SectionLabel index="02" label="story" />
+    <div class="lg:col-span-4 p-6 lg:p-8">
+      <SectionLabel index="02" label="story">
+        {portraitAsset && (
+          <figure class="mt-6 max-w-xs">
+            <Image
+              src={portraitAsset}
+              alt={portrait.alt}
+              width={400}
+              height={400}
+              format="avif"
+              loading="eager"
+              class="aspect-square w-full object-cover border border-(--color-border)"
+            />
+            <figcaption class="mt-3 label text-(--color-text-muted)">{portrait.alt}</figcaption>
+          </figure>
+        )}
+      </SectionLabel>
     </div>
-    <div class="lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8">
+    <div class="lg:col-span-8 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8">
       <div class="blog-prose max-w-2xl">
         <Content />
       </div>
