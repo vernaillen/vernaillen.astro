@@ -1,0 +1,84 @@
+---
+import { getEntry } from 'astro:content'
+import { Icon } from 'astro-icon/components'
+import Base from '../layouts/Base.astro'
+import Masthead from '../components/Masthead.astro'
+import Button from '../components/Button.astro'
+import SectionLabel from '../components/SectionLabel.astro'
+import { authoredGroups, contributedProjects, type GitHubProject } from '../lib/github'
+import type { LinksPage } from '../content.config'
+
+const page = await getEntry('pages', 'open-source')
+const data = page!.data as LinksPage
+---
+
+<Base title={data.title} description={data.description} path="/open-source">
+  <Masthead index="01" label="open source" title={data.title} description={data.description}>
+    <Fragment slot="actions">
+      {data.links.map((link) => (
+        <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant} target={link.target} />
+      ))}
+    </Fragment>
+  </Masthead>
+
+  {authoredGroups.length > 0 && (
+    <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
+      <div class="lg:col-span-3 p-6 lg:p-8">
+        <SectionLabel index="02" label="authored" />
+      </div>
+      <div class="lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8 flex flex-col gap-10">
+        {authoredGroups.map((group) => (
+          <div class="flex flex-col gap-4">
+            <h2 class="label text-(--color-text-dimmed)">{group.title}</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-(--color-border)">
+              {group.projects.map((project: GitHubProject) => (
+                <a href={project.url} target="_blank" rel="noopener noreferrer" class="group flex flex-col gap-2 p-5 border-r border-b border-(--color-border) transition-colors hover:bg-(--color-bg-muted)">
+                  <div class="flex items-start justify-between gap-2">
+                    <span class="flex items-center gap-2 font-mono text-sm text-(--color-text) group-hover:text-vernaillen-500 transition-colors truncate">
+                      <Icon name="simple-icons:github" class="size-4 shrink-0" />
+                      <span class="truncate">{project.repo}</span>
+                    </span>
+                    {project.stars > 0 && (
+                      <span class="shrink-0 inline-flex items-center gap-1 font-mono text-xs text-(--color-text-dimmed)">
+                        <Icon name="lucide:star" class="size-3" />
+                        {project.stars.toLocaleString('en-US')}
+                      </span>
+                    )}
+                  </div>
+                  <p class="text-sm text-(--color-text-muted)">{project.description}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {contributedProjects.length > 0 && (
+    <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
+      <div class="lg:col-span-3 p-6 lg:p-8">
+        <SectionLabel index="03" label="contributed to" />
+      </div>
+      <div class="lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-(--color-border)">
+          {contributedProjects.map((project) => (
+            <a href={project.pr || project.url} target="_blank" rel="noopener noreferrer" class="group flex flex-col gap-2 p-5 border-r border-b border-(--color-border) transition-colors hover:bg-(--color-bg-muted)">
+              <div class="flex items-start justify-between gap-2">
+                <span class="flex items-center gap-2 font-mono text-sm text-(--color-text) group-hover:text-vernaillen-500 transition-colors truncate">
+                  <Icon name="simple-icons:github" class="size-4 shrink-0" />
+                  <span class="truncate">{project.repo}</span>
+                </span>
+                <span class="shrink-0 inline-flex items-center gap-1 font-mono text-xs text-(--color-text-dimmed)">
+                  <Icon name="lucide:star" class="size-3" />
+                  {project.stars.toLocaleString('en-US')}
+                </span>
+              </div>
+              <p class="text-sm text-(--color-text-muted)">{project.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Base>

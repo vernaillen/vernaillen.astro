@@ -1,0 +1,9 @@
+title: Building Solutions, Shipping Code
+description: A mix of open source tools, client work, and personal projects. From enterprise portals to creative coding experiments.
+links:
+  - label: "Let's talk"
+    to: https://calendly.com/vernaillen/15min
+    color: "neutral"
+  - label: 'GitHub'
+    to: https://github.com/vernaillen
+    icon: i-simple-icons-github

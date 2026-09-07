@@ -1,0 +1,23 @@
+---
+import Button from '../Button.astro'
+import { site } from '../../lib/site'
+---
+
+<section class="grid lg:grid-cols-12 bg-vernaillen-500 text-dusk-950 border-b border-dusk-950/20">
+  <div class="lg:col-span-8 p-6 lg:p-10 flex flex-col gap-3 justify-center">
+    <p class="font-mono uppercase text-[0.6875rem] tracking-[0.16em] text-dusk-950/85">
+      Freelance &middot; since 2013 &middot; Belgium / remote
+    </p>
+    <h2 class="text-3xl lg:text-5xl font-semibold tracking-tight">Let&rsquo;s work together.</h2>
+  </div>
+  <div class="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-dusk-950/20 p-6 lg:p-10 flex flex-wrap items-center gap-3">
+    <Button label="Book a call" to={site.meetingLink} icon="lucide:calendar" variant="contrast" target="_blank" />
+    <Button
+      label={site.email}
+      to={`mailto:${site.email}`}
+      icon="lucide:mail"
+      variant="outline"
+      class="border-dusk-950! text-dusk-950! hover:bg-dusk-950/10!"
+    />
+  </div>
+</section>

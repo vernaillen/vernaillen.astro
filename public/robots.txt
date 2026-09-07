@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://vernaillen.dev/sitemap-index.xml

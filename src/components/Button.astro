@@ -1,0 +1,50 @@
+---
+import { Icon } from 'astro-icon/components'
+import { resolveIcon } from '../lib/icons'
+
+interface Props {
+  label?: string
+  to?: string
+  icon?: string
+  variant?: string
+  size?: string
+  target?: string
+  class?: string
+}
+
+const { label, to, icon, variant = 'solid', size = 'md', target, class: className } = Astro.props
+const Tag = to ? 'a' : 'button'
+
+const sizeClasses: Record<string, string> = {
+  xs: 'text-[0.65rem] px-2.5 py-1.5 gap-1.5',
+  sm: 'text-[0.7rem] px-3 py-2 gap-1.5',
+  md: 'text-xs px-4 py-2.5 gap-2',
+  lg: 'text-xs px-5 py-3 gap-2',
+}
+
+const variantClasses: Record<string, string> = {
+  solid: 'bg-vernaillen-500 text-dusk-950 hover:bg-vernaillen-400',
+  outline: 'border border-(--color-border) hover:border-vernaillen-500 hover:text-vernaillen-500',
+  ghost: 'hover:bg-(--color-bg-muted)',
+  soft: 'bg-(--color-bg-muted) hover:bg-(--color-border)',
+  subtle: 'bg-(--color-bg-muted)/60 hover:bg-(--color-bg-muted)',
+  link: 'underline-offset-4 hover:underline px-0! py-0!',
+  contrast: 'bg-dusk-950 text-dusk-50 hover:bg-dusk-800',
+}
+---
+
+<Tag
+  href={to}
+  target={target}
+  rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+  class:list={[
+    'inline-flex items-center justify-center font-mono uppercase tracking-[0.12em] font-medium transition-colors',
+    sizeClasses[size] ?? sizeClasses.md,
+    variantClasses[variant] ?? variantClasses.solid,
+    className,
+  ]}
+>
+  {icon && <Icon name={resolveIcon(icon)} class="size-4 shrink-0" />}
+  {label && <span>{label}</span>}
+  <slot />
+</Tag>

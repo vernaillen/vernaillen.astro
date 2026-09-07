@@ -1,0 +1,54 @@
+---
+import { getEntry } from 'astro:content'
+import Base from '../layouts/Base.astro'
+import Masthead from '../components/Masthead.astro'
+import Button from '../components/Button.astro'
+import type { CareerPage } from '../content.config'
+
+const page = await getEntry('pages', 'career')
+const data = page!.data as CareerPage
+
+const CATEGORY_ORDER = ['Open Source', 'Freelance', 'Employed'] as const
+const groups = CATEGORY_ORDER.map((category) => ({
+  category,
+  events: data.events.filter((event) => event.category === category),
+}))
+---
+
+<Base title={data.title} description={data.description} path="/career">
+  <Masthead index="01" label="career" title={data.title} description={data.description}>
+    <Fragment slot="actions">
+      {data.links.map((link) => (
+        <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant} size={link.size} target={link.target} />
+      ))}
+    </Fragment>
+  </Masthead>
+
+  <div class="grid lg:grid-cols-3 gap-px bg-(--color-border) border-b border-(--color-border)">
+    {groups.map((group) => (
+      <div class="flex flex-col bg-(--color-bg)">
+        <h2 class="lg:sticky lg:top-20 label text-vernaillen-500 bg-(--color-bg) p-6 lg:p-8 border-b border-(--color-border)">
+          {group.category}
+        </h2>
+        <div class="flex flex-col px-6 lg:px-8">
+          {group.events.map((event, i) => (
+            <div class:list={['flex flex-col gap-1.5 py-5', i === 0 ? '' : 'border-t border-(--color-border)']}>
+              <p class="label text-(--color-text-dimmed)">{event.location} &middot; {event.date}</p>
+              <h3 class="text-base font-medium text-(--color-text)">{event.title}</h3>
+              {event.stack.length > 0 && (
+                <p class="font-mono uppercase text-[0.65rem] tracking-wider text-(--color-text-muted)">{event.stack.join(' / ')}</p>
+              )}
+              {event.links && (
+                <div class="flex flex-wrap gap-2 pt-2">
+                  {event.links.map((link) => (
+                    <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant ?? 'outline'} size={link.size ?? 'xs'} target={link.target} />
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</Base>

@@ -1,0 +1,9 @@
+title: Harmonics.be
+description: Website for my sound healing, ecstatic dance, and trance dance activities. Built with Nuxt and Nuxt Content, deployed on Vercel.
+image: /images/projects/harmonics.png
+url: https://harmonics.be
+tags:
+  - Nuxt
+  - Nuxt Content
+  - Vercel
+date: 2023-01-01

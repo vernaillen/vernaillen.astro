@@ -1,0 +1,1 @@
+Keeps the ACME HTTP-01 challenge dir present in the docroot so Combell can drop its token here.

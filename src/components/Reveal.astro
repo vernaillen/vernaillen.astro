@@ -1,0 +1,13 @@
+---
+// Fires a fade+translate transition once an element enters the viewport.
+// Gated behind `html.js` (global.css) and observed by `reveal.ts`, so nothing
+// is ever hidden for no-JS visitors.
+interface Props {
+  class?: string
+}
+const { class: className } = Astro.props
+---
+
+<div class:list={['reveal', className]}>
+  <slot />
+</div>

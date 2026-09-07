@@ -1,0 +1,78 @@
+---
+import { Image } from 'astro:assets'
+import Button from '../Button.astro'
+import Eyebrow from '../Eyebrow.astro'
+import { socialLinks } from '../../lib/site'
+import { Icon } from 'astro-icon/components'
+import { resolveIcon } from '../../lib/icons'
+import { localImage } from '../../lib/images'
+import type { IndexPage } from '../../content.config'
+
+interface Props {
+  data: IndexPage
+}
+
+const { data } = Astro.props
+const avatar = await localImage('/images/woutervernaillen.jpg')
+---
+
+<section class="grid lg:grid-cols-12 border-b border-(--color-border)">
+  <div class="lg:col-span-8 p-6 lg:p-10 flex flex-col gap-8">
+    <Eyebrow index="01" label="hello" />
+
+    <div class="flex flex-col gap-3">
+      <h1 class="display">{data.title}</h1>
+      <p class="text-2xl lg:text-3xl font-medium text-(--color-text-muted)">{data.title2}</p>
+    </div>
+
+    <p class="max-w-xl text-base text-(--color-text-muted)">{data.description}</p>
+
+    <div class="flex flex-wrap items-center gap-3">
+      {data.hero.links.map((link, i) => (
+        <Button
+          label={link.label}
+          to={link.to}
+          icon={link.icon}
+          variant={link.variant ?? (i === 0 ? 'solid' : 'outline')}
+          size={link.size ?? 'lg'}
+        />
+      ))}
+    </div>
+
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono uppercase text-[0.6875rem] tracking-[0.16em] text-(--color-text-muted)">
+      {socialLinks.map((link) => (
+        <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-vernaillen-500 transition-colors">
+          <Icon name={resolveIcon(link.icon)} class="size-4" />
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-(--color-border) flex flex-col">
+    <div class="grid grid-cols-2 lg:grid-cols-1">
+      {data.stats.map((stat, i) => (
+        <div
+          class:list={[
+            'flex items-baseline justify-between gap-2 p-6 border-b border-(--color-border)',
+            i % 2 === 0 ? 'border-r lg:border-r-0 border-(--color-border)' : '',
+          ]}
+        >
+          <span class="text-4xl font-semibold tabular-nums text-vernaillen-500">{stat.value}</span>
+          <span class="font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-(--color-text-muted) text-right">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+
+    {avatar && (
+      <Image
+        src={avatar}
+        alt="Wouter Vernaillen"
+        width={480}
+        loading="eager"
+        fetchpriority="high"
+        class="aspect-square w-full object-cover grayscale hover:grayscale-0 transition-[filter] duration-500"
+      />
+    )}
+  </div>
+</section>

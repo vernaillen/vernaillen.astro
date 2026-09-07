@@ -1,0 +1,77 @@
+---
+import { Icon } from 'astro-icon/components'
+import { navLinks, isNavLinkActive } from '../lib/links'
+import { resolveIcon } from '../lib/icons'
+
+const pathname = new URL(Astro.request.url).pathname
+---
+
+<header class="sticky top-0 z-50 bg-(--color-bg) border-b border-(--color-border)">
+  <div class="page-frame flex items-stretch">
+    <a href="/" aria-label="Wouter Vernaillen, home" class="flex items-center shrink-0 px-5 border-r border-(--color-border)">
+      <svg viewBox="0 0 754 276" class="h-6 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+        <g fill="none">
+          <path class="fill-black dark:fill-vernaillen-500" d="M0 0 H92 V184 H172 V0 H264 V184 H344 V0 H436 V276 H0 Z" />
+          <path class="fill-vernaillen-500 dark:fill-white" d="M490 0 H582 V184 H662 V0 H754 V276 H490 Z" />
+        </g>
+      </svg>
+    </a>
+
+    <nav class="hidden md:flex font-mono uppercase text-[0.6875rem] tracking-[0.16em]">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'flex items-center h-14 px-4 border-r border-(--color-border) transition-colors',
+            isNavLinkActive(link, pathname)
+              ? 'text-(--color-text) shadow-[inset_0_-2px_0_var(--color-vernaillen-500)]'
+              : 'text-(--color-text-muted) hover:text-(--color-text)',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-stretch ml-auto">
+      <button
+        type="button"
+        data-theme-toggle
+        aria-label="Toggle color theme"
+        class="flex items-center justify-center size-14 border-l border-(--color-border) text-(--color-text-muted) hover:text-(--color-text) transition-colors"
+      >
+        <Icon name="lucide:sun" class="size-4 hidden dark:block" />
+        <Icon name="lucide:moon" class="size-4 dark:hidden" />
+      </button>
+      <button
+        type="button"
+        data-menu-toggle
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        class="md:hidden flex items-center justify-center size-14 border-l border-(--color-border) text-(--color-text-muted) hover:text-(--color-text) transition-colors"
+      >
+        <Icon name="lucide:menu" class="size-4" />
+      </button>
+    </div>
+  </div>
+
+  <nav data-menu-panel hidden class="md:hidden border-t border-(--color-border) font-mono uppercase text-[0.6875rem] tracking-[0.16em] flex flex-col">
+    {navLinks.map((link) => (
+      <a
+        href={link.href}
+        class:list={[
+          'flex items-center gap-3 h-12 px-5 border-b border-(--color-border) transition-colors',
+          isNavLinkActive(link, pathname)
+            ? 'text-vernaillen-500'
+            : 'text-(--color-text-muted) hover:text-(--color-text)',
+        ]}
+      >
+        <Icon name={resolveIcon(link.icon)} class="size-4" />
+        {link.label}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<script src="../scripts/menu.ts"></script>
+<script src="../scripts/theme.ts"></script>

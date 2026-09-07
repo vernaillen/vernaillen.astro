@@ -1,0 +1,97 @@
+---
+import { getCollection, getEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+import { Icon } from 'astro-icon/components'
+import Base from '../layouts/Base.astro'
+import Masthead from '../components/Masthead.astro'
+import Button from '../components/Button.astro'
+import Reveal from '../components/Reveal.astro'
+import { localImage } from '../lib/images'
+import type { LinksPage } from '../content.config'
+
+const page = await getEntry('pages', 'projects')
+const data = page!.data as LinksPage
+
+const projects = (await getCollection('projects')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+
+const fftPoster = await localImage('/images/projects/fft-visualizer-hero.png')
+const videoPoster = await localImage('/images/projects/vue-audiomotion-analyzer-poster.png')
+
+const cardImages = await Promise.all(
+  projects.map(async (project) => (project.data.video ? undefined : await localImage(project.data.image))),
+)
+
+const logoIds = new Set(['wpnuxt', 'harmonics'])
+---
+
+<Base title={data.title} description={data.description} path="/projects">
+  <Masthead index="01" label="projects" title={data.title} description={data.description}>
+    <Fragment slot="actions">
+      {data.links.map((link) => (
+        <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant} target={link.target} />
+      ))}
+    </Fragment>
+  </Masthead>
+
+  {projects.map((project, index) => {
+    const reversed = index % 2 === 1
+    return (
+      <Reveal>
+        <div class="grid lg:grid-cols-12 border-b border-(--color-border)">
+          <div class:list={['lg:col-span-5 p-6 lg:p-10 flex flex-col gap-4 justify-center', reversed ? 'lg:order-2' : 'lg:order-1']}>
+            <span class="label text-(--color-text-dimmed)">{project.data.date.getUTCFullYear()}</span>
+            <h2 class="text-2xl font-semibold tracking-tight">{project.data.title}</h2>
+            <p class="text-base text-(--color-text-muted)">{project.data.description}</p>
+            <a
+              href={project.data.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-fit inline-flex items-center gap-1.5 font-mono uppercase text-[0.6875rem] tracking-[0.16em] text-vernaillen-500 hover:underline underline-offset-4"
+            >
+              View project
+              <Icon name="lucide:arrow-up-right" class="size-3.5" />
+            </a>
+          </div>
+          <div
+            class:list={[
+              'lg:col-span-7 border-t lg:border-t-0 min-h-64',
+              reversed ? 'lg:order-1 lg:border-r border-(--color-border)' : 'lg:order-2 lg:border-l border-(--color-border)',
+            ]}
+          >
+            {project.data.demo === 'fft' ? (
+              <div class="fft-demo-shell h-full" data-fft-demo>
+                {fftPoster && <Image src={fftPoster} alt={project.data.title} width={1200} height={630} format="avif" class="fft-demo-poster" />}
+                <div class="fft-demo-overlay">
+                  <button type="button" class="fft-demo-play" data-fft-play aria-label="Load interactive demo">
+                    <Icon name="lucide:play" class="size-5 translate-x-0.5" />
+                  </button>
+                  <span class="fft-demo-caption">Interactive demo — click to load</span>
+                </div>
+              </div>
+            ) : project.data.video ? (
+              <div class="video-shell" data-project-video>
+                {videoPoster && <Image src={videoPoster} alt={project.data.title} width={640} height={192} format="avif" class="video-poster" />}
+                <video muted loop playsinline preload="none" aria-hidden="true" width="640" height="192" class="video-el">
+                  <source src={project.data.image.replace(/\.mp4$/, '.webm')} type="video/webm" />
+                  <source src={project.data.image} type="video/mp4" />
+                </video>
+              </div>
+            ) : cardImages[index] && (
+              <Image
+                src={cardImages[index]!}
+                alt={project.data.title}
+                {...(logoIds.has(project.id) ? { width: 640 } : { width: 640, height: 192 })}
+                format="avif"
+                loading="lazy"
+                class:list={['w-full h-full min-h-64', logoIds.has(project.id) ? 'object-contain p-8' : 'object-cover']}
+              />
+            )}
+          </div>
+        </div>
+      </Reveal>
+    )
+  })}
+</Base>
+
+<script src="../scripts/fft-demo.ts"></script>
+<script src="../scripts/video.ts"></script>

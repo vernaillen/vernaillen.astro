@@ -1,0 +1,173 @@
+seo:
+  title: "Wouter Vernaillen - Enterprise Full-Stack Java Developer"
+  description: "Freelance Developer specializing in Java/Spring backends and Nuxt/Vue frontends. 25+ years of experience building web solutions. Open source contributor and creator of WPNuxt."
+title: "Hi, I'm Wouter Vernaillen"
+title2: "Enterprise Full-Stack Java Developer"
+description: "Spring Boot, Vue/Nuxt & Angular, DevOps, Secure delivery, AI-enabled development."
+hero:
+  links:
+    - label: View Projects
+      to: /projects
+      icon: i-lucide-folder-code
+      size: lg
+    - label: Career
+      to: /career
+      icon: i-lucide-briefcase
+      size: lg
+    - label: Blog
+      to: /blog
+      icon: i-lucide-book
+      size: lg
+      variant: outline
+stats:
+  - value: "25+"
+    label: "Years Experience"
+  - value: "50+"
+    label: "Projects Delivered"
+  - value: "64"
+    label: "GitHub Stars"
+  - value: "2013"
+    label: "Freelancing Since"
+about:
+  title: "About Me"
+  description: |
+    I build robust web solutions from backend to frontend — bridging enterprise Java with modern JavaScript, and now embracing agentic workflows.<br>Loving every bit of it!
+    <br><br>
+    As a full stack developer with 25+ years of experience, I've gone from the first static HTML sites to cutting-edge web portals with seamless backend integrations.
+    I combine deep Java/Spring expertise with a passion for modern frontend development using Nuxt and Vue. Creator of WPNuxt, an open source module for headless WordPress with Nuxt.
+    <br><br>
+    I'm also a sound healing practitioner, an ecstatic dance DJ, and a trance dance facilitator. I run [Harmonics.be](https://harmonics.be) — organizing events around sound, music, and movement.
+    <br><br>
+    I'm based in Belgium (Europe/Brussels timezone) and work primarily remotely, for Belgian and international clients alike.
+experience:
+  title: Work Experience
+  items:
+    - position: "Creator & Maintainer of"
+      date: "2023 - Present"
+      company:
+        name: WPNuxt
+        logo: "i-simple-icons-nuxtdotjs"
+        url: "https://wpnuxt.com"
+        color: "#00DC82"
+    - position: "Full Stack Developer at"
+      date: "2019 - Present"
+      company:
+        name: Opgroeien / Kind & Gezin
+        logo: "i-lucide-landmark"
+        url: "https://www.opgroeien.be"
+        color: "#A50050"
+    - position: "Full Stack Developer at"
+      date: "2018 - 2019"
+      company:
+        name: IDEWE
+        logo: "i-lucide-shield-check"
+        url: "https://www.idewe.be"
+        color: "#10B981"
+    - position: "Full Stack Developer at"
+      date: "2014 - 2017"
+      company:
+        name: Kind & Gezin
+        logo: "i-lucide-landmark"
+        url: "https://www.kindengezin.be"
+        color: "#cbe0e9"
+    - position: "Lead Developer at"
+      date: "2013 - 2014"
+      company:
+        name: Colruyt
+        logo: "i-lucide-baby"
+        url: "https://www.colruytgroup.com"
+        color: "#EF7D00"
+    - position: "Portal Architect at"
+      date: "2010 - 2013"
+      company:
+        name: Van Marcke
+        logo: "i-lucide-wrench"
+        url: "https://www.vanmarcke.com"
+        color: "#0072BC"
+    - position: "WebSphere Portal Consultant at"
+      date: "2006 - 2010"
+      company:
+        name: IBM
+        logo: "i-simple-icons-ibm"
+        url: "https://www.ibm.com"
+        color: "#0F62FE"
+    - position: "Java Software Engineer at"
+      date: "2003 - 2006"
+      company:
+        name: UPM-Kymmene
+        logo: "i-lucide-trees"
+        url: "https://www.upm.com"
+        color: "#5A8F3C"
+    - position: "Lotus Notes Developer at"
+      date: "2000 - 2003"
+      company:
+        name: Atos Origin
+        logo: "i-lucide-building-2"
+        url: "https://atos.net"
+        color: "#0066A1"
+    - position: "Lotus Notes Developer at"
+      date: "1999 - 2000"
+      company:
+        name: Alcatel e-Com
+        logo: "i-lucide-phone"
+        url: "https://en.wikipedia.org/wiki/Alcatel"
+        color: "#3A4A9F"
+testimonials:
+  - quote: "Wouter's expertise in IBM Websphere portal helped us in reaching key projects. His ability to think user-led allows to work rapidly and meet expectations."
+    author:
+      name: "Björn Minne"
+      description: "Online Sales & Marketing Manager B2B at Van Marcke"
+      avatar:
+        src: /images/testimonials/bjorn-minne.jpeg
+        alt: Björn Minne
+  - quote: "Wouter is a dedicated professional with who I had the pleasure to work with on two strategic projects at Van Marcke. He was the go to IT professional and project leader. I would recommend him without hesitation."
+    author:
+      name: "Philip Borremans"
+      description: "Chief Social Media Officer & CSR Coordinator"
+      avatar:
+        src: /images/testimonials/philip-borremans.jpeg
+        alt: Philip Borremans
+  - quote: "Wouter's passion for technology and dedication to success have made and continue to make it a pleasure to work with him. The combination of a broad interest with deep knowledge & experience make for a great developer cocktail."
+    author:
+      name: "Jonathan Bosmans"
+      description: "Senior Consultant at IBM"
+      avatar:
+        src: /images/testimonials/jonathan-bosmans.jpeg
+        alt: Jonathan Bosmans
+blog:
+  title: "Latest Articles"
+  description: "Thoughts on development, open source, and the tools I use"
+faq:
+  title: Frequently Asked Questions
+  description: Answers to common questions about working with me.
+  categories:
+    - title: Services & Expertise
+      questions:
+        - label: What services do you offer?
+          content: |
+            I specialize in full stack web development with Java/Spring backends and Nuxt/Vue frontends. This includes API development & integration, building modern web portals, setting up CI/CD pipelines, and DevOps with Docker and Kubernetes. I also build headless WordPress solutions using my open source WPNuxt module.
+        - label: What is your tech stack?
+          content: |
+            My primary stack is Java and Spring Framework on the backend, with Nuxt and Vue.js on the frontend. For DevOps I work with Docker, Kubernetes, and Jenkins. I deploy to Vercel for frontend projects and have extensive experience with Liferay portal platforms.
+        - label: Do you work with startups or only enterprises?
+          content: |
+            Both! While much of my career has been in enterprise environments (government, large corporations), I also enjoy working with smaller teams and startups. My open source work on WPNuxt is a good example of building developer tools from the ground up.
+    - title: Working Together
+      questions:
+        - label: Are you available for freelance work?
+          content: |
+            Yes, I've been freelancing since 2013. I'm available for both long-term engagements and shorter project-based work. Feel free to schedule a call via Calendly to discuss your project.
+        - label: Where are you based?
+          content: |
+            I'm based in Belgium (Europe/Brussels timezone). I work primarily remotely, for Belgian and international clients alike — for clients in Belgium I'm available on-site up to one day a week.
+        - label: How can I get in touch?
+          content: |
+            The easiest way is to schedule a 15-minute call on [Calendly](https://calendly.com/vernaillen/15min). You can also reach me on [LinkedIn](https://www.linkedin.com/in/woutervernaillen/) or [GitHub](https://github.com/vernaillen/).
+    - title: About Me
+      questions:
+        - label: What do you enjoy most about your work?
+          content: |
+            I love bridging the gap between robust backend systems and beautiful, fast frontends. There's something satisfying about making a complex enterprise system feel effortless to use. Building open source tools like WPNuxt and seeing others use them is also incredibly rewarding.
+        - label: What are your interests outside of coding?
+          content: |
+            Sound, music and dance are a big part of my life. I'm a sound healing practitioner, ecstatic dance DJ, and trance dance facilitator — you can find more about that on [Harmonics.be](https://harmonics.be). I'm also an avid traveler, always curious about other cultures.

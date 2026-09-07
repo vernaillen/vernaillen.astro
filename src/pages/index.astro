@@ -1,0 +1,40 @@
+---
+import { getCollection, getEntry } from 'astro:content'
+import Base from '../layouts/Base.astro'
+import Reveal from '../components/Reveal.astro'
+import Hero from '../components/home/Hero.astro'
+import CtaBand from '../components/home/CtaBand.astro'
+import About from '../components/home/About.astro'
+import WorkExperience from '../components/home/WorkExperience.astro'
+import Blog from '../components/home/Blog.astro'
+import Testimonials from '../components/home/Testimonials.astro'
+import type { IndexPage } from '../content.config'
+
+const page = await getEntry('pages', 'index')
+const data = page!.data as IndexPage
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3)
+---
+
+<Base title={data.seo.title} description={data.seo.description} path="/">
+  <Hero data={data} />
+  <CtaBand />
+
+  <Reveal>
+    <About data={data} />
+  </Reveal>
+
+  <Reveal>
+    <WorkExperience data={data} />
+  </Reveal>
+
+  <Reveal>
+    <Blog data={data} posts={posts} />
+  </Reveal>
+
+  <Reveal>
+    <Testimonials data={data} />
+  </Reveal>
+</Base>

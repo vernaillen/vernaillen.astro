@@ -1,0 +1,145 @@
+title: Career
+description: The projects and companies I've worked with over 25+ years, and the technologies I've used along the way.
+events:
+  - category: Open Source
+    title: Creator & Maintainer of WPNuxt, FFT Visualizer, etc
+    date: "2023 - Present"
+    location: Harmonics.be
+    stack:
+      - Nuxt
+      - Vue
+      - TypeScript
+      - Tailwind CSS
+      - GraphQL
+      - Vite
+    links:
+      - label: WPNuxt
+        size: sm
+        to: https://wpnuxt.com
+        icon: i-simple-icons-nuxtdotjs
+        target: _blank
+        variant: subtle
+      - label: FFT Visualizer
+        size: sm
+        to: https://www.fftvisualizer.com
+        icon: i-mage-sound-waves
+        target: _blank
+        variant: subtle
+      - label: More projects
+        size: sm
+        to: /open-source
+        icon: i-material-symbols-arrow-right-alt
+        variant: soft
+  - category: Freelance
+    title: Senior Full Stack Java Developer — Governmental citizen portal
+    date: "2019 - Present"
+    location: Opgroeien / Kind & Gezin
+    stack:
+      - Spring Boot
+      - Microservices
+      - REST
+      - Angular
+      - Docker
+      - Kubernetes
+      - Helm
+      - Jenkins
+      - Liferay
+  - category: Freelance
+    title: Senior Full Stack Java Developer — Customer Portal
+    date: 2018 - 2019
+    location: IDEWE (via Cronos)
+    stack:
+      - Liferay DXP
+      - Spring
+      - Hibernate
+      - AngularJS
+      - Alfresco
+      - PostgreSQL
+      - Maven
+      - Jenkins
+  - category: Freelance
+    title: Senior Full Stack Java Developer — Governmental citizen portal
+    date: 2014 - 2017
+    location: Kind & Gezin (via Cronos)
+    stack:
+      - Liferay Portal
+      - Spring WebFlow
+      - Spring Security
+      - SOAP
+      - Angular 2
+      - Ionic 2
+      - Hibernate
+      - JBoss
+      - Oracle DB
+  - category: Freelance
+    title: Lead Developer — Dreambaby community portal
+    date: 2013
+    location: Colruyt (via TCS)
+    stack:
+      - WebSphere Portal
+      - IBM Web Content Manager
+      - IBM Connections
+      - EJB3
+      - SOAP
+      - REST
+      - jQuery
+      - Ajax
+  - category: Employed
+    title: Portal Architect / Project Leader Intranet
+    date: 2010 - 2013
+    location: Van Marcke
+    stack:
+      - WebSphere Portal
+      - WebSphere Commerce
+      - Spring Portlet MVC
+      - Hibernate
+      - Struts
+      - OmniFind
+      - DB2
+      - jQuery
+      - Maven
+  - category: Employed
+    title: "WebSphere Portal & J2EE Developer/Consultant — clients: UZ Gent, VDAB, European Commission, Eandis"
+    date: 2006 - 2010
+    location: IBM
+    stack:
+      - WebSphere Portal
+      - Liferay Portal
+      - Lotus Web Content Management
+      - Spring Core
+      - Spring Portlet MVC
+      - JSF
+      - JAX-RS
+      - OmniFind
+      - Oracle DB
+      - Dojo
+  - category: Employed
+    title: Java Software Engineer & Lead Developer
+    date: 2003 - 2006
+    location: UPM-Kymmene
+    stack:
+      - Struts
+      - Hibernate
+      - EJB 2
+      - XML/XSL
+      - Lucene
+      - Oracle DB
+      - SAP
+      - jUnit
+  - category: Employed
+    title: Lotus Notes Developer
+    date: 2000 - 2001
+    location: Atos Origin
+    stack:
+      - Lotus Notes
+  - category: Employed
+    title: Lotus Notes Developer
+    location: Alcatel e-Com / the e-Corporation
+    date: 1999 - 2000
+    stack:
+      - Lotus Notes
+links:
+  - label: LinkedIn
+    size: md
+    to: https://www.linkedin.com/in/woutervernaillen/
+    icon: i-simple-icons-linkedin
