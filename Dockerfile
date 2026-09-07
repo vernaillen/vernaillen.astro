@@ -7,7 +7,7 @@ FROM node:26-alpine AS build
 WORKDIR /app
 # Node 25+ no longer bundles Corepack; pin the pnpm major from pnpm-lock.yaml.
 RUN npm install -g pnpm@12
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
 # Build-time only; this stage is discarded. PUBLIC_RADIO_URL is baked into

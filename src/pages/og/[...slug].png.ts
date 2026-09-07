@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { APIRoute } from 'astro'
-import { getCollection, getEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
 import satori from 'satori'
 import { Resvg } from '@resvg/resvg-js'
-import type { AboutPage, BlogMeta, CareerPage, IndexPage, LinksPage } from '../../content.config'
+import { getPage } from '../../lib/content'
 
 const BG = '#0a0908'
 const ACCENT = '#9c8e1b'
@@ -154,28 +154,24 @@ interface Route {
 export async function getStaticPaths() {
   const routes: Route[] = []
 
-  const index = await getEntry('pages', 'index')
-  const indexData = index!.data as IndexPage
+  routes.push({ slug: '404', title: 'Page not found', description: 'The requested page could not be found.' })
+
+  const { data: indexData } = await getPage('index')
   routes.push({ slug: 'index', title: indexData.seo.title, description: indexData.seo.description })
 
-  const about = await getEntry('pages', 'about')
-  const aboutData = about!.data as AboutPage
+  const { data: aboutData } = await getPage('about')
   routes.push({ slug: 'about', title: aboutData.title, description: aboutData.description })
 
-  const career = await getEntry('pages', 'career')
-  const careerData = career!.data as CareerPage
+  const { data: careerData } = await getPage('career')
   routes.push({ slug: 'career', title: careerData.title, description: careerData.description })
 
-  const openSource = await getEntry('pages', 'open-source')
-  const openSourceData = openSource!.data as LinksPage
+  const { data: openSourceData } = await getPage('open-source')
   routes.push({ slug: 'open-source', title: openSourceData.title, description: openSourceData.description })
 
-  const projects = await getEntry('pages', 'projects')
-  const projectsData = projects!.data as LinksPage
+  const { data: projectsData } = await getPage('projects')
   routes.push({ slug: 'projects', title: projectsData.title, description: projectsData.description })
 
-  const blogMeta = await getEntry('pages', 'blog')
-  const blogMetaData = blogMeta!.data as BlogMeta
+  const { data: blogMetaData } = await getPage('blog')
   routes.push({ slug: 'blog', title: blogMetaData.title, description: blogMetaData.description })
 
   const posts = await getCollection('blog')

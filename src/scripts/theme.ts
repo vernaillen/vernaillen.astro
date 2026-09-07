@@ -7,9 +7,18 @@ function isDark() {
 function applyTheme(next: 'light' | 'dark') {
   document.documentElement.classList.toggle('dark', next === 'dark')
   localStorage.setItem(STORAGE_KEY, next)
+  updateLabels()
+}
+
+function updateLabels() {
+  const target = isDark() ? 'light' : 'dark'
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+    button.setAttribute('aria-label', `Switch to ${target} mode`)
+  })
 }
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+updateLabels()
 
 document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
   button.addEventListener('click', (event) => {

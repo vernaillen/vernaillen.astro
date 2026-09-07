@@ -8,6 +8,13 @@ toggle?.addEventListener('click', () => {
   toggle.setAttribute('aria-expanded', String(opening))
 })
 
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape' || !panel || panel.hidden) return
+  panel.hidden = true
+  toggle?.setAttribute('aria-expanded', 'false')
+  toggle?.focus()
+})
+
 panel?.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => {
     if (!panel) return

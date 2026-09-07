@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
 import { Icon } from 'astro-icon/components'
 import Base from '../layouts/Base.astro'
@@ -7,10 +7,9 @@ import Masthead from '../components/Masthead.astro'
 import Button from '../components/Button.astro'
 import Reveal from '../components/Reveal.astro'
 import { localImage } from '../lib/images'
-import type { LinksPage } from '../content.config'
+import { getPage } from '../lib/content'
 
-const page = await getEntry('pages', 'projects')
-const data = page!.data as LinksPage
+const { data } = await getPage('projects')
 
 const projects = (await getCollection('projects')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 
@@ -46,7 +45,7 @@ const logoIds = new Set(['wpnuxt', 'harmonics'])
               href={project.data.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="w-fit inline-flex items-center gap-1.5 font-mono uppercase text-[0.6875rem] tracking-[0.16em] text-vernaillen-500 hover:underline underline-offset-4"
+              class="w-fit inline-flex items-center gap-1.5 font-mono uppercase text-xs tracking-[0.12em] text-(--color-accent-text) hover:underline underline-offset-4"
             >
               View project
               <Icon name="lucide:arrow-up-right" class="size-3.5" />
