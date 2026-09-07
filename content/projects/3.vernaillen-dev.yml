@@ -1,7 +1,8 @@
 title: Vernaillen.dev
 description: This developer portfolio and blog, rebuilt as a fast static Astro site with a custom editorial design. Open source on GitHub.
 image: /images/projects/vernaillendev.png
-url: https://vernaillen.dev
+code: https://github.com/vernaillen/vernaillen.dev
+website: https://vernaillen.dev
 tags:
   - Astro
   - Tailwind CSS

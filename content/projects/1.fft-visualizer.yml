@@ -1,7 +1,8 @@
 title: FFT Visualizer
 description: WebGL-based real-time audio spectrum analyzer and FFT visualizer. Renders frequency data as interactive WebGL visuals.
 image: /images/projects/fft-visualizer.png
-url: https://github.com/harmonics-audio/fft-visualizer
+code: https://github.com/harmonics-audio/fft-visualizer
+website: https://fftvisualizer.com
 demo: fft
 tags:
   - Vue

@@ -43,15 +43,12 @@ const logoIds = new Set(['wpnuxt', 'harmonics'])
             <span class="label text-(--color-text-dimmed)">{project.data.date.getUTCFullYear()}</span>
             <h2 class="text-2xl font-semibold tracking-tight">{project.data.title}</h2>
             <p class="text-base text-(--color-text-muted)">{project.data.description}</p>
-            <a
-              href={project.data.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="w-fit inline-flex items-center gap-1.5 font-mono uppercase text-xs tracking-[0.12em] text-(--color-accent-text) hover:underline underline-offset-4"
-            >
-              View project
-              <Icon name="lucide:arrow-up-right" class="size-3.5" />
-            </a>
+            <div class="flex flex-wrap gap-3">
+              {project.data.code && (
+                <Button label="View code" to={project.data.code} target="_blank" icon="i-simple-icons-github" variant="outline" size="sm" />
+              )}
+              <Button label="View website" to={project.data.website} target="_blank" icon="i-lucide-arrow-up-right" variant="outline" size="sm" />
+            </div>
             {isFft && <div class="mt-auto pt-6" set:html={fftControlsHtml()} />}
           </div>
           <div

@@ -2,7 +2,8 @@ title: Nuxt Audiomotion Analyzer
 description: High-resolution real-time audio spectrum analyzer for Nuxt. A plugin wrapping Henrique Vianna's audioMotion-analyzer for visualizing audio data.
 image: /images/projects/vue-audiomotion-analyzer.mp4
 video: true
-url: https://nuxt-audiomotion-analyzer-docs.vercel.app/
+code: https://github.com/vernaillen/nuxt-audiomotion-analyzer
+website: https://nuxt-audiomotion-analyzer-docs.vercel.app/
 tags:
   - Nuxt
   - Audio
