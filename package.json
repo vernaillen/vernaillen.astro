@@ -52,5 +52,6 @@
       "sharp",
       "@resvg/resvg-js"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.28.0"
 }
