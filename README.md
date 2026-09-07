@@ -1,43 +1,41 @@
-# Astro Starter Kit: Minimal
+# vernaillen.dev
+
+The Astro source for [vernaillen.dev](https://vernaillen.dev), Wouter Vernaillen's portfolio and technical blog. It is a static rebuild of the previous Nuxt site with a custom editorial grid design.
+
+## Requirements
+
+- Node.js 26 (see `.node-version`)
+- pnpm 12.3.4
+
+## Development
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm install
+pnpm dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Run the complete local verification before opening a pull request:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+pnpm check
+pnpm test:e2e
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+`pnpm check` runs ESLint, Astro's type checker, and the production build. The browser tests start a preview server and check representative desktop and mobile layouts.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Content and routes
 
-Any static assets, like images, can be placed in the `public/` directory.
+- Page content lives in `content/` and is validated by `src/content.config.ts`.
+- Blog filenames start with a numeric editorial prefix; public slugs omit it.
+- Images imported from `src/assets/images/` are processed by Astro.
+- Video files that must retain their original format live in `public/images/`.
+- `/llms.txt`, `/llms-full.txt`, raw Markdown routes, the sitemap, and social cards are generated at build time.
+- `/search-index.json` powers the dependency-free search dialog and is fetched only when search opens.
 
-## 🧞 Commands
+## Deployment
 
-All commands are run from the root of the project, from a terminal:
+The GitHub Actions workflow checks every branch and builds the production Docker image. On `main`, it pushes the image to the private registry and asks Coolify to redeploy it. nginx serves `dist/`; Bunny CDN can cache the public deployment in front of it.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+The build accepts `GITHUB_TOKEN` as a BuildKit secret to refresh open-source contribution data, with a checked-in snapshot as fallback. `PUBLIC_RADIO_URL` sets the FFT demo's audio proxy.
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+See [MIGRATION.md](./MIGRATION.md) for intentional differences from the Nuxt site.

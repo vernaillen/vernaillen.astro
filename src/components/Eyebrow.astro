@@ -10,7 +10,7 @@ const { index, label, class: className } = Astro.props
 <p class:list={['label inline-flex items-center gap-2.5', className]}>
   {index && (
     <>
-      <span class="text-vernaillen-500">{index}</span>
+      <span class="text-(--color-accent-text)">{index}</span>
       <span class="text-(--color-text-dimmed)" aria-hidden="true">/</span>
     </>
   )}

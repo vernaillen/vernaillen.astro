@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components'
 import SectionLabel from '../SectionLabel.astro'
+import Button from '../Button.astro'
 import { resolveIcon } from '../../lib/icons'
 import type { IndexPage } from '../../content.config'
 
@@ -12,12 +13,12 @@ const { data } = Astro.props
 
 <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
   <div class="lg:col-span-3 p-6 lg:p-8">
-    <SectionLabel index="03" label="experience" />
+    <SectionLabel index="04" label="experience" />
   </div>
   <div class="lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8 flex flex-col gap-6">
     <h2 class="section-title">{data.experience.title}</h2>
     <div class="flex flex-col">
-      {data.experience.items.map((item, i) => (
+      {data.experience.items.slice(0, 3).map((item, i) => (
         <a
           href={item.company.url}
           target="_blank"
@@ -30,14 +31,17 @@ const { data } = Astro.props
           <span class="font-mono text-xs tabular-nums text-(--color-text-dimmed) shrink-0">{item.date}</span>
           <span class="flex flex-wrap items-baseline gap-x-1.5 min-w-0">
             <span class="text-(--color-text-muted)">{item.position}</span>
-            <span class="inline-flex items-center gap-1.5 font-medium text-(--color-text) group-hover:text-vernaillen-500 transition-colors">
+            <span class="inline-flex items-center gap-1.5 font-medium text-(--color-text) group-hover:text-(--color-accent-text) transition-colors">
               {item.company.name}
               <Icon name={resolveIcon(item.company.logo)} style={{ color: item.company.color }} class="size-3.5 shrink-0" />
             </span>
           </span>
-          <Icon name="lucide:arrow-up-right" class="size-4 text-(--color-text-dimmed) group-hover:text-vernaillen-500 transition-colors" />
+          <Icon name="lucide:arrow-up-right" class="size-4 text-(--color-text-dimmed) group-hover:text-(--color-accent-text) transition-colors" />
         </a>
       ))}
+    </div>
+    <div>
+      <Button label="Full career" to="/career" icon="lucide:arrow-right" variant="outline" size="sm" />
     </div>
   </div>
 </section>

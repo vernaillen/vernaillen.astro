@@ -1,13 +1,12 @@
 import type { APIRoute } from 'astro'
-import { getCollection, getEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
 import { site } from '../lib/site'
-import type { IndexPage, CareerPage } from '../content.config'
+import { getPage } from '../lib/content'
 
 export const GET: APIRoute = async () => {
   const contents: string[] = []
 
-  const homeEntry = await getEntry('pages', 'index')
-  const home = homeEntry?.data as IndexPage
+  const { data: home } = await getPage('index')
 
   if (home) {
     const sections = [`# Home\n\nSource: ${site.url}/`]
@@ -43,13 +42,12 @@ export const GET: APIRoute = async () => {
     contents.push(sections.join('\n\n'))
   }
 
-  const aboutEntry = await getEntry('pages', 'about')
+  const aboutEntry = await getPage('about')
   if (aboutEntry?.body) {
     contents.push(`# About\n\nSource: ${site.url}/about\n\n${aboutEntry.body.trim()}`)
   }
 
-  const careerEntry = await getEntry('pages', 'career')
-  const career = careerEntry?.data as CareerPage
+  const { data: career } = await getPage('career')
   if (career?.events?.length) {
     const lines = career.events.map((e) => `- **${e.date}** — *${e.category}* — ${e.title} @ ${e.location}`)
     const description = career.description ? `${career.description}\n\n` : ''

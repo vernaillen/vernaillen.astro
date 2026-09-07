@@ -6,6 +6,7 @@ import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import Seo from '../components/Seo.astro'
 import JsonLd from '../components/JsonLd.astro'
+import SearchDialog from '../components/SearchDialog.astro'
 import { site } from '../lib/site'
 
 interface Props {
@@ -15,9 +16,10 @@ interface Props {
   path?: string
   type?: 'website' | 'article'
   publishedTime?: string
+  noindex?: boolean
 }
 
-const { title, description, image, path = new URL(Astro.request.url).pathname, type, publishedTime } = Astro.props
+const { title, description, image, path = new URL(Astro.request.url).pathname, type, publishedTime, noindex } = Astro.props
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -48,7 +50,7 @@ const websiteSchema = {
     <link rel="preload" as="font" type="font/woff2" href={geistWoff} crossorigin="anonymous" />
     <link rel="preload" as="font" type="font/woff2" href={geistMonoWoff} crossorigin="anonymous" />
 
-    <Seo title={title} description={description} image={image} path={path} type={type} publishedTime={publishedTime} />
+    <Seo title={title} description={description} image={image} path={path} type={type} publishedTime={publishedTime} noindex={noindex} />
     <JsonLd data={personSchema} />
     <JsonLd data={websiteSchema} />
 
@@ -71,6 +73,7 @@ const websiteSchema = {
       <slot />
     </main>
     <Footer />
+    <SearchDialog />
     <script src="../scripts/reveal.ts"></script>
   </body>
 </html>

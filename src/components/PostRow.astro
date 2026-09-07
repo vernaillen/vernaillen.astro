@@ -33,7 +33,7 @@ const imageDims = isLogo ? { width: 192 } : { width: 192, height: 120 }
 >
   <span class="label text-(--color-text-dimmed) tabular-nums self-start pt-1">{index}</span>
   <div class="flex flex-col gap-1.5 min-w-0">
-    <h3 class="text-xl font-medium tracking-tight group-hover:text-vernaillen-500 transition-colors">{post.data.title}</h3>
+    <h3 class="text-xl font-medium tracking-tight group-hover:text-(--color-accent-text) transition-colors">{post.data.title}</h3>
     <p class="text-sm text-(--color-text-muted) line-clamp-2">{post.data.description}</p>
     <p class="label text-(--color-text-dimmed)">{formatPostDate(post.data.date)} &middot; {post.data.minRead} min read</p>
   </div>
@@ -50,7 +50,7 @@ const imageDims = isLogo ? { width: 192 } : { width: 192, height: 120 }
   ) : (
     <Icon
       name="lucide:arrow-right"
-      class="size-4 text-(--color-text-dimmed) group-hover:text-vernaillen-500 group-hover:translate-x-1 transition-all self-start mt-1.5 justify-self-end"
+      class="size-4 text-(--color-text-dimmed) group-hover:text-(--color-accent-text) group-hover:translate-x-1 transition-all self-start mt-1.5 justify-self-end"
     />
   )}
 </a>

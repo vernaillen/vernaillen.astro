@@ -83,6 +83,7 @@
 :root {
   --color-selection-bg: var(--color-vernaillen-500);
   --color-selection-text: var(--color-dusk-950);
+  --color-accent-text: var(--color-vernaillen-700);
 }
 
 .dark {
@@ -93,6 +94,7 @@
   --color-text: var(--color-dusk-50);
   --color-text-muted: var(--color-dusk-400);
   --color-text-dimmed: #8a867c;
+  --color-accent-text: var(--color-vernaillen-300);
 }
 
 @layer base {
@@ -104,6 +106,10 @@
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent-text);
+    outline-offset: 3px;
   }
   ::selection {
     background-color: var(--color-selection-bg);
@@ -167,9 +173,9 @@
   /* Mono uppercase label — eyebrows, nav, meta, table columns, buttons */
   .label {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
   }
 
   /* Ruled grid frame — vertical hairlines on both page edges, hidden below sm.
@@ -189,6 +195,7 @@
 
   /* Blog prose — refined typography, width set by the caller (`max-w-*`) */
   .blog-prose {
+    min-width: 0;
     & h2 {
       font-size: 1.5rem;
       font-weight: 600;
@@ -214,12 +221,31 @@
       color: var(--color-text-muted);
       line-height: 1.75;
     }
+    & ul,
+    & ol {
+      margin: 0 0 1.25rem 1.35rem;
+      padding-left: 0.75rem;
+    }
+    & ul {
+      list-style: square;
+    }
+    & ol {
+      list-style: decimal;
+    }
+    & li + li {
+      margin-top: 0.4rem;
+    }
+    & li > ul,
+    & li > ol {
+      margin-top: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
     & strong {
       color: var(--color-text);
       font-weight: 600;
     }
     & a {
-      color: var(--color-vernaillen-500);
+      color: var(--color-accent-text);
       text-decoration: underline;
       text-decoration-thickness: 1px;
       text-underline-offset: 4px;
@@ -236,9 +262,32 @@
     & :not(pre) > code {
       font-family: var(--font-mono);
       font-size: 0.85em;
-      color: var(--color-vernaillen-400);
+      color: var(--color-accent-text);
       background: color-mix(in srgb, var(--color-vernaillen-500) 8%, transparent);
       padding: 0.15em 0.4em;
+      overflow-wrap: anywhere;
+    }
+    & table {
+      display: block;
+      width: max-content;
+      max-width: 100%;
+      margin: 1.75rem 0;
+      overflow-x: auto;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    & th,
+    & td {
+      min-width: 8rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--color-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    & th {
+      color: var(--color-text);
+      background: var(--color-bg-muted);
+      font-weight: 600;
     }
   }
   .dark .blog-prose :not(pre) > code {
@@ -303,6 +352,10 @@
   .terminal-block:hover .terminal-copy {
     opacity: 1;
   }
+  .terminal-copy:focus-visible,
+  .terminal-block:focus-within .terminal-copy {
+    opacity: 1;
+  }
   .terminal-copy:hover {
     background: var(--color-bg-elevated);
     color: var(--color-text);
@@ -329,6 +382,7 @@
     margin: 0;
     padding: 1rem 1.25rem;
     overflow-x: auto;
+    max-width: 100%;
     font-size: 0.85rem;
     line-height: 1.6;
   }

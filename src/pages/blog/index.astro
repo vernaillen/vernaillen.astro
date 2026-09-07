@@ -1,17 +1,15 @@
 ---
-import { getCollection, getEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
 import Base from '../../layouts/Base.astro'
 import Masthead from '../../components/Masthead.astro'
 import PostRow from '../../components/PostRow.astro'
-import { formatPostDate } from '../../lib/date'
+import { formatPostDate, sortPostsNewestFirst } from '../../lib/date'
+import { getPage } from '../../lib/content'
 import { localImage } from '../../lib/images'
-import type { BlogMeta } from '../../content.config'
+const { data } = await getPage('blog')
 
-const page = await getEntry('pages', 'blog')
-const data = page!.data as BlogMeta
-
-const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const posts = sortPostsNewestFirst(await getCollection('blog'))
 const [featured, ...rest] = posts
 const featuredImage = await localImage(featured.data.image.src)
 ---
@@ -41,7 +39,7 @@ const featuredImage = await localImage(featured.data.image.src)
       <p class="label text-(--color-text-dimmed)">{formatPostDate(featured.data.date)} &middot; {featured.data.minRead} min read</p>
       <h2 class="text-3xl font-medium tracking-tight group-hover:text-vernaillen-500 transition-colors">{featured.data.title}</h2>
       <p class="text-base text-(--color-text-muted)">{featured.data.description}</p>
-      <span class="font-mono uppercase text-[0.6875rem] tracking-[0.16em] text-vernaillen-500">Read article &rarr;</span>
+      <span class="font-mono uppercase text-xs tracking-[0.12em] text-(--color-accent-text)">Read article &rarr;</span>
     </a>
   </section>
 

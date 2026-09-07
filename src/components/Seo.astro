@@ -8,9 +8,10 @@ interface Props {
   path: string
   type?: 'website' | 'article'
   publishedTime?: string
+  noindex?: boolean
 }
 
-const { title, description, image, path, type = 'website', publishedTime } = Astro.props
+const { title, description, image, path, type = 'website', publishedTime, noindex = false } = Astro.props
 const canonical = new URL(path, site.url).toString()
 const ogImage = new URL(image ?? ogImagePath(path), site.url).toString()
 const fullTitle = path === '/' ? title : `${title} - ${site.name}`
@@ -18,7 +19,7 @@ const fullTitle = path === '/' ? title : `${title} - ${site.name}`
 
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 <link rel="canonical" href={canonical} />
 
 <meta property="og:type" content={type} />

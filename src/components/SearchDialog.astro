@@ -1,0 +1,18 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<dialog data-search-dialog aria-labelledby="search-title" class="m-auto w-[min(42rem,calc(100%-2rem))] max-h-[min(42rem,calc(100%-2rem))] border border-(--color-border) bg-(--color-bg-elevated) text-(--color-text) shadow-2xl backdrop:bg-dusk-950/75">
+  <div class="flex items-center border-b border-(--color-border)">
+    <Icon name="lucide:search" class="ml-5 size-4 text-(--color-text-dimmed)" />
+    <label id="search-title" class="sr-only" for="site-search">Search this site</label>
+    <input id="site-search" data-search-input type="search" autocomplete="off" placeholder="Search pages and articles…" class="min-w-0 flex-1 bg-transparent px-4 py-5 outline-none placeholder:text-(--color-text-dimmed)" />
+    <button type="button" data-search-close aria-label="Close search" class="m-2 inline-flex size-10 items-center justify-center text-(--color-text-muted) hover:text-(--color-text)">
+      <Icon name="lucide:x" class="size-4" />
+    </button>
+  </div>
+  <p data-search-status class="px-5 py-4 text-sm text-(--color-text-muted)">Start typing to search.</p>
+  <ul data-search-results class="max-h-[28rem] overflow-y-auto"></ul>
+</dialog>
+
+<script src="../scripts/search.ts"></script>

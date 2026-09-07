@@ -1,9 +1,9 @@
 title: Vernaillen.dev
-description: This very website — my developer portfolio and blog. Built with Nuxt 4, Nuxt UI, and Nuxt Content. Open source on GitHub.
+description: This developer portfolio and blog, rebuilt as a fast static Astro site with a custom editorial design. Open source on GitHub.
 image: /images/projects/vernaillendev.png
 url: https://vernaillen.dev
 tags:
-  - Nuxt
-  - Nuxt UI
-  - Nuxt Content
+  - Astro
+  - Tailwind CSS
+  - Content Collections
 date: 2026-01-01

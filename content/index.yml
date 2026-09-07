@@ -6,17 +6,14 @@ title2: "Enterprise Full-Stack Java Developer"
 description: "Spring Boot, Vue/Nuxt & Angular, DevOps, Secure delivery, AI-enabled development."
 hero:
   links:
+    - label: Book a call
+      to: https://calendly.com/vernaillen/15min
+      icon: i-lucide-calendar
+      size: lg
+      target: _blank
     - label: View Projects
       to: /projects
       icon: i-lucide-folder-code
-      size: lg
-    - label: Career
-      to: /career
-      icon: i-lucide-briefcase
-      size: lg
-    - label: Blog
-      to: /blog
-      icon: i-lucide-book
       size: lg
       variant: outline
 stats:
@@ -39,6 +36,25 @@ about:
     I'm also a sound healing practitioner, an ecstatic dance DJ, and a trance dance facilitator. I run [Harmonics.be](https://harmonics.be) — organizing events around sound, music, and movement.
     <br><br>
     I'm based in Belgium (Europe/Brussels timezone) and work primarily remotely, for Belgian and international clients alike.
+caseStudies:
+  - client: Opgroeien / Kind & Gezin
+    title: Government citizen portal
+    challenge: Maintain and extend a public-facing portal backed by enterprise services in a long-running government programme.
+    contribution: Full-stack development across Spring Boot microservices, REST APIs, Angular, delivery pipelines and the Kubernetes platform.
+    evidence: Continuous engagement since 2019, building on an earlier Kind & Gezin portal engagement from 2014 to 2017.
+    stack: [Spring Boot, Angular, Docker, Kubernetes, Helm]
+  - client: Van Marcke
+    title: Enterprise intranet and commerce
+    challenge: Connect portal, content, search and commerce capabilities into usable tools for a large B2B organisation.
+    contribution: Portal architecture, project leadership and development across the WebSphere platform and its integrations.
+    evidence: Led two strategic projects; client references describe the work as user-led, rapid and dependable.
+    stack: [WebSphere Portal, Spring, Hibernate, DB2, Maven]
+  - client: WPNuxt
+    title: Open-source headless WordPress toolkit
+    challenge: Give content teams the WordPress workflow they know while providing Nuxt developers with a typed, modern frontend stack.
+    contribution: Created and maintain the core module, block renderer, authentication package, CLI, starters and documentation.
+    evidence: A production-ready 2.0 release built through more than 700 commits, with generated types, caching and serverless support.
+    stack: [Nuxt, Vue, TypeScript, GraphQL, WordPress]
 experience:
   title: Work Experience
   items:

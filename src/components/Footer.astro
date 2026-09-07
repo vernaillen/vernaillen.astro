@@ -17,12 +17,12 @@ const deployedAtLabel = formatDeployedAt(buildDate)
           <path fill="currentColor" class="fill-dusk-950" d="M490 0 H582 V184 H662 V0 H754 V276 H490 Z" />
         </svg>
       </div>
-      <nav class="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-dusk-950/20 p-8 flex flex-col gap-3 font-mono uppercase text-[0.6875rem] tracking-[0.16em]">
+      <nav aria-label="Footer" class="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-dusk-950/20 p-8 flex flex-col gap-3 font-mono uppercase text-xs tracking-[0.12em]">
         {navLinks.map((link) => (
           <a href={link.href} class="hover:underline underline-offset-4">{link.label}</a>
         ))}
       </nav>
-      <div class="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-dusk-950/20 p-8 flex flex-col gap-3 font-mono uppercase text-[0.6875rem] tracking-[0.16em]">
+      <div class="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-dusk-950/20 p-8 flex flex-col gap-3 font-mono uppercase text-xs tracking-[0.12em]">
         {socialLinks.map((link) => (
           <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:underline underline-offset-4">
             <Icon name={resolveIcon(link.icon)} class="size-4" />
@@ -34,7 +34,7 @@ const deployedAtLabel = formatDeployedAt(buildDate)
 
     <div class="p-8">
       <p class="font-mono text-xs text-dusk-950/85 leading-relaxed">
-        Built with Astro &amp; Tailwind CSS, self-hosted on Combell via Bunny CDN.<br />
+        Built with Astro &amp; Tailwind CSS, deployed through Coolify and served via Bunny CDN.<br />
         last deployed {deployedAtLabel}<br /><br />
         © {year} Wouter Vernaillen · Harmonics BV — VAT BE0503971022
       </p>
