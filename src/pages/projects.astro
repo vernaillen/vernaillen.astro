@@ -8,6 +8,7 @@ import Button from '../components/Button.astro'
 import Reveal from '../components/Reveal.astro'
 import { localImage } from '../lib/images'
 import { getPage } from '../lib/content'
+import { fftControlsHtml } from '../lib/fft-demo'
 
 const { data } = await getPage('projects')
 
@@ -34,9 +35,10 @@ const logoIds = new Set(['wpnuxt', 'harmonics'])
 
   {projects.map((project, index) => {
     const reversed = index % 2 === 1
+    const isFft = project.data.demo === 'fft'
     return (
       <Reveal>
-        <div class="grid lg:grid-cols-12 border-b border-(--color-border)">
+        <div class="grid lg:grid-cols-12 border-b border-(--color-border)" {...(isFft ? { 'data-fft-demo': '' } : {})}>
           <div class:list={['lg:col-span-5 p-6 lg:p-10 flex flex-col gap-4 justify-center', reversed ? 'lg:order-2' : 'lg:order-1']}>
             <span class="label text-(--color-text-dimmed)">{project.data.date.getUTCFullYear()}</span>
             <h2 class="text-2xl font-semibold tracking-tight">{project.data.title}</h2>
@@ -50,6 +52,7 @@ const logoIds = new Set(['wpnuxt', 'harmonics'])
               View project
               <Icon name="lucide:arrow-up-right" class="size-3.5" />
             </a>
+            {isFft && <div class="mt-auto pt-6" set:html={fftControlsHtml()} />}
           </div>
           <div
             class:list={[
@@ -57,14 +60,14 @@ const logoIds = new Set(['wpnuxt', 'harmonics'])
               reversed ? 'lg:order-1 lg:border-r border-(--color-border)' : 'lg:order-2 lg:border-l border-(--color-border)',
             ]}
           >
-            {project.data.demo === 'fft' ? (
-              <div class="fft-demo-shell h-full" data-fft-demo>
+            {isFft ? (
+              <div class="fft-demo-shell h-full" data-fft-stage>
                 {fftPoster && <Image src={fftPoster} alt={project.data.title} width={1200} height={630} format="avif" class="fft-demo-poster" />}
                 <div class="fft-demo-overlay">
-                  <button type="button" class="fft-demo-play" data-fft-play aria-label="Load interactive demo">
+                  <button type="button" class="fft-demo-play" data-fft-play aria-label="Play the interactive demo">
                     <Icon name="lucide:play" class="size-5 translate-x-0.5" />
                   </button>
-                  <span class="fft-demo-caption">Interactive demo — click to load</span>
+                  <span class="fft-demo-caption">Interactive demo — press play to listen</span>
                 </div>
               </div>
             ) : project.data.video ? (

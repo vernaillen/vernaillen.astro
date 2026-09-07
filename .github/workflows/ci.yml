@@ -29,7 +29,7 @@ on:
 #     COOLIFY_TOKEN   - Coolify API token (Keys & Tokens) with deploy permission.
 #   Variables:
 #     RADIO_ORIGIN_URL  - absolute URL of the radio app's stream proxy
-#                         (https://origin.apps.vernaillen.dev/api/radio)
+#                         (https://radio.vernaillen.dev/api/radio)
 #     COOLIFY_URL       - Coolify instance URL without trailing slash.
 #     COOLIFY_APP_UUID  - UUID of the Docker Image application in Coolify that
 #                         runs registry.apps.vernaillen.dev/vernaillen-astro:latest.

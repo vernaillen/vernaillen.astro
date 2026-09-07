@@ -5,6 +5,7 @@ import type { Properties } from 'hast'
 import { existsSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { fftControlsHtml } from './fft-demo'
 
 interface CurlyAttrs {
   class?: string
@@ -123,10 +124,10 @@ function textLine(node: RootContent | undefined): string | undefined {
  */
 const FFT_OVERLAY_HTML = [
   '<div class="fft-demo-overlay">',
-  '<button type="button" class="fft-demo-play" data-fft-play aria-label="Load interactive demo">',
+  '<button type="button" class="fft-demo-play" data-fft-play aria-label="Play the interactive demo">',
   '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
   '</button>',
-  '<p class="fft-demo-caption">Interactive demo — click to load</p>',
+  '<p class="fft-demo-caption">Interactive demo — press play to listen</p>',
   '</div>',
 ].join('')
 
@@ -154,7 +155,7 @@ export function remarkFftDemoBlock() {
       }
       const node: Paragraph = {
         type: 'paragraph',
-        children: [posterImage, { type: 'html', value: FFT_OVERLAY_HTML }],
+        children: [posterImage, { type: 'html', value: FFT_OVERLAY_HTML + fftControlsHtml() }],
         data: { hName: 'div', hProperties: { class: 'fft-demo-shell not-prose', 'data-fft-demo': '' } },
       }
       tree.children.splice(start, end - start + 1, node)

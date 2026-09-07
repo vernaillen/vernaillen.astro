@@ -423,7 +423,12 @@
     min-height: 0;
     aspect-ratio: 1200 / 630;
     object-fit: cover;
-    background: #0a0a12;
+    background: var(--color-bg);
+  }
+  /* The poster is a dark render; in light mode invert it (hue-rotate keeps
+     the bar colours) so the frame sits on the page background. */
+  html:not(.dark) .fft-demo-poster {
+    filter: invert(1) hue-rotate(180deg);
   }
   .fft-demo-overlay {
     position: absolute;
@@ -433,6 +438,10 @@
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
+    background: color-mix(in srgb, white 35%, transparent);
+    color: var(--color-text);
+  }
+  .dark .fft-demo-overlay {
     background: color-mix(in srgb, black 35%, transparent);
     color: white;
   }
@@ -442,7 +451,7 @@
     justify-content: center;
     width: 3.5rem;
     height: 3.5rem;
-    background: color-mix(in srgb, white 15%, transparent);
+    background: color-mix(in srgb, currentColor 12%, transparent);
     backdrop-filter: blur(4px);
     border: 0;
     padding: 0;
@@ -450,7 +459,7 @@
     cursor: pointer;
   }
   .fft-demo-play:hover {
-    background: color-mix(in srgb, white 25%, transparent);
+    background: color-mix(in srgb, currentColor 22%, transparent);
   }
   .fft-demo-play:disabled {
     opacity: 0.6;
@@ -483,12 +492,27 @@
     object-fit: cover;
   }
 
-  /* Booted FFT demo — canvas + controls injected by fft-demo-core.ts */
-  .fft-demo-canvas {
-    display: block;
+  /* Booted FFT demo — stage + canvas + controls injected by fft-demo-core.ts.
+     The visualizer sizes the canvas to its parent with a ResizeObserver, so
+     that parent must never derive its size from the canvas: the stage gets
+     its height from width + aspect-ratio and the canvas is out of flow.
+     (With the canvas directly in the shell, shell height = canvas + controls
+     → canvas grows to that → shell grows again, without end.) */
+  .fft-demo-stage {
+    position: relative;
     width: 100%;
     aspect-ratio: 1200 / 630;
+    background: var(--color-bg);
+  }
+  .dark .fft-demo-stage {
     background: #0a0a12;
+  }
+  .fft-demo-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
   }
   .fft-demo-controls {
     display: flex;
@@ -531,15 +555,19 @@
     background: var(--color-bg-muted);
     color: var(--color-text);
   }
-  .fft-demo-status {
-    min-height: 1.25rem;
+  /* Scoped under the panel so these beat the blog's `.blog-prose p` rules —
+     the status line must keep one fixed line of height in both states. */
+  .fft-demo-panel .fft-demo-status {
+    min-height: 1.125rem;
+    line-height: 1.125rem;
     margin-top: 0.625rem;
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--color-text-muted);
   }
-  .fft-demo-attribution {
+  .fft-demo-panel .fft-demo-attribution {
     margin-top: 0.25rem;
+    line-height: 1.125rem;
     font-family: var(--font-mono);
     font-size: 0.7rem;
     color: var(--color-text-dimmed);

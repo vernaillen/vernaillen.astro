@@ -1,22 +1,15 @@
-import { FFTVisualizer, type FFTVisualizerOptions } from '@fft-visualizer/core'
+import { FFTVisualizer } from '@fft-visualizer/core'
 import type { FftProcessor } from '@fft-visualizer/core/wasm'
+import { PRESETS, SOMA, SOURCE_LABEL, presetOptions, type AudioSource } from '../lib/fft-demo'
 
 const BANDS = 80
 
-const SOMA = {
-  name: 'Groove Salad Classic',
-  station: 'https://somafm.com/gsclassic/',
-  support: 'https://somafm.com/support/',
-  songs: 'https://somafm.com/songs/gsclassic.json',
-}
-
-type AudioSource = 'radio' | 'mic'
 
 // SomaFM 403s the Range header every <audio> fetch sends, so the stream goes
 // through the radio app's proxy (see the source project's radio.get.ts).
 // PUBLIC_RADIO_URL overrides the proxy origin at build time.
 function resolveStreamUrl() {
-  return import.meta.env.PUBLIC_RADIO_URL || 'https://origin.apps.vernaillen.dev/api/radio'
+  return import.meta.env.PUBLIC_RADIO_URL || 'https://radio.vernaillen.dev/api/radio'
 }
 
 interface DemoAudio {
@@ -147,62 +140,6 @@ function createDemoAudio(source: AudioSource, bins: number, fftSize = 2048): Dem
   return { start, stop }
 }
 
-const PRESETS: { name: string; props: Partial<FFTVisualizerOptions> }[] = [
-  {
-    name: 'Radial',
-    props: {
-      radial: true, radialInnerRadius: 0.35, barSpace: 0.2,
-      reflexRatio: 0.65, reflexAlpha: 0.5, glow: 0.9,
-      gradient: 'rainbow', gradientDirection: 'horizontal',
-      showPeaks: false, smoothing: 0.65,
-    },
-  },
-  {
-    name: 'Stereo',
-    props: {
-      stereo: true, barSpace: 0.4, reflexRatio: 0.35, reflexAlpha: 0.5, glow: 1,
-      gradient: 'rainbow', gradientDirection: 'horizontal',
-      showPeaks: false, smoothing: 0.65,
-    },
-  },
-  {
-    name: 'Reflected',
-    props: {
-      gradient: 'aurora', glow: 0.5, barSpace: 0.3,
-      reflexRatio: 0.3, reflexAlpha: 0.3, showPeaks: false, smoothing: 0.65,
-    },
-  },
-  {
-    name: 'LED meter',
-    props: {
-      ledBars: true, ledShape: 'meter', barSpace: 0.35,
-      gradient: [
-        { stop: 0, color: '#22dd66' },
-        { stop: 0.6, color: '#ffd000' },
-        { stop: 1, color: '#ff3344' },
-      ],
-    },
-  },
-  {
-    name: 'Lumi bars',
-    props: {
-      lumiBars: true, bands: 40, barSpace: 0.05,
-      reflexRatio: 0.35, reflexAlpha: 0.25, glow: 1,
-      gradient: 'rainbow', gradientDirection: 'horizontal',
-      colorMode: 'bar-level', stereo: true,
-      showPeaks: true, peakDecay: 0.99, smoothing: 0.65,
-    },
-  },
-  {
-    name: 'Lazers',
-    props: {
-      radial: true, radialInnerRadius: 0, barSpace: 0.35, glow: 1,
-      gradient: 'rainbow', gradientDirection: 'horizontal',
-      stereo: true, showPeaks: false, smoothing: 0.5, bands: 40,
-    },
-  },
-]
-
 function webglAvailable(): boolean {
   try {
     const canvas = document.createElement('canvas')
@@ -212,42 +149,37 @@ function webglAvailable(): boolean {
   }
 }
 
-const sourceLabel: Record<AudioSource, string> = { radio: 'Play radio', mic: 'Microphone' }
+/**
+ * Mounts the visualizer into a demo root: the poster + play overlay inside
+ * `[data-fft-stage]` (or the root itself) are replaced by the canvas stage,
+ * and the pre-rendered `[data-fft-controls]` panel is wired up in place.
+ */
+export function boot(root: HTMLElement, options: { autostart?: AudioSource } = {}) {
+  root.dataset.fftBooted = ''
+  const host = root.querySelector<HTMLElement>('[data-fft-stage]') ?? root
+  const panel = root.querySelector<HTMLElement>('[data-fft-controls]')!
+  host.querySelector('.fft-demo-overlay')?.remove()
+  host.querySelector('.fft-demo-poster')?.remove()
+  host.insertAdjacentHTML('afterbegin', '<div class="fft-demo-stage"><canvas class="fft-demo-canvas"></canvas></div>')
 
-export function boot(shell: HTMLElement) {
-  shell.innerHTML = `
-    <canvas class="fft-demo-canvas"></canvas>
-    <div class="fft-demo-controls">
-      <button type="button" class="fft-demo-btn" data-source="radio">${sourceLabel.radio}</button>
-      <button type="button" class="fft-demo-btn" data-source="mic">${sourceLabel.mic}</button>
-      <select class="fft-demo-preset" aria-label="Visual style"></select>
-    </div>
-    <p class="fft-demo-status" role="status"></p>
-    <p class="fft-demo-attribution">
-      <a href="${SOMA.station}" target="_blank" rel="noopener noreferrer">${SOMA.name}</a> on
-      <a href="https://somafm.com" target="_blank" rel="noopener noreferrer">SomaFM</a> ·
-      <a href="${SOMA.support}" target="_blank" rel="noopener noreferrer">support them</a>
-    </p>
-  `
-
-  const canvas = shell.querySelector<HTMLCanvasElement>('.fft-demo-canvas')!
-  const status = shell.querySelector<HTMLParagraphElement>('.fft-demo-status')!
-  const select = shell.querySelector<HTMLSelectElement>('.fft-demo-preset')!
-  const buttons = [...shell.querySelectorAll<HTMLButtonElement>('[data-source]')]
-
-  for (const preset of PRESETS) {
-    const option = document.createElement('option')
-    option.textContent = preset.name
-    select.append(option)
-  }
+  const canvas = host.querySelector<HTMLCanvasElement>('.fft-demo-canvas')!
+  const status = panel.querySelector<HTMLParagraphElement>('.fft-demo-status')!
+  const select = panel.querySelector<HTMLSelectElement>('.fft-demo-preset')!
+  const buttons = [...panel.querySelectorAll<HTMLButtonElement>('[data-source]')]
 
   if (!webglAvailable()) {
     status.textContent = 'Visualizer needs WebGL, which is not available in this browser.'
-    shell.querySelector('.fft-demo-controls')?.remove()
+    for (const button of buttons) button.disabled = true
     return
   }
 
-  const visualizer = new FFTVisualizer(canvas, { mode: 'external', background: '#0a0a12', ...PRESETS[0]!.props })
+  const stage = canvas.parentElement!
+  const currentPreset = () =>
+    presetOptions(select.selectedIndex, {
+      dark: document.documentElement.classList.contains('dark'),
+      background: getComputedStyle(stage).backgroundColor,
+    })
+  const visualizer = new FFTVisualizer(canvas, { mode: 'external', ...currentPreset() })
 
   let source: AudioSource | null = null
   let pending: AudioSource | null = null
@@ -259,14 +191,17 @@ export function boot(shell: HTMLElement) {
     for (const button of buttons) {
       const id = button.dataset.source as AudioSource
       const active = source === id
-      button.textContent = active ? 'Stop' : pending === id ? 'Connecting…' : sourceLabel[id]
+      button.textContent = active ? 'Stop' : pending === id ? 'Connecting…' : SOURCE_LABEL[id]
       button.classList.toggle('is-active', active)
       button.disabled = pending !== null && !active
     }
   }
 
   function feed(mono: Uint8Array, left: Uint8Array, right: Uint8Array) {
-    visualizer.feedData(mono, left, right)
+    // feedData() with a stereo pair fills only the left/right buffers while the
+    // mono presets draw from the mono buffer, so feed what the active preset draws.
+    if (PRESETS[select.selectedIndex]!.props.stereo) visualizer.feedData(mono, left, right)
+    else visualizer.feedData(mono)
   }
 
   async function refreshNowPlaying() {
@@ -315,14 +250,16 @@ export function boot(shell: HTMLElement) {
     audio = instance
     try {
       await instance.start(feed)
-    } catch {
+    } catch (error) {
       instance.stop()
       if (id !== runId) return
       audio = null
       pending = null
       status.textContent = next === 'mic'
         ? 'No microphone — permission denied, or no input device available.'
-        : 'Could not connect to the radio stream.'
+        : (error as { name?: string } | null)?.name === 'NotAllowedError'
+          ? 'Press “Play radio” to start the stream.'
+          : 'Could not connect to the radio stream.'
       setButtons()
       return
     }
@@ -340,6 +277,13 @@ export function boot(shell: HTMLElement) {
   for (const button of buttons) {
     button.addEventListener('click', () => void toggle(button.dataset.source as AudioSource))
   }
-  select.addEventListener('change', () => visualizer.setOptions(PRESETS[select.selectedIndex]!.props))
+  const applyPreset = () => visualizer.setOptions(currentPreset())
+  select.addEventListener('change', applyPreset)
+  // The theme toggle flips the html class; re-apply so the background follows.
+  new MutationObserver(applyPreset).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
   setButtons()
+  // Autostart after a click on the poster: the click that loaded the module
+  // is a sticky user activation, so audio is allowed in Chromium and Firefox.
+  // Safari may still refuse play(), which toggle() turns into a hint.
+  if (options.autostart) void toggle(options.autostart)
 }
