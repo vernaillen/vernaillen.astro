@@ -105,9 +105,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Coolify pulls :latest again and restarts the container.
+      # Coolify pulls :latest again and restarts the container. The endpoint
+      # is POST-only (GET answers 405); uuid/force are read from the query string.
       - name: Redeploy on Coolify
         if: github.ref == 'refs/heads/main'
         run: |
-          curl -fsS "${{ vars.COOLIFY_URL }}/api/v1/deploy?uuid=${{ vars.COOLIFY_APP_UUID }}&force=true" \
+          curl -fsS -X POST "${{ vars.COOLIFY_URL }}/api/v1/deploy?uuid=${{ vars.COOLIFY_APP_UUID }}&force=true" \
             -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}"
