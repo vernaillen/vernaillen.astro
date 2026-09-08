@@ -25,7 +25,7 @@ const logoIds = new Set(['wpnuxt', 'harmonics'])
 ---
 
 <Base title={data.title} description={data.description} path="/projects">
-  <Masthead index="01" label="projects" title={data.title} description={data.description}>
+  <Masthead label="projects" title={data.title} description={data.description}>
     <Fragment slot="actions">
       {data.links.map((link) => (
         <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant} target={link.target} />

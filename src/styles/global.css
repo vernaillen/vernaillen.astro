@@ -63,7 +63,7 @@
   --color-bg: #f9f8f5;
   --color-bg-muted: #f0efea;
   --color-bg-elevated: #ffffff;
-  --color-border: var(--color-dusk-300);
+  --color-border: var(--color-dusk-200);
   --color-text: #131210;
   --color-text-muted: #656158;
   --color-text-dimmed: #6e6a60;
@@ -90,7 +90,7 @@
   --color-bg: var(--color-dusk-950);
   --color-bg-muted: var(--color-dusk-900);
   --color-bg-elevated: var(--color-dusk-900);
-  --color-border: color-mix(in srgb, var(--color-dusk-700) 70%, transparent);
+  --color-border: color-mix(in srgb, var(--color-dusk-800) 85%, transparent);
   --color-text: var(--color-dusk-50);
   --color-text-muted: var(--color-dusk-400);
   --color-text-dimmed: #8a867c;
@@ -122,12 +122,11 @@
     line-height: 1.2;
   }
   /* Brand marker — a solid gold square, not a glow. Baseline-aligned. */
-  h1::after,
-  .section-title::after {
+  h1::after {
     content: '';
     display: inline-block;
-    width: 0.16em;
-    height: 0.16em;
+    width: 0.14em;
+    height: 0.14em;
     margin-left: 0.14em;
     background: var(--color-vernaillen-500);
   }
@@ -149,25 +148,25 @@
 @layer components {
   /* Home hero name */
   .display {
-    font-size: clamp(3rem, 8.5vw, 7.5rem);
+    font-size: clamp(2.5rem, 5vw, 4.25rem);
     font-weight: 600;
-    letter-spacing: -0.04em;
-    line-height: 0.92;
+    letter-spacing: -0.03em;
+    line-height: 1;
     text-wrap: balance;
   }
 
   /* Sub-page / post masthead h1 */
   .masthead {
-    font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+    font-size: clamp(2rem, 3.5vw, 3rem);
     font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 1;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
   }
 
   /* Section h2 */
   .section-title {
-    font-size: clamp(1.75rem, 3vw, 2.75rem);
-    letter-spacing: -0.03em;
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    letter-spacing: -0.02em;
   }
 
   /* Mono uppercase label — eyebrows, nav, meta, table columns, buttons */
@@ -175,7 +174,7 @@
     font-family: var(--font-mono);
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
   }
 
   /* Ruled grid frame — vertical hairlines on both page edges, hidden below sm.
@@ -186,13 +185,6 @@
     max-width: 80rem;
     margin-inline: auto;
   }
-  @media (min-width: 40rem) {
-    .page-frame {
-      border-left: 1px solid var(--color-border);
-      border-right: 1px solid var(--color-border);
-    }
-  }
-
   /* Blog prose — refined typography, width set by the caller (`max-w-*`) */
   .blog-prose {
     min-width: 0;
@@ -202,8 +194,6 @@
       letter-spacing: -0.01em;
       margin-top: 2.5rem;
       margin-bottom: 1rem;
-      border-top: 1px solid var(--color-border);
-      padding-top: 1.5rem;
     }
     & h3 {
       font-size: 1.25rem;
@@ -556,9 +546,11 @@
     color: var(--color-text);
   }
   /* Scoped under the panel so these beat the blog's `.blog-prose p` rules —
-     the status line must keep one fixed line of height in both states. */
+     reserve two lines up front so the longest status strings (e.g. the
+     microphone-live message) never wrap without room, which would push the
+     panel taller and shift the layout. */
   .fft-demo-panel .fft-demo-status {
-    min-height: 1.125rem;
+    min-height: 2.25rem;
     line-height: 1.125rem;
     margin-top: 0.625rem;
     font-family: var(--font-mono);
@@ -586,12 +578,10 @@
      no-JS visitors. Opacity-only + 8px translate — static and precise. */
   html.js .reveal {
     opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 220ms ease-out, transform 220ms ease-out;
+    transition: opacity 180ms ease-out;
   }
   html.js .reveal.revealed {
     opacity: 1;
-    transform: translateY(0);
   }
 
   /* Active heading in the blog post sticky TOC */

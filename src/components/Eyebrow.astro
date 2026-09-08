@@ -1,18 +1,11 @@
 ---
 interface Props {
-  index?: string
   label: string
   class?: string
 }
-const { index, label, class: className } = Astro.props
+const { label, class: className } = Astro.props
 ---
 
 <p class:list={['label inline-flex items-center gap-2.5', className]}>
-  {index && (
-    <>
-      <span class="text-(--color-accent-text)">{index}</span>
-      <span class="text-(--color-text-dimmed)" aria-hidden="true">/</span>
-    </>
-  )}
   <span class="text-(--color-text-muted)">{label}</span>
 </p>

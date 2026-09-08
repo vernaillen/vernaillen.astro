@@ -8,31 +8,35 @@ const pathname = new URL(Astro.request.url).pathname
 
 <header class="sticky top-0 z-50 bg-(--color-bg) border-b border-(--color-border)">
   <div class="page-frame flex items-stretch">
-    <a href="/" aria-label="Wouter Vernaillen, home" class="flex items-center shrink-0 px-5 border-r border-(--color-border)">
-      <svg viewBox="0 0 754 276" class="h-6 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-        <g fill="none">
-          <path class="fill-black dark:fill-vernaillen-500" d="M0 0 H92 V184 H172 V0 H264 V184 H344 V0 H436 V276 H0 Z" />
-          <path class="fill-vernaillen-500 dark:fill-white" d="M490 0 H582 V184 H662 V0 H754 V276 H490 Z" />
-        </g>
-      </svg>
-    </a>
+    <!-- 2/3 of the frame is the masthead's 8-of-12 divider, so the nav's right
+         edge lands on the same vertical rule that runs down the page. -->
+    <div class="flex items-stretch lg:w-2/3">
+      <a href="/" aria-label="Wouter Vernaillen, home" class="flex shrink-0 px-5">
+        <svg viewBox="0 0 754 276" class="h-6 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <g fill="none">
+            <path class="fill-black dark:fill-vernaillen-500" d="M0 0 H92 V184 H172 V0 H264 V184 H344 V0 H436 V276 H0 Z" />
+            <path class="fill-vernaillen-500 dark:fill-white" d="M490 0 H582 V184 H662 V0 H754 V276 H490 Z" />
+          </g>
+        </svg>
+      </a>
 
-    <nav aria-label="Primary" class="hidden md:flex font-mono uppercase text-xs tracking-[0.12em]">
-      {navLinks.map((link) => (
-        <a
-          href={link.href}
-          aria-current={isNavLinkActive(link, pathname) ? 'page' : undefined}
-          class:list={[
-            'flex items-center h-14 px-4 border-r border-(--color-border) transition-colors',
-            isNavLinkActive(link, pathname)
-              ? 'text-(--color-text) shadow-[inset_0_-2px_0_var(--color-vernaillen-500)]'
-              : 'text-(--color-text-muted) hover:text-(--color-text)',
-          ]}
-        >
-          {link.label}
-        </a>
-      ))}
-    </nav>
+      <nav aria-label="Primary" class="hidden md:flex md:ml-8 lg:ml-auto font-mono uppercase text-xs tracking-[0.08em]">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isNavLinkActive(link, pathname) ? 'page' : undefined}
+            class:list={[
+              'flex items-center h-14 px-4 transition-colors',
+              isNavLinkActive(link, pathname)
+                ? 'text-(--color-text) shadow-[inset_0_-2px_0_var(--color-vernaillen-500)]'
+                : 'text-(--color-text-muted) hover:text-(--color-text)',
+            ]}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+    </div>
 
     <div class="flex items-stretch ml-auto">
       <button
@@ -43,7 +47,7 @@ const pathname = new URL(Astro.request.url).pathname
         class="flex items-center justify-center gap-2 h-14 px-4 border-l border-(--color-border) text-(--color-text-muted) hover:text-(--color-text) transition-colors"
       >
         <Icon name="lucide:search" class="size-4" />
-        <span class="hidden xl:inline font-mono text-xs uppercase tracking-[0.12em]">Search</span>
+        <span class="hidden xl:inline font-mono text-xs uppercase tracking-[0.08em]">Search</span>
         <kbd class="hidden xl:inline font-mono text-[0.65rem] text-(--color-text-dimmed)">⌘K</kbd>
       </button>
       <button
@@ -68,7 +72,7 @@ const pathname = new URL(Astro.request.url).pathname
     </div>
   </div>
 
-  <nav id="mobile-menu" aria-label="Mobile" data-menu-panel hidden class="md:hidden border-t border-(--color-border) font-mono uppercase text-xs tracking-[0.12em] flex flex-col">
+  <nav id="mobile-menu" aria-label="Mobile" data-menu-panel hidden class="md:hidden border-t border-(--color-border) font-mono uppercase text-xs tracking-[0.08em] flex flex-col">
     {navLinks.map((link) => (
       <a
         href={link.href}

@@ -18,11 +18,11 @@ const portraitAsset = portrait && (await localImage(portrait.src))
 ---
 
 <Base title={data.title} description={data.description} path="/about">
-  <Masthead index="01" label="about" title={data.title} description={data.description} />
+  <Masthead label="about" title={data.title} description={data.description} />
 
   <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
-    <div class="lg:col-span-4 p-6 lg:p-8">
-      <SectionLabel index="02" label="story">
+    <div class="lg:col-span-4 p-6 lg:p-10">
+      <SectionLabel label="story">
         {portraitAsset && (
           <figure class="mt-6 max-w-xs">
             <Image
@@ -39,7 +39,7 @@ const portraitAsset = portrait && (await localImage(portrait.src))
         )}
       </SectionLabel>
     </div>
-    <div class="lg:col-span-8 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8">
+    <div class="lg:col-span-8 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-10">
       <div class="blog-prose max-w-2xl">
         <Content />
       </div>

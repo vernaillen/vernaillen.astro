@@ -7,3 +7,4 @@ links:
   - label: 'GitHub'
     to: https://github.com/vernaillen
     icon: i-simple-icons-github
+    variant: outline

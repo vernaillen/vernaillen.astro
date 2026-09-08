@@ -2,21 +2,20 @@
 import Eyebrow from './Eyebrow.astro'
 
 interface Props {
-  index?: string
   label: string
   title: string
   description?: string
   class?: string
 }
-const { index, label, title, description, class: className } = Astro.props
+const { label, title, description, class: className } = Astro.props
 ---
 
 <div class:list={['grid lg:grid-cols-12 border-b border-(--color-border)', className]}>
-  <div class="lg:col-span-8 p-6 lg:p-10 flex flex-col gap-6">
-    <Eyebrow index={index} label={label} />
+  <div class="lg:col-span-8 p-6 lg:px-10 lg:py-14 flex flex-col gap-6">
+    <Eyebrow label={label} />
     <h1 class="masthead">{title}</h1>
   </div>
-  <div class="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-10 flex flex-col justify-end gap-6">
+  <div class="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:px-10 lg:py-14 flex flex-col justify-end gap-6">
     {description && <p class="text-base text-(--color-text-muted)">{description}</p>}
     <div class="flex flex-wrap gap-3">
       <slot name="actions" />

@@ -8,23 +8,25 @@ const year = buildDate.getUTCFullYear()
 const deployedAtLabel = formatDeployedAt(buildDate)
 ---
 
-<footer class="bg-vernaillen-500 text-dusk-950">
-  <div class="page-frame border-dusk-950/20">
-    <div class="grid lg:grid-cols-12 border-b border-dusk-950/20">
-      <div class="lg:col-span-6 p-8 flex items-center">
-        <svg viewBox="0 0 754 276" class="h-24 lg:h-32 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-          <path fill="currentColor" class="fill-dusk-950" d="M0 0 H92 V184 H172 V0 H264 V184 H344 V0 H436 V276 H0 Z" />
-          <path fill="currentColor" class="fill-dusk-950" d="M490 0 H582 V184 H662 V0 H754 V276 H490 Z" />
+<footer class="border-t border-(--color-border)">
+  <div class="page-frame">
+    <div class="grid lg:grid-cols-12 gap-8 border-b border-(--color-border) p-8">
+      <div class="lg:col-span-6 flex">
+        <svg viewBox="0 0 754 276" class="h-10 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <g fill="none">
+            <path class="fill-black dark:fill-vernaillen-500" d="M0 0 H92 V184 H172 V0 H264 V184 H344 V0 H436 V276 H0 Z" />
+            <path class="fill-vernaillen-500 dark:fill-white" d="M490 0 H582 V184 H662 V0 H754 V276 H490 Z" />
+          </g>
         </svg>
       </div>
-      <nav aria-label="Footer" class="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-dusk-950/20 p-8 flex flex-col gap-3 font-mono uppercase text-xs tracking-[0.12em]">
+      <nav aria-label="Footer" class="lg:col-span-3 flex flex-col gap-3 text-sm">
         {navLinks.map((link) => (
-          <a href={link.href} class="hover:underline underline-offset-4">{link.label}</a>
+          <a href={link.href} class="text-(--color-text-muted) hover:text-(--color-accent-text) transition-colors">{link.label}</a>
         ))}
       </nav>
-      <div class="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-dusk-950/20 p-8 flex flex-col gap-3 font-mono uppercase text-xs tracking-[0.12em]">
+      <div class="lg:col-span-3 flex flex-col gap-3 text-sm">
         {socialLinks.map((link) => (
-          <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:underline underline-offset-4">
+          <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-(--color-text-muted) hover:text-(--color-accent-text) transition-colors">
             <Icon name={resolveIcon(link.icon)} class="size-4" />
             {link.label}
           </a>
@@ -33,9 +35,8 @@ const deployedAtLabel = formatDeployedAt(buildDate)
     </div>
 
     <div class="p-8">
-      <p class="font-mono text-xs text-dusk-950/85 leading-relaxed">
-        Built with Astro &amp; Tailwind CSS, deployed through Coolify and served via Bunny CDN.<br />
-        last deployed {deployedAtLabel}<br /><br />
+      <p class="text-xs text-(--color-text-dimmed) leading-relaxed">
+        Built with Astro &amp; Tailwind CSS, deployed through Coolify and served via Bunny CDN · last deployed {deployedAtLabel}<br />
         © {year} Wouter Vernaillen · Harmonics BV — VAT BE0503971022
       </p>
     </div>

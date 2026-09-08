@@ -11,7 +11,7 @@ const { data } = await getPage('open-source')
 ---
 
 <Base title={data.title} description={data.description} path="/open-source">
-  <Masthead index="01" label="open source" title={data.title} description={data.description}>
+  <Masthead label="open source" title={data.title} description={data.description}>
     <Fragment slot="actions">
       {data.links.map((link) => (
         <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant} target={link.target} />
@@ -21,16 +21,16 @@ const { data } = await getPage('open-source')
 
   {authoredGroups.length > 0 && (
     <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
-      <div class="lg:col-span-3 p-6 lg:p-8">
-        <SectionLabel index="02" label="authored" />
+      <div class="lg:col-span-3 p-6 lg:p-10">
+        <SectionLabel label="authored" />
       </div>
-      <div class="min-w-0 lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8 flex flex-col gap-10">
+      <div class="min-w-0 lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-10 flex flex-col gap-10">
         {authoredGroups.map((group) => (
           <div class="min-w-0 flex flex-col gap-4">
             <h2 class="label text-(--color-text-dimmed)">{group.title}</h2>
-            <div class="min-w-0 grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-(--color-border)">
+            <div class="min-w-0 divide-y divide-(--color-border)">
               {group.projects.map((project: GitHubProject) => (
-                <a href={project.url} target="_blank" rel="noopener noreferrer" class="group min-w-0 flex flex-col gap-2 p-5 border-r border-b border-(--color-border) transition-colors hover:bg-(--color-bg-muted)">
+                <a href={project.url} target="_blank" rel="noopener noreferrer" class="group min-w-0 flex flex-col gap-1.5 py-4 transition-colors hover:bg-(--color-bg-muted)">
                   <div class="flex items-start justify-between gap-2">
                     <span class="min-w-0 flex items-center gap-2 font-mono text-sm text-(--color-text) group-hover:text-(--color-accent-text) transition-colors">
                       <Icon name="simple-icons:github" class="size-4 shrink-0" />
@@ -55,13 +55,13 @@ const { data } = await getPage('open-source')
 
   {contributedProjects.length > 0 && (
     <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
-      <div class="lg:col-span-3 p-6 lg:p-8">
-        <SectionLabel index="03" label="contributed to" />
+      <div class="lg:col-span-3 p-6 lg:p-10">
+        <SectionLabel label="contributed to" />
       </div>
-      <div class="min-w-0 lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8">
-        <div class="min-w-0 grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-(--color-border)">
+      <div class="min-w-0 lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-10">
+        <div class="min-w-0 divide-y divide-(--color-border)">
           {contributedProjects.map((project) => (
-            <a href={project.pr || project.url} target="_blank" rel="noopener noreferrer" class="group min-w-0 flex flex-col gap-2 p-5 border-r border-b border-(--color-border) transition-colors hover:bg-(--color-bg-muted)">
+            <a href={project.pr || project.url} target="_blank" rel="noopener noreferrer" class="group min-w-0 flex flex-col gap-1.5 py-4 transition-colors hover:bg-(--color-bg-muted)">
               <div class="flex items-start justify-between gap-2">
                 <span class="min-w-0 flex items-center gap-2 font-mono text-sm text-(--color-text) group-hover:text-(--color-accent-text) transition-colors">
                   <Icon name="simple-icons:github" class="size-4 shrink-0" />

@@ -14,7 +14,7 @@ const groups = CATEGORY_ORDER.map((category) => ({
 ---
 
 <Base title={data.title} description={data.description} path="/career">
-  <Masthead index="01" label="career" title={data.title} description={data.description}>
+  <Masthead label="career" title={data.title} description={data.description}>
     <Fragment slot="actions">
       {data.links.map((link) => (
         <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant} size={link.size} target={link.target} />
@@ -22,19 +22,19 @@ const groups = CATEGORY_ORDER.map((category) => ({
     </Fragment>
   </Masthead>
 
-  <div class="grid lg:grid-cols-3 gap-px bg-(--color-border) border-b border-(--color-border)">
+  <div class="grid lg:grid-cols-3 gap-10 p-6 lg:p-10 border-b border-(--color-border)">
     {groups.map((group) => (
-      <div class="flex flex-col bg-(--color-bg)">
-        <h2 class="lg:sticky lg:top-20 label text-(--color-accent-text) bg-(--color-bg) p-6 lg:p-8 border-b border-(--color-border)">
+      <div class="flex flex-col">
+        <h2 class="text-sm font-medium text-(--color-text) pb-4 border-b border-(--color-border)">
           {group.category}
         </h2>
-        <div class="flex flex-col px-6 lg:px-8">
+        <div class="flex flex-col">
           {group.events.map((event, i) => (
             <div class:list={['flex flex-col gap-1.5 py-5', i === 0 ? '' : 'border-t border-(--color-border)']}>
-              <p class="label text-(--color-text-dimmed)">{event.location} &middot; {event.date}</p>
+              <p class="text-xs font-mono text-(--color-text-muted)">{event.location} &middot; {event.date}</p>
               <h3 class="text-base font-medium text-(--color-text)">{event.title}</h3>
               {event.stack.length > 0 && (
-                <p class="font-mono uppercase text-[0.65rem] tracking-wider text-(--color-text-muted)">{event.stack.join(' / ')}</p>
+                <p class="text-sm text-(--color-text-dimmed)">{event.stack.join(' · ')}</p>
               )}
               {event.links && (
                 <div class="flex flex-wrap gap-2 pt-2">

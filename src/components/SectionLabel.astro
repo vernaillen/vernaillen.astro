@@ -2,14 +2,13 @@
 import Eyebrow from './Eyebrow.astro'
 
 interface Props {
-  index?: string
   label: string
   class?: string
 }
-const { index, label, class: className } = Astro.props
+const { label, class: className } = Astro.props
 ---
 
-<div class:list={['lg:sticky lg:top-20', className]}>
-  <Eyebrow index={index} label={label} />
+<div class:list={[className]}>
+  <Eyebrow label={label} />
   <slot />
 </div>

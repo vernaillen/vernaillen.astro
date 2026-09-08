@@ -1,6 +1,6 @@
 ---
-title: About Me
-description: Developer, open source maker, sound healer. Building things that bridge worlds.
+title: Developer, Maker, Sound Healer
+description: "Freelance developer in Belgium, open source maintainer, and the person behind Harmonics.be. One thread runs through all of it: making the complex feel natural."
 images:
   - src: /images/woutervernaillen.jpg
     alt: Wouter Vernaillen

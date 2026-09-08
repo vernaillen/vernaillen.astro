@@ -15,7 +15,7 @@ const featuredImage = await localImage(featured.data.image.src)
 ---
 
 <Base title={data.title} description={data.description} path="/blog">
-  <Masthead index="01" label="blog" title={data.title} description={data.description} />
+  <Masthead label="blog" title={data.title} description={data.description} />
 
   <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
     <a href={`/blog/${featured.id}`} class="group lg:col-span-7 block">
@@ -37,15 +37,15 @@ const featuredImage = await localImage(featured.data.image.src)
       class="group lg:col-span-5 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-10 flex flex-col gap-4 justify-center"
     >
       <p class="label text-(--color-text-dimmed)">{formatPostDate(featured.data.date)} &middot; {featured.data.minRead} min read</p>
-      <h2 class="text-3xl font-medium tracking-tight group-hover:text-vernaillen-500 transition-colors">{featured.data.title}</h2>
+      <h2 class="text-2xl font-medium tracking-tight group-hover:text-(--color-accent-text) transition-colors">{featured.data.title}</h2>
       <p class="text-base text-(--color-text-muted)">{featured.data.description}</p>
-      <span class="font-mono uppercase text-xs tracking-[0.12em] text-(--color-accent-text)">Read article &rarr;</span>
+      <span class="font-mono uppercase text-xs tracking-[0.08em] text-(--color-accent-text)">Read article &rarr;</span>
     </a>
   </section>
 
   <section class="flex flex-col">
     {rest.map((post, index) => (
-      <PostRow post={post} index={String(index + 2).padStart(3, '0')} showImage first={index === 0} />
+      <PostRow post={post} showImage first={index === 0} />
     ))}
   </section>
 </Base>

@@ -16,14 +16,14 @@ const { label, to, icon, variant = 'solid', size = 'md', target, class: classNam
 const Tag = to ? 'a' : 'button'
 
 const sizeClasses: Record<string, string> = {
-  xs: 'text-[0.65rem] px-2.5 py-1.5 gap-1.5',
-  sm: 'text-[0.7rem] px-3 py-2 gap-1.5',
-  md: 'text-xs px-4 py-2.5 gap-2',
-  lg: 'text-xs px-5 py-3 gap-2',
+  xs: 'text-[0.65rem] h-7 px-2.5 gap-1.5',
+  sm: 'text-[0.7rem] h-8 px-3 gap-1.5',
+  md: 'text-xs h-9 px-4 gap-2',
+  lg: 'text-xs h-10 px-5 gap-2',
 }
 
 const variantClasses: Record<string, string> = {
-  solid: 'bg-vernaillen-500 text-dusk-950 hover:bg-vernaillen-400',
+  solid: 'bg-vernaillen-500 text-white dark:text-dusk-950 hover:bg-vernaillen-400',
   outline: 'border border-(--color-border) hover:border-vernaillen-500 hover:text-(--color-accent-text)',
   ghost: 'hover:bg-(--color-bg-muted)',
   soft: 'bg-(--color-bg-muted) hover:bg-(--color-border)',
@@ -38,7 +38,7 @@ const variantClasses: Record<string, string> = {
   target={target}
   rel={target === '_blank' ? 'noopener noreferrer' : undefined}
   class:list={[
-    'inline-flex items-center justify-center font-mono uppercase tracking-[0.12em] font-medium transition-colors',
+    'inline-flex items-center justify-center font-mono uppercase tracking-[0.08em] font-medium transition-colors',
     sizeClasses[size] ?? sizeClasses.md,
     variantClasses[variant] ?? variantClasses.solid,
     className,
