@@ -17,7 +17,7 @@ hero:
       size: lg
       variant: outline
 stats:
-  - value: "25+"
+  - since: 1999
     label: "Years Experience"
   - value: "50+"
     label: "Projects Delivered"
@@ -30,7 +30,7 @@ about:
   description: |
     I build robust web solutions from backend to frontend — bridging enterprise Java with modern JavaScript, and now embracing agentic workflows.<br>Loving every bit of it!
     <br><br>
-    As a full stack developer with 25+ years of experience, I've gone from the first static HTML sites to cutting-edge web portals with seamless backend integrations.
+    As a full stack developer working since 1999, I've gone from the first static HTML sites to cutting-edge web portals with seamless backend integrations.
     I combine deep Java/Spring expertise with a passion for modern frontend development using Nuxt and Vue. Creator of WPNuxt, an open source module for headless WordPress with Nuxt.
     <br><br>
     I'm also a sound healing practitioner, an ecstatic dance DJ, and a trance dance facilitator. I run [Harmonics.be](https://harmonics.be) — organizing events around sound, music, and movement.

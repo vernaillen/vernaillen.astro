@@ -83,7 +83,7 @@ const indexSchema = z
     title2: z.string(),
     description: z.string(),
     hero: z.object({ links: z.array(linkSchema) }),
-    stats: z.array(z.object({ value: z.string(), label: z.string() })),
+    stats: z.array(z.object({ value: z.string().optional(), since: z.number().optional(), label: z.string() })),
     about: z.object({ title: z.string(), description: z.string() }),
     caseStudies: z.array(
       z.object({

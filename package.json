@@ -10,7 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "docker:build": "docker build -t vernaillen-astro .",
-    "docker:preview": "pnpm docker:build && docker run --rm -p 8080:80 vernaillen-astro",
+    "docker:preview": "pnpm docker:build && docker run --rm -p 8080:8080 vernaillen-astro",
     "astro": "astro",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
