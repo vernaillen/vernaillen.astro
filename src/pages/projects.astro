@@ -14,7 +14,7 @@ const { data } = await getPage('projects')
 
 const projects = (await getCollection('projects')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 
-const fftPoster = await localImage('/images/projects/fft-visualizer-hero.png')
+const fftPoster = await localImage('/images/fft-demo-poster.png')
 const videoPoster = await localImage('/images/projects/vue-audiomotion-analyzer-poster.png')
 
 const cardImages = await Promise.all(
@@ -54,11 +54,14 @@ const logoIds = new Set(['wpnuxt', 'harmonics'])
           <div
             class:list={[
               'lg:col-span-7 border-t lg:border-t-0 min-h-64',
+              // The demo keeps the canvas aspect ratio rather than filling the
+              // cell, so centre it in whatever height the text column sets.
+              isFft ? 'flex items-center' : '',
               reversed ? 'lg:order-1 lg:border-r border-(--color-border)' : 'lg:order-2 lg:border-l border-(--color-border)',
             ]}
           >
             {isFft ? (
-              <div class="fft-demo-shell h-full" data-fft-stage>
+              <div class="fft-demo-shell" data-fft-stage>
                 {fftPoster && <Image src={fftPoster} alt={project.data.title} width={1200} height={630} format="avif" class="fft-demo-poster" />}
                 <div class="fft-demo-overlay">
                   <button type="button" class="fft-demo-play" data-fft-play aria-label="Play the interactive demo">

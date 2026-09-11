@@ -164,7 +164,8 @@ export function boot(root: HTMLElement, options: { autostart?: AudioSource } = {
 
   const canvas = host.querySelector<HTMLCanvasElement>('.fft-demo-canvas')!
   const status = panel.querySelector<HTMLParagraphElement>('.fft-demo-status')!
-  const select = panel.querySelector<HTMLSelectElement>('.fft-demo-preset')!
+  const preset = panel.querySelector<HTMLElement>('[data-fft-preset]')!
+  const presetIndex = () => Number(preset.dataset.index)
   const buttons = [...panel.querySelectorAll<HTMLButtonElement>('[data-source]')]
 
   if (!webglAvailable()) {
@@ -175,7 +176,7 @@ export function boot(root: HTMLElement, options: { autostart?: AudioSource } = {
 
   const stage = canvas.parentElement!
   const currentPreset = () =>
-    presetOptions(select.selectedIndex, {
+    presetOptions(presetIndex(), {
       dark: document.documentElement.classList.contains('dark'),
       background: getComputedStyle(stage).backgroundColor,
     })
@@ -200,7 +201,7 @@ export function boot(root: HTMLElement, options: { autostart?: AudioSource } = {
   function feed(mono: Uint8Array, left: Uint8Array, right: Uint8Array) {
     // feedData() with a stereo pair fills only the left/right buffers while the
     // mono presets draw from the mono buffer, so feed what the active preset draws.
-    if (PRESETS[select.selectedIndex]!.props.stereo) visualizer.feedData(mono, left, right)
+    if (PRESETS[presetIndex()]!.props.stereo) visualizer.feedData(mono, left, right)
     else visualizer.feedData(mono)
   }
 
@@ -278,7 +279,7 @@ export function boot(root: HTMLElement, options: { autostart?: AudioSource } = {
     button.addEventListener('click', () => void toggle(button.dataset.source as AudioSource))
   }
   const applyPreset = () => visualizer.setOptions(currentPreset())
-  select.addEventListener('change', applyPreset)
+  panel.addEventListener('fft:preset', applyPreset)
   // The theme toggle flips the html class; re-apply so the background follows.
   new MutationObserver(applyPreset).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
   setButtons()

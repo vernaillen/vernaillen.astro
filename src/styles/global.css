@@ -398,8 +398,8 @@
   /* FFT demo shell — poster image + click-to-load button before boot;
      fft-demo.ts swaps the poster for a canvas + controls on click. The
      shell sizes to its content (poster or canvas + controls) so the booted
-     controls are never clipped; on /projects `h-full` lets the poster
-     stretch to fill the media cell. */
+     controls are never clipped, and the poster carries the same aspect ratio
+     as the stage so swapping one for the other changes no height. */
   .fft-demo-shell {
     position: relative;
     display: flex;
@@ -409,8 +409,6 @@
   .fft-demo-poster {
     display: block;
     width: 100%;
-    flex: 1 1 auto;
-    min-height: 0;
     aspect-ratio: 1200 / 630;
     object-fit: cover;
     background: var(--color-bg);
@@ -534,16 +532,49 @@
     color: var(--color-vernaillen-500);
     border-color: var(--color-vernaillen-500);
   }
+  /* Visual-style stepper — three ruled cells: chevron, name, chevron. The
+     square end columns match the row height so the chevrons read as their own
+     buttons, and every preset name sits in the same grid cell with the
+     inactive ones hidden, so the box is as wide as the longest name and
+     stepping never moves the chevrons. */
   .fft-demo-preset {
     margin-left: auto;
+    display: grid;
+    grid-template-columns: 2.125rem 1fr 2.125rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-muted);
+  }
+  .fft-demo-step {
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+  .fft-demo-step:hover {
+    color: var(--color-vernaillen-500);
+    background: var(--color-bg-elevated);
+  }
+  .fft-demo-preset-name {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    padding: 0.5rem 0.875rem;
+    border-inline: 1px solid var(--color-border);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding: 0.5rem 0.875rem;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-muted);
     color: var(--color-text);
+  }
+  .fft-demo-preset-name > span {
+    grid-area: 1 / 1;
+    visibility: hidden;
+  }
+  .fft-demo-preset-name > span[data-current] {
+    visibility: visible;
   }
   /* Scoped under the panel so these beat the blog's `.blog-prose p` rules —
      reserve two lines up front so the longest status strings (e.g. the

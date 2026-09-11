@@ -41,3 +41,17 @@ document.addEventListener('click', (event) => {
       if (caption) caption.textContent = 'Demo could not load — try again.'
     })
 })
+
+// Stepping the visual style has to work before the demo is booted (the choice
+// carries into boot()), so it lives here rather than in the core; the core
+// listens for the event to re-apply the preset to a running visualizer.
+document.addEventListener('click', (event) => {
+  const step = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-preset-step]')
+  if (!step) return
+  const group = step.closest<HTMLElement>('[data-fft-preset]')!
+  const names = [...group.querySelectorAll<HTMLElement>('.fft-demo-preset-name > span')]
+  const index = (Number(group.dataset.index) + Number(step.dataset.presetStep) + names.length) % names.length
+  group.dataset.index = String(index)
+  for (const [i, name] of names.entries()) name.toggleAttribute('data-current', i === index)
+  group.dispatchEvent(new CustomEvent('fft:preset', { bubbles: true }))
+})
