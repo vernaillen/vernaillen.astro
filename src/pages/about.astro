@@ -2,8 +2,7 @@
 import { getEntry, render } from 'astro:content'
 import { Image } from 'astro:assets'
 import Base from '../layouts/Base.astro'
-import Masthead from '../components/Masthead.astro'
-import SectionLabel from '../components/SectionLabel.astro'
+import Eyebrow from '../components/Eyebrow.astro'
 import { localImage } from '../lib/images'
 import type { AboutPage } from '../content.config'
 
@@ -14,32 +13,30 @@ const { Content } = await render(page!)
 const images = await Promise.all(
   data.images.map(async (image) => ({ ...image, asset: await localImage(image.src) })),
 )
-const validImages = images.filter((image) => image.asset)
-const photoColsClass = validImages.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'
 ---
 
 <Base title={data.title} description={data.description} path="/about">
-  <Masthead index="01" label="about" title={data.title} description={data.description} />
+  <section class="mx-auto max-w-3xl px-4 sm:px-6 py-16 sm:py-24">
+    <Eyebrow index="01" label="about" />
+    <h1 class="pt-2 text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+    <p class="pt-4 text-(--color-text-muted) max-w-xl">{data.description}</p>
 
-  {validImages.length > 0 && (
-    <div class:list={['grid gap-px bg-(--color-border) border-b border-(--color-border)', photoColsClass]}>
-      {validImages.map((image) => (
-        <figure class="bg-(--color-bg)">
-          <Image src={image.asset!} alt={image.alt} width={480} format="avif" loading="lazy" class:list={['aspect-square w-full', image.src.includes('logo') ? 'object-contain p-8' : 'object-cover']} />
-          <figcaption class="p-3 border-t border-(--color-border) font-mono text-xs uppercase tracking-wider text-(--color-text-muted)">{image.alt}</figcaption>
-        </figure>
+    <div class="flex flex-wrap gap-6 pt-10 pb-4">
+      {images.map((image, index) => image.asset && (
+        <div
+          class:list={[
+            'bg-white p-2 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out hover:scale-105 hover:rotate-0 hover:z-10',
+            index % 2 === 0 ? '-rotate-3 hover:-translate-x-4' : 'rotate-3 hover:translate-x-4',
+          ]}
+        >
+          <Image src={image.asset} alt={image.alt} width={128} height={128} format="avif" loading="lazy" class="size-32 object-cover" />
+          <span class="w-32 text-xs text-black font-medium text-center mt-2">{image.alt}</span>
+        </div>
       ))}
     </div>
-  )}
 
-  <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
-    <div class="lg:col-span-3 p-6 lg:p-8">
-      <SectionLabel index="02" label="story" />
-    </div>
-    <div class="lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8">
-      <div class="blog-prose max-w-2xl">
-        <Content />
-      </div>
+    <div class="blog-prose pt-6">
+      <Content />
     </div>
   </section>
 </Base>

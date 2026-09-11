@@ -3,7 +3,7 @@ import { getCollection, getEntry } from 'astro:content'
 import Base from '../layouts/Base.astro'
 import Reveal from '../components/Reveal.astro'
 import Hero from '../components/home/Hero.astro'
-import CtaBand from '../components/home/CtaBand.astro'
+import Stats from '../components/home/Stats.astro'
 import About from '../components/home/About.astro'
 import WorkExperience from '../components/home/WorkExperience.astro'
 import Blog from '../components/home/Blog.astro'
@@ -20,21 +20,21 @@ const posts = (await getCollection('blog'))
 
 <Base title={data.seo.title} description={data.seo.description} path="/">
   <Hero data={data} />
-  <CtaBand />
 
   <Reveal>
-    <About data={data} />
+    <Stats data={data} />
   </Reveal>
 
-  <Reveal>
+  <Reveal class="mx-auto max-w-7xl px-4 sm:px-6 py-20 lg:py-28 grid gap-16 lg:grid-cols-2 lg:gap-12 section-divider">
+    <About data={data} />
     <WorkExperience data={data} />
   </Reveal>
 
-  <Reveal>
+  <Reveal class="mx-auto max-w-7xl px-4 sm:px-6 py-20 lg:py-28 section-divider">
     <Blog data={data} posts={posts} />
   </Reveal>
 
-  <Reveal>
+  <Reveal class="mx-auto max-w-7xl px-4 sm:px-6 py-20 lg:py-28 section-divider">
     <Testimonials data={data} />
   </Reveal>
 </Base>

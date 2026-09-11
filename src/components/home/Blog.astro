@@ -1,6 +1,6 @@
 ---
-import PostRow from '../PostRow.astro'
-import SectionLabel from '../SectionLabel.astro'
+import BlogPostCard from '../BlogPostCard.astro'
+import SectionHeading from '../SectionHeading.astro'
 import type { CollectionEntry } from 'astro:content'
 import type { IndexPage } from '../../content.config'
 
@@ -11,25 +11,14 @@ interface Props {
 const { data, posts } = Astro.props
 ---
 
-<section class="grid lg:grid-cols-12 border-b border-(--color-border)">
-  <div class="lg:col-span-3 p-6 lg:p-8">
-    <SectionLabel index="04" label="writing" />
+<div class="flex flex-col gap-6">
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+    <SectionHeading index="03" eyebrow="writing" title={data.blog.title} description={data.blog.description} />
+    <a href="/blog" class="shrink-0 font-mono text-sm text-vernaillen-500 hover:underline underline-offset-4">All posts &rarr;</a>
   </div>
-  <div class="lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8 flex flex-col gap-6">
-    <div class="flex flex-col gap-2">
-      <h2 class="section-title">{data.blog.title}</h2>
-      {data.blog.description && <p class="text-base text-(--color-text-muted) max-w-2xl">{data.blog.description}</p>}
-    </div>
-    <div class="flex flex-col -mx-6 lg:-mx-8">
-      {posts.map((post, index) => (
-        <PostRow post={post} index={String(index + 1).padStart(3, '0')} eager={index === 0} first={index === 0} />
-      ))}
-      <a
-        href="/blog"
-        class="border-t border-(--color-border) px-5 sm:px-8 py-5 font-mono uppercase text-[0.6875rem] tracking-[0.16em] text-vernaillen-500 hover:underline underline-offset-4"
-      >
-        All posts &rarr;
-      </a>
-    </div>
+  <div class="flex flex-col gap-3">
+    {posts.map((post, index) => (
+      <BlogPostCard post={post} orientation="horizontal" eager={index === 0} />
+    ))}
   </div>
-</section>
+</div>

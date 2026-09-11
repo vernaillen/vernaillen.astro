@@ -1,53 +1,26 @@
 ---
 import { getCollection, getEntry } from 'astro:content'
-import { Image } from 'astro:assets'
 import Base from '../../layouts/Base.astro'
-import Masthead from '../../components/Masthead.astro'
-import PostRow from '../../components/PostRow.astro'
-import { formatPostDate } from '../../lib/date'
-import { localImage } from '../../lib/images'
+import Eyebrow from '../../components/Eyebrow.astro'
+import BlogPostCard from '../../components/BlogPostCard.astro'
 import type { BlogMeta } from '../../content.config'
 
 const page = await getEntry('pages', 'blog')
 const data = page!.data as BlogMeta
 
 const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-const [featured, ...rest] = posts
-const featuredImage = await localImage(featured.data.image.src)
 ---
 
 <Base title={data.title} description={data.description} path="/blog">
-  <Masthead index="01" label="blog" title={data.title} description={data.description} />
+  <section class="mx-auto max-w-5xl px-4 sm:px-6 py-16 sm:py-24">
+    <Eyebrow index="01" label="blog" />
+    <h1 class="pt-2 text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+    <p class="pt-4 text-(--color-text-muted) max-w-2xl">{data.description}</p>
 
-  <section class="grid lg:grid-cols-12 border-b border-(--color-border)">
-    <a href={`/blog/${featured.id}`} class="group lg:col-span-7 block">
-      {featuredImage && (
-        <Image
-          src={featuredImage}
-          alt={featured.data.image.alt ?? featured.data.title}
-          width={900}
-          widths={[480, 720, 900, 1200]}
-          sizes="(min-width: 80rem) 747px, (min-width: 64rem) 58vw, 100vw"
-          loading="eager"
-          fetchpriority="high"
-          class="aspect-[16/9] w-full object-cover"
-        />
-      )}
-    </a>
-    <a
-      href={`/blog/${featured.id}`}
-      class="group lg:col-span-5 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-10 flex flex-col gap-4 justify-center"
-    >
-      <p class="label text-(--color-text-dimmed)">{formatPostDate(featured.data.date)} &middot; {featured.data.minRead} min read</p>
-      <h2 class="text-3xl font-medium tracking-tight group-hover:text-vernaillen-500 transition-colors">{featured.data.title}</h2>
-      <p class="text-base text-(--color-text-muted)">{featured.data.description}</p>
-      <span class="font-mono uppercase text-[0.6875rem] tracking-[0.16em] text-vernaillen-500">Read article &rarr;</span>
-    </a>
-  </section>
-
-  <section class="flex flex-col">
-    {rest.map((post, index) => (
-      <PostRow post={post} index={String(index + 2).padStart(3, '0')} showImage first={index === 0} />
-    ))}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12">
+      {posts.map((post, index) => (
+        <BlogPostCard post={post} orientation="vertical" eager={index === 0} />
+      ))}
+    </div>
   </section>
 </Base>

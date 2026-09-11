@@ -12,11 +12,12 @@ const SOMA = {
 
 type AudioSource = 'radio' | 'mic'
 
-// SomaFM 403s the Range header every <audio> fetch sends, so the stream goes
-// through the radio app's proxy (see the source project's radio.get.ts).
-// PUBLIC_RADIO_URL overrides the proxy origin at build time.
+// Same-origin `/api/radio` only exists on the old Nitro deploy; this static
+// site needs PUBLIC_RADIO_URL to point at an absolute proxy origin instead
+// (SomaFM 403s the Range header every <audio> fetch sends, so the stream must
+// go through a proxy that strips it — see the source project's radio.get.ts).
 function resolveStreamUrl() {
-  return import.meta.env.PUBLIC_RADIO_URL || 'https://origin.apps.vernaillen.dev/api/radio'
+  return import.meta.env.PUBLIC_RADIO_URL || '/api/radio'
 }
 
 interface DemoAudio {

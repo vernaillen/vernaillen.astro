@@ -1,13 +1,15 @@
 ---
 import Base from '../layouts/Base.astro'
-import Masthead from '../components/Masthead.astro'
-import Button from '../components/Button.astro'
+import Eyebrow from '../components/Eyebrow.astro'
 ---
 
 <Base title="Page not found" description="We are sorry but this page could not be found." path="/404">
-  <Masthead index="404" label="not found" title="Page not found" description="We are sorry but this page could not be found.">
-    <Fragment slot="actions">
-      <Button label="Back home" to="/" variant="solid" />
-    </Fragment>
-  </Masthead>
+  <section class="mx-auto max-w-3xl px-4 sm:px-6 py-24 sm:py-32 text-center flex flex-col items-center gap-4">
+    <Eyebrow index="404" label="not found" class="mx-auto" />
+    <h1 class="text-3xl sm:text-5xl tracking-tight">Page not found</h1>
+    <p class="text-(--color-text-muted) max-w-md">We are sorry but this page could not be found.</p>
+    <a href="/" class="mt-4 inline-flex items-center justify-center rounded-md bg-vernaillen-500 text-dusk-950 hover:bg-vernaillen-400 transition-colors text-sm px-3.5 py-2 gap-2 font-medium">
+      Back home
+    </a>
+  </section>
 </Base>

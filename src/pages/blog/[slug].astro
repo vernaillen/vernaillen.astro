@@ -10,14 +10,10 @@ import { site, ogImagePath } from '../../lib/site'
 import { resolveIcon } from '../../lib/icons'
 
 export async function getStaticPaths() {
-  const posts = (await getCollection('blog')).sort((a, b) => {
-    const numA = Number(a.filePath?.split('/').pop()?.match(/^\d+/)?.[0] ?? 0)
-    const numB = Number(b.filePath?.split('/').pop()?.match(/^\d+/)?.[0] ?? 0)
-    return numA - numB
-  })
+  const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   return posts.map((post, index) => ({
     params: { slug: post.id },
-    props: { post, prev: posts[index - 1], next: posts[index + 1] },
+    props: { post, prev: posts[index + 1], next: posts[index - 1] },
   }))
 }
 
@@ -50,47 +46,60 @@ const articleSchema = {
 <Base title={post.data.title} description={post.data.description} path={`/blog/${post.id}`} type="article" publishedTime={post.data.date.toISOString()}>
   <JsonLd data={articleSchema} />
 
-  <div class="border-b border-(--color-border) p-6 lg:p-10 flex flex-col gap-4">
-    <a href="/blog" class="w-fit font-mono uppercase text-[0.6875rem] tracking-[0.16em] text-(--color-text-muted) hover:text-vernaillen-500 transition-colors">
-      &larr; blog
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 pt-16">
+    <a href="/blog" class="font-mono text-xs text-(--color-text-muted) flex items-center gap-1.5 hover:text-(--color-text) transition-colors">
+      <span class="text-vernaillen-500/70">&gt;_</span>
+      <span>blog</span>
     </a>
-    <p class="label text-(--color-text-dimmed)">{formatPostDate(post.data.date)} &middot; {post.data.minRead} min read</p>
-    <h1 class="masthead max-w-4xl">{post.data.title}</h1>
-    <p class="text-lg text-(--color-text-muted) max-w-3xl">{post.data.description}</p>
-    <div class="flex items-center gap-3 pt-2">
-      {authorAvatar && <Image src={authorAvatar} alt={post.data.author.avatar.alt} width={36} height={36} class="size-9 object-cover" />}
-      <div class="text-sm">
-        <p class="font-medium text-(--color-text)">{post.data.author.name}</p>
-        <p class="font-mono text-xs text-(--color-text-muted)">{post.data.author.description}</p>
+
+    <div class="flex flex-col gap-4 mt-8">
+      <div class="flex items-center justify-center gap-3 font-mono text-xs text-(--color-text-muted)">
+        <span>{formatPostDate(post.data.date)}</span>
+        <span class="text-vernaillen-500/50">//</span>
+        <span>{post.data.minRead} min read</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl text-center max-w-3xl mx-auto tracking-tight leading-tight">{post.data.title}</h1>
+      <p class="font-mono text-(--color-text-muted) text-center max-w-3xl mx-auto text-base leading-relaxed">{post.data.description}</p>
+
+      {image && (
+        <Image
+          src={image}
+          alt={post.data.title}
+          width={900}
+          height={post.data.image.height ?? 300}
+          format="avif"
+          loading="eager"
+          fetchpriority="high"
+          style={{ height: `${post.data.image.height ?? 300}px` }}
+          class="rounded-lg w-full object-cover object-center border border-(--color-border)"
+        />
+      )}
+
+      <div class="flex items-center justify-center gap-3 pt-2">
+        {authorAvatar && <Image src={authorAvatar} alt={post.data.author.avatar.alt} width={36} height={36} class="size-9 rounded-full object-cover" />}
+        <div class="text-sm text-left">
+          <p class="font-medium">{post.data.author.name}</p>
+          <p class="text-(--color-text-muted) text-xs">{post.data.author.description}</p>
+        </div>
       </div>
     </div>
   </div>
 
-  {image && (
-    <Image
-      src={image}
-      alt={post.data.title}
-      width={1600}
-      widths={[640, 960, 1280, 1600]}
-      sizes="(min-width: 80rem) 80rem, 100vw"
-      format="avif"
-      loading="eager"
-      fetchpriority="high"
-      class="aspect-[21/9] w-full object-cover border-b border-(--color-border)"
-    />
-  )}
-
-  <div class="grid lg:grid-cols-12">
-    <article class="blog-prose lg:col-span-9 max-w-3xl p-6 lg:p-10">
+  <div class="mx-auto max-w-3xl lg:max-w-5xl px-4 sm:px-6 pt-12 pb-20 grid gap-10 lg:grid-cols-[minmax(0,1fr)_200px] lg:items-start">
+    <article class="blog-prose min-w-0 max-w-3xl">
       <Content />
 
       {post.data.social && post.data.social.length > 0 && (
-        <div class="mt-10 border border-vernaillen-500/40 p-4">
-          <p class="label text-vernaillen-500">comment /</p>
+        <div class="mt-10 rounded-lg border border-vernaillen-500/25 bg-vernaillen-500/5 p-3">
+          <p class="flex items-center gap-1.5 font-mono text-xs text-vernaillen-500">
+            <Icon name="lucide:message-square-text" class="size-4 shrink-0" />
+            comment //
+          </p>
           <p class="mt-1.5 text-xs text-(--color-text-muted) leading-snug">Got thoughts on this post? Join the conversation:</p>
           <div class="mt-2.5 flex flex-wrap gap-2">
             {post.data.social.map((s) => (
-              <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`Join the conversation on ${s.name}`} class="inline-flex items-center justify-center size-8 border border-vernaillen-500/40 text-vernaillen-500 hover:bg-vernaillen-500/10 transition-colors">
+              <a href={s.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md bg-vernaillen-500/10 hover:bg-vernaillen-500/20 transition-colors size-8 text-vernaillen-500">
                 <Icon name={s.icon ? resolveIcon(s.icon) : (socialIcons[s.name] ?? `simple-icons:${s.name}`)} class="size-4" />
               </a>
             ))}
@@ -99,55 +108,47 @@ const articleSchema = {
       )}
 
       <div class="flex items-center justify-end gap-2 mt-10 pt-6 border-t border-(--color-border)">
-        <span class="label text-(--color-text-muted) mr-1">share /</span>
-        <a href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(articleLink)}`} target="_blank" rel="noopener noreferrer" aria-label="Share on X" class="inline-flex size-8 items-center justify-center border border-(--color-border) hover:border-vernaillen-500 hover:text-vernaillen-500 transition-colors">
+        <span class="font-mono text-xs text-(--color-text-muted) mr-1">share //</span>
+        <a href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(articleLink)}`} target="_blank" rel="noopener noreferrer" class="inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
           <Icon name="simple-icons:x" class="size-3.5" />
         </a>
-        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleLink)}`} target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn" class="inline-flex size-8 items-center justify-center border border-(--color-border) hover:border-vernaillen-500 hover:text-vernaillen-500 transition-colors">
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleLink)}`} target="_blank" rel="noopener noreferrer" class="inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
           <Icon name="simple-icons:linkedin" class="size-3.5" />
         </a>
-        <a href={`https://bsky.app/intent/compose?text=${encodeURIComponent(`${post.data.title} ${articleLink}`)}`} target="_blank" rel="noopener noreferrer" aria-label="Share on Bluesky" class="inline-flex size-8 items-center justify-center border border-(--color-border) hover:border-vernaillen-500 hover:text-vernaillen-500 transition-colors">
+        <a href={`https://bsky.app/intent/compose?text=${encodeURIComponent(`${post.data.title} ${articleLink}`)}`} target="_blank" rel="noopener noreferrer" class="inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
           <Icon name="simple-icons:bluesky" class="size-3.5" />
         </a>
-        <button type="button" data-copy-link={articleLink} aria-label="Copy link" class="copy-btn inline-flex size-8 items-center justify-center border border-(--color-border) hover:border-vernaillen-500 hover:text-vernaillen-500 transition-colors">
+        <button type="button" data-copy-link={articleLink} aria-label="Copy link" class="copy-btn inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
           <Icon name="lucide:link" class="icon-copy size-3.5" />
           <Icon name="lucide:check" class="icon-check size-3.5" />
         </button>
       </div>
 
-      {(prev || next) && (
-        <div class="grid sm:grid-cols-2 mt-6 border border-(--color-border)">
-          {prev && (
-            <a href={`/blog/${prev.id}`} class="group flex flex-col gap-1 p-5 border-b sm:border-b-0 sm:border-r border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
-              <p class="label text-(--color-text-dimmed)">&larr; Previous</p>
-              <p class="text-base font-medium group-hover:text-vernaillen-500 transition-colors">{prev.data.title}</p>
-              <p class="text-sm text-(--color-text-muted) line-clamp-2">{prev.data.description}</p>
-            </a>
-          )}
-          {next && (
-            <a
-              href={`/blog/${next.id}`}
-              class:list={[
-                'group flex flex-col gap-1 p-5 hover:bg-(--color-bg-muted) transition-colors sm:text-right sm:items-end',
-                !prev && 'sm:col-start-2 sm:border-l border-(--color-border)',
-              ]}
-            >
-              <p class="label text-(--color-text-dimmed)">Next &rarr;</p>
-              <p class="text-base font-medium group-hover:text-vernaillen-500 transition-colors">{next.data.title}</p>
-              <p class="text-sm text-(--color-text-muted) line-clamp-2">{next.data.description}</p>
-            </a>
-          )}
-        </div>
-      )}
+      <div class="grid sm:grid-cols-2 gap-3 pt-6">
+        {prev && (
+          <a href={`/blog/${prev.id}`} class="card-glow rounded-lg border border-(--color-border) p-4">
+            <p class="font-mono text-xs text-(--color-text-muted)">&larr; Previous</p>
+            <p class="text-sm mt-1">{prev.data.title}</p>
+            <p class="text-xs text-(--color-text-muted) line-clamp-2 mt-1">{prev.data.description}</p>
+          </a>
+        )}
+        {next && (
+          <a href={`/blog/${next.id}`} class:list={['card-glow rounded-lg border border-(--color-border) p-4', !prev && 'sm:col-start-2']}>
+            <p class="font-mono text-xs text-(--color-text-muted) text-right">Next &rarr;</p>
+            <p class="text-sm mt-1 text-right">{next.data.title}</p>
+            <p class="text-xs text-(--color-text-muted) line-clamp-2 mt-1 text-right">{next.data.description}</p>
+          </a>
+        )}
+      </div>
     </article>
 
     {headings.length > 0 && (
-      <nav id="toc" class="hidden lg:block lg:col-span-3 lg:border-l border-(--color-border) p-6 lg:p-8 sticky top-20 self-start text-sm">
-        <p class="label text-(--color-text-dimmed) mb-3">Contents</p>
-        <ul class="flex flex-col gap-2">
+      <nav id="toc" class="hidden lg:block sticky top-24 text-sm">
+        <p class="font-mono text-xs uppercase tracking-wide text-(--color-text-muted) mb-2">On this page</p>
+        <ul class="flex flex-col gap-1.5 border-l border-(--color-border)">
           {headings.filter((h) => h.depth <= 3).map((heading) => (
-            <li style={{ paddingLeft: `${(heading.depth - 2) * 0.75}rem` }}>
-              <a href={`#${heading.slug}`} data-toc-link class="block border-l-2 border-transparent pl-3 -ml-px text-(--color-text-muted) hover:text-(--color-text) transition-colors">{heading.text}</a>
+            <li style={{ paddingLeft: `${(heading.depth - 2) * 0.75 + 0.75}rem` }}>
+              <a href={`#${heading.slug}`} data-toc-link class="text-(--color-text-muted) hover:text-(--color-text) transition-colors">{heading.text}</a>
             </li>
           ))}
         </ul>
@@ -159,4 +160,4 @@ const articleSchema = {
 <script src="../../scripts/copy-code.ts"></script>
 <script src="../../scripts/copy-link.ts"></script>
 <script src="../../scripts/toc.ts"></script>
-{post.body?.includes('::fft-visualizer-demo') && <script src="../../scripts/fft-demo.ts"></script>}
+<script src="../../scripts/fft-demo.ts"></script>

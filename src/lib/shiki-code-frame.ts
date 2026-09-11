@@ -29,18 +29,9 @@ function el(tagName: string, properties: Properties, children: ElementContent[] 
  * blog posts (dots + filename + language + copy button). Markup only this
  * pass — the copy-to-clipboard behaviour is a client script added later.
  */
-// Comment tokens in both Material themes sit below WCAG AA (2.5–2.8:1); swap them for
-// same-hue shades that clear 4.5:1 on the theme backgrounds.
-const COMMENT_COLORS: Record<string, string> = { '#676E95': '#969EC4', '#90A4AE': '#607079' }
-
 export function shikiCodeFrame(): ShikiTransformer {
   return {
     name: 'terminal-code-frame',
-    span(node) {
-      const style = node.properties.style
-      if (typeof style !== 'string') return
-      node.properties.style = style.replace(/#(?:676E95|90A4AE)\b/gi, (hex) => COMMENT_COLORS[hex.toUpperCase()] ?? hex)
-    },
     pre(node) {
       const raw = (this.options.meta?.__raw ?? '').trim()
       const filename = /\[(.+)\]/.exec(raw)?.[1]

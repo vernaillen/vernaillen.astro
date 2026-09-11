@@ -1,6 +1,8 @@
 ---
-import SectionLabel from '../SectionLabel.astro'
+import SectionHeading from '../SectionHeading.astro'
+import Button from '../Button.astro'
 import { renderInlineMarkdown } from '../../lib/inline-markdown'
+import { site } from '../../lib/site'
 import type { IndexPage } from '../../content.config'
 
 interface Props {
@@ -9,12 +11,13 @@ interface Props {
 const { data } = Astro.props
 ---
 
-<section class="grid lg:grid-cols-12 border-b border-(--color-border)">
-  <div class="lg:col-span-3 p-6 lg:p-8">
-    <SectionLabel index="02" label="about" />
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 rounded-lg border border-(--color-border) bg-(--color-bg-elevated)/40 p-6">
+    <SectionHeading index="01" eyebrow="about" title={data.about.title} />
+    <p class="text-sm text-(--color-text-muted) leading-relaxed" set:html={renderInlineMarkdown(data.about.description)} />
   </div>
-  <div class="lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8 flex flex-col gap-6">
-    <h2 class="section-title">{data.about.title}</h2>
-    <div class="lg:columns-2 gap-10 text-base leading-relaxed text-(--color-text-muted)" set:html={renderInlineMarkdown(data.about.description)} />
+  <div class="flex flex-wrap items-center gap-3 rounded-lg border border-(--color-border) bg-(--color-bg-elevated)/40 p-6">
+    <Button label="Book a call" to={site.meetingLink} icon="lucide:calendar" variant="solid" target="_blank" />
+    <Button label={site.email} to={`mailto:${site.email}`} icon="lucide:mail" variant="outline" />
   </div>
-</section>
+</div>

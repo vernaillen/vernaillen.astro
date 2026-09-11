@@ -63,36 +63,27 @@
   --color-bg: #f9f8f5;
   --color-bg-muted: #f0efea;
   --color-bg-elevated: #ffffff;
-  --color-border: var(--color-dusk-300);
+  --color-border: #dfddd6;
   --color-text: #131210;
   --color-text-muted: #656158;
-  --color-text-dimmed: #6e6a60;
-
-  /* Swiss grid editorial: square everything. Zeroing the whole radius scale
-     is a safety net on top of never authoring a `rounded-*` class. */
-  --radius-xs: 0px;
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
-  --radius-3xl: 0px;
-  --radius-4xl: 0px;
+  --color-text-dimmed: #918d82;
 }
 
 :root {
-  --color-selection-bg: var(--color-vernaillen-500);
-  --color-selection-text: var(--color-dusk-950);
+  --color-selection-bg: #c8c8c8;
+  --color-selection-text: #282a30;
 }
 
 .dark {
   --color-bg: var(--color-dusk-950);
   --color-bg-muted: var(--color-dusk-900);
   --color-bg-elevated: var(--color-dusk-900);
-  --color-border: color-mix(in srgb, var(--color-dusk-700) 70%, transparent);
+  --color-border: color-mix(in srgb, var(--color-dusk-800) 60%, transparent);
   --color-text: var(--color-dusk-50);
   --color-text-muted: var(--color-dusk-400);
-  --color-text-dimmed: #8a867c;
+  --color-text-dimmed: var(--color-dusk-600);
+  --color-selection-bg: #474747;
+  --color-selection-text: #ffffff;
 }
 
 @layer base {
@@ -115,15 +106,20 @@
     letter-spacing: -0.02em;
     line-height: 1.2;
   }
-  /* Brand marker — a solid gold square, not a glow. Baseline-aligned. */
   h1::after,
   .section-title::after {
-    content: '';
-    display: inline-block;
-    width: 0.16em;
-    height: 0.16em;
-    margin-left: 0.14em;
-    background: var(--color-vernaillen-500);
+    content: '.';
+    color: var(--color-vernaillen-500);
+    font-weight: 700;
+    margin-left: 4px;
+  }
+
+  /* Consistent section dividers */
+  .section-divider {
+    border-top: 1px solid var(--color-dusk-200);
+  }
+  .dark .section-divider {
+    border-top-color: var(--color-dusk-800);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -141,62 +137,71 @@
 }
 
 @layer components {
-  /* Home hero name */
   .display {
-    font-size: clamp(3rem, 8.5vw, 7.5rem);
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    line-height: 0.92;
-    text-wrap: balance;
-  }
-
-  /* Sub-page / post masthead h1 */
-  .masthead {
-    font-size: clamp(2.5rem, 5.5vw, 4.75rem);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 1;
-  }
-
-  /* Section h2 */
-  .section-title {
-    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.05;
     letter-spacing: -0.03em;
   }
 
-  /* Mono uppercase label — eyebrows, nav, meta, table columns, buttons */
-  .label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
+  /* Card hover — subtle gold border accent */
+  .card-glow {
+    transition: border-color 0.3s ease;
+  }
+  .card-glow:hover {
+    border-color: color-mix(in srgb, var(--color-vernaillen-400) 50%, transparent);
+  }
+  .dark .card-glow:hover {
+    border-color: color-mix(in srgb, var(--color-vernaillen-500) 40%, transparent);
   }
 
-  /* Ruled grid frame — vertical hairlines on both page edges, hidden below sm.
-     Header/footer are full-bleed; their inner content reuses this class so
-     the vertical lines run through the whole page. */
-  .page-frame {
-    width: 100%;
-    max-width: 80rem;
-    margin-inline: auto;
+  /* CSS-only dot grid, used behind the hero and other section backdrops */
+  .dot-pattern {
+    position: relative;
   }
-  @media (min-width: 40rem) {
-    .page-frame {
-      border-left: 1px solid var(--color-border);
-      border-right: 1px solid var(--color-border);
-    }
+  .dot-pattern::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(circle, var(--color-text-muted) 1px, transparent 1px);
+    background-size: 14px 14px;
+    mask-image: radial-gradient(ellipse at center, black, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 70%);
+    opacity: 0.2;
   }
 
-  /* Blog prose — refined typography, width set by the caller (`max-w-*`) */
+  /* Fixed-position radial gold glow behind the hero — CSS replacement for the
+     dropped WebGL shader background. The hero's text stays the LCP element. */
+  .hero-glow {
+    position: relative;
+  }
+  .hero-glow::before {
+    content: '';
+    position: absolute;
+    top: -10vh;
+    left: -10%;
+    width: 120%;
+    height: 50vh;
+    z-index: -1;
+    background: radial-gradient(50% 40% at 50% 50%, rgba(186, 175, 78, 0.12) 0%, rgba(186, 175, 78, 0.04) 40%, transparent 70%);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .dark .hero-glow::before {
+    background: radial-gradient(50% 40% at 50% 50%, rgba(140, 120, 21, 0.1) 0%, rgba(140, 120, 21, 0.03) 45%, transparent 75%);
+    opacity: 0.4;
+  }
+
+  /* Blog prose — constrained width, refined typography */
   .blog-prose {
+    max-width: 900px;
+
     & h2 {
       font-size: 1.5rem;
       font-weight: 600;
       letter-spacing: -0.01em;
       margin-top: 2.5rem;
       margin-bottom: 1rem;
-      border-top: 1px solid var(--color-border);
-      padding-top: 1.5rem;
     }
     & h3 {
       font-size: 1.25rem;
@@ -220,12 +225,14 @@
     }
     & a {
       color: var(--color-vernaillen-500);
-      text-decoration: underline;
-      text-decoration-thickness: 1px;
       text-underline-offset: 4px;
+      text-decoration: none;
+    }
+    & a:hover {
+      text-decoration: underline;
     }
     & blockquote {
-      border-left: 2px solid var(--color-vernaillen-500);
+      border-left: 2px solid var(--color-teal-500);
       padding-left: 1rem;
       margin: 1.5rem 0;
       font-style: italic;
@@ -239,6 +246,7 @@
       color: var(--color-vernaillen-400);
       background: color-mix(in srgb, var(--color-vernaillen-500) 8%, transparent);
       padding: 0.15em 0.4em;
+      border-radius: 0.25rem;
     }
   }
   .dark .blog-prose :not(pre) > code {
@@ -250,10 +258,11 @@
     color: color-mix(in srgb, var(--color-dusk-50) 90%, var(--color-dusk-950));
   }
 
-  /* Terminal-style code frame around Shiki output — square, hairline border */
+  /* Terminal-style code frame around Shiki output */
   .terminal-block {
     position: relative;
     margin: 1.75rem 0;
+    border-radius: 0.5rem;
     overflow: hidden;
     border: 1px solid var(--color-border);
     background: var(--color-bg-muted);
@@ -285,7 +294,7 @@
     margin-left: auto;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-text-dimmed);
+    opacity: 0.6;
   }
   .terminal-copy {
     position: absolute;
@@ -296,6 +305,7 @@
     justify-content: center;
     width: 1.75rem;
     height: 1.75rem;
+    border-radius: 0.375rem;
     color: var(--color-text-muted);
     opacity: 0;
     transition: opacity 0.15s ease, background-color 0.15s ease;
@@ -352,24 +362,23 @@
   }
 
   /* FFT demo shell — poster image + click-to-load button before boot;
-     fft-demo.ts swaps the poster for a canvas + controls on click. The
-     shell sizes to its content (poster or canvas + controls) so the booted
-     controls are never clipped; on /projects `h-full` lets the poster
-     stretch to fill the media cell. */
+     fft-demo.ts swaps the poster for a canvas + controls on click. */
   .fft-demo-shell {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    margin: 1.75rem 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+  .fft-demo-shell[data-fft-demo] {
+    aspect-ratio: 1200 / 630;
+    background: #0a0a12;
   }
   .fft-demo-poster {
     display: block;
     width: 100%;
-    flex: 1 1 auto;
-    min-height: 0;
-    aspect-ratio: 1200 / 630;
+    height: auto;
     object-fit: cover;
-    background: #0a0a12;
   }
   .fft-demo-overlay {
     position: absolute;
@@ -388,6 +397,7 @@
     justify-content: center;
     width: 3.5rem;
     height: 3.5rem;
+    border-radius: 9999px;
     background: color-mix(in srgb, white 15%, transparent);
     backdrop-filter: blur(4px);
     border: 0;
@@ -413,12 +423,14 @@
      starts/stops playback via IntersectionObserver once visible (and not
      reduced-motion). The video sits on top so the poster only shows before
      playback starts (no explicit fade — muted autoplay begins near-instantly
-     once in view). Square, fills its media cell. */
+     once in view). */
   .video-shell {
     position: relative;
-    height: 100%;
+    height: 12rem;
     width: 100%;
     overflow: hidden;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
   }
   .video-poster,
   .video-el {
@@ -433,8 +445,7 @@
   .fft-demo-canvas {
     display: block;
     width: 100%;
-    aspect-ratio: 1200 / 630;
-    background: #0a0a12;
+    height: 100%;
   }
   .fft-demo-controls {
     display: flex;
@@ -446,9 +457,8 @@
   .fft-demo-btn {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 0.5rem 0.875rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.375rem;
     border: 1px solid var(--color-border);
     background: var(--color-bg-muted);
     color: var(--color-text);
@@ -470,9 +480,8 @@
     margin-left: auto;
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 0.5rem 0.875rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.375rem;
     border: 1px solid var(--color-border);
     background: var(--color-bg-muted);
     color: var(--color-text);
@@ -489,7 +498,6 @@
     font-family: var(--font-mono);
     font-size: 0.7rem;
     color: var(--color-text-dimmed);
-    margin-bottom: 1rem;
   }
   .fft-demo-attribution a {
     color: var(--color-vernaillen-500);
@@ -501,10 +509,10 @@
 
   /* Scroll reveal — only ever hidden once JS has run (html.js, set by an
      inline pre-paint script in Base.astro), so content is never hidden for
-     no-JS visitors. Opacity-only + 8px translate — static and precise. */
+     no-JS visitors. */
   html.js .reveal {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(12px);
     transition: opacity 220ms ease-out, transform 220ms ease-out;
   }
   html.js .reveal.revealed {
@@ -514,7 +522,6 @@
 
   /* Active heading in the blog post sticky TOC */
   .toc-active {
-    color: var(--color-vernaillen-500);
-    border-color: var(--color-vernaillen-500);
+    color: var(--color-text);
   }
 }

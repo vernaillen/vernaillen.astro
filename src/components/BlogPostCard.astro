@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets'
+import { Icon } from 'astro-icon/components'
+import type { CollectionEntry } from 'astro:content'
+import { formatPostDate } from '../lib/date'
+import { localImage } from '../lib/images'
+import Reveal from './Reveal.astro'
+
+interface Props {
+  post: CollectionEntry<'blog'>
+  orientation?: 'vertical' | 'horizontal'
+  eager?: boolean
+}
+
+const { post, orientation = 'vertical', eager = false } = Astro.props
+const image = await localImage(post.data.image.src)
+const horizontal = orientation === 'horizontal'
+---
+
+<Reveal class={horizontal ? '' : 'h-full'}>
+<a
+  href={`/blog/${post.id}`}
+  class:list={[
+    'card-glow group rounded-lg border border-(--color-border) p-3 transition-transform',
+    horizontal ? 'flex flex-col sm:flex-row gap-4 sm:items-start' : 'flex flex-col h-full hover:scale-[1.01] duration-400',
+  ]}
+>
+  {image && (
+    <Image
+      src={image}
+      alt={post.data.image.alt ?? post.data.title}
+      width={horizontal ? 320 : 600}
+      height={horizontal ? 160 : 256}
+      format="avif"
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      class:list={[
+        'rounded-lg border border-(--color-border) object-cover',
+        horizontal ? 'w-full sm:w-40 h-40 sm:h-auto shrink-0' : 'h-48 sm:h-52 md:h-52 lg:h-64 w-full',
+      ]}
+    />
+  )}
+  <div class="flex flex-col gap-1.5 pt-2 flex-1 min-w-0">
+    <p class="font-mono text-xs text-(--color-text-muted)">
+      {formatPostDate(post.data.date)} <span class="text-vernaillen-500/60">//</span> {post.data.minRead} min read
+    </p>
+    <h3 class="text-lg tracking-tight">{post.data.title}</h3>
+    <p class="text-sm text-(--color-text-muted) line-clamp-2">{post.data.description}</p>
+    <span class="mt-auto pt-2 inline-flex items-center gap-1 text-sm text-vernaillen-500">
+      Read Article
+      <Icon name="lucide:arrow-right" class="size-4 transition-transform opacity-0 group-hover:translate-x-1 group-hover:opacity-100" />
+    </span>
+  </div>
+</a>
+</Reveal>

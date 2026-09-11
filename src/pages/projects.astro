@@ -3,7 +3,7 @@ import { getCollection, getEntry } from 'astro:content'
 import { Image } from 'astro:assets'
 import { Icon } from 'astro-icon/components'
 import Base from '../layouts/Base.astro'
-import Masthead from '../components/Masthead.astro'
+import Eyebrow from '../components/Eyebrow.astro'
 import Button from '../components/Button.astro'
 import Reveal from '../components/Reveal.astro'
 import { localImage } from '../lib/images'
@@ -20,55 +20,52 @@ const videoPoster = await localImage('/images/projects/vue-audiomotion-analyzer-
 const cardImages = await Promise.all(
   projects.map(async (project) => (project.data.video ? undefined : await localImage(project.data.image))),
 )
-
-const logoIds = new Set(['wpnuxt', 'harmonics'])
 ---
 
 <Base title={data.title} description={data.description} path="/projects">
-  <Masthead index="01" label="projects" title={data.title} description={data.description}>
-    <Fragment slot="actions">
+  <section class="mx-auto max-w-5xl px-4 sm:px-6 py-16 sm:py-24">
+    <Eyebrow index="01" label="projects" />
+    <h1 class="pt-2 text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+    <p class="pt-4 text-(--color-text-muted) max-w-2xl">{data.description}</p>
+
+    <div class="flex flex-wrap gap-2 pt-6">
       {data.links.map((link) => (
         <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant} target={link.target} />
       ))}
-    </Fragment>
-  </Masthead>
+    </div>
 
-  {projects.map((project, index) => {
-    const reversed = index % 2 === 1
-    return (
-      <Reveal>
-        <div class="grid lg:grid-cols-12 border-b border-(--color-border)">
-          <div class:list={['lg:col-span-5 p-6 lg:p-10 flex flex-col gap-4 justify-center', reversed ? 'lg:order-2' : 'lg:order-1']}>
-            <span class="label text-(--color-text-dimmed)">{project.data.date.getUTCFullYear()}</span>
-            <h2 class="text-2xl font-semibold tracking-tight">{project.data.title}</h2>
-            <p class="text-base text-(--color-text-muted)">{project.data.description}</p>
-            <a
-              href={project.data.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="w-fit inline-flex items-center gap-1.5 font-mono uppercase text-[0.6875rem] tracking-[0.16em] text-vernaillen-500 hover:underline underline-offset-4"
-            >
-              View project
-              <Icon name="lucide:arrow-up-right" class="size-3.5" />
-            </a>
+    <div class="flex flex-col gap-16 pt-16">
+      {projects.map((project, index) => project.data.demo === 'fft' ? (
+        <Reveal>
+          <div class="mb-2 flex items-center gap-3">
+            <span class="font-mono text-xs text-(--color-text-muted)">{project.data.date.getUTCFullYear()}</span>
+            <h2 class="text-lg font-semibold">{project.data.title}</h2>
           </div>
-          <div
-            class:list={[
-              'lg:col-span-7 border-t lg:border-t-0 min-h-64',
-              reversed ? 'lg:order-1 lg:border-r border-(--color-border)' : 'lg:order-2 lg:border-l border-(--color-border)',
-            ]}
-          >
-            {project.data.demo === 'fft' ? (
-              <div class="fft-demo-shell h-full" data-fft-demo>
-                {fftPoster && <Image src={fftPoster} alt={project.data.title} width={1200} height={630} format="avif" class="fft-demo-poster" />}
-                <div class="fft-demo-overlay">
-                  <button type="button" class="fft-demo-play" data-fft-play aria-label="Load interactive demo">
-                    <Icon name="lucide:play" class="size-5 translate-x-0.5" />
-                  </button>
-                  <span class="fft-demo-caption">Interactive demo — click to load</span>
-                </div>
-              </div>
-            ) : project.data.video ? (
+          <p class="mb-5 max-w-2xl text-(--color-text-muted)">{project.data.description}</p>
+          <div class="fft-demo-shell" data-fft-demo>
+            {fftPoster && <Image src={fftPoster} alt={project.data.title} width={1200} height={630} format="avif" class="fft-demo-poster" />}
+            <div class="fft-demo-overlay">
+              <button type="button" class="fft-demo-play" data-fft-play aria-label="Load interactive demo">
+                <Icon name="lucide:play" class="size-5 translate-x-0.5" />
+              </button>
+              <span class="fft-demo-caption">Interactive demo — click to load</span>
+            </div>
+          </div>
+          <a href={project.data.url} target="_blank" rel="noopener noreferrer" class="group mt-5 inline-flex items-center gap-1 text-sm text-vernaillen-500">
+            View Project
+            <Icon name="lucide:arrow-right" class="size-4 transition-transform opacity-0 group-hover:translate-x-1 group-hover:opacity-100" />
+          </a>
+        </Reveal>
+      ) : (
+        <Reveal>
+        <a
+          href={project.data.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class:list={['group flex flex-col gap-4 sm:gap-8 sm:items-center', index % 2 === 1 ? 'sm:flex-row-reverse' : 'sm:flex-row']}
+        >
+          <div class="sm:w-1/2 shrink-0">
+            {project.data.video ? (
               <div class="video-shell" data-project-video>
                 {videoPoster && <Image src={videoPoster} alt={project.data.title} width={640} height={192} format="avif" class="video-poster" />}
                 <video muted loop playsinline preload="none" aria-hidden="true" width="640" height="192" class="video-el">
@@ -80,17 +77,28 @@ const logoIds = new Set(['wpnuxt', 'harmonics'])
               <Image
                 src={cardImages[index]!}
                 alt={project.data.title}
-                {...(logoIds.has(project.id) ? { width: 640 } : { width: 640, height: 192 })}
+                width={640}
+                height={192}
                 format="avif"
                 loading="lazy"
-                class:list={['w-full h-full min-h-64', logoIds.has(project.id) ? 'object-contain p-8' : 'object-cover']}
+                class="object-cover w-full h-48 rounded-lg border border-(--color-border)"
               />
             )}
           </div>
-        </div>
-      </Reveal>
-    )
-  })}
+          <div class="flex flex-col gap-2">
+            <span class="font-mono text-xs text-(--color-text-muted)">{project.data.date.getUTCFullYear()}</span>
+            <h2 class="text-lg font-semibold">{project.data.title}</h2>
+            <p class="text-sm text-(--color-text-muted)">{project.data.description}</p>
+            <span class="inline-flex items-center gap-1 text-sm text-vernaillen-500">
+              View Project
+              <Icon name="lucide:arrow-right" class="size-4 transition-transform opacity-0 group-hover:translate-x-1 group-hover:opacity-100" />
+            </span>
+          </div>
+        </a>
+        </Reveal>
+      ))}
+    </div>
+  </section>
 </Base>
 
 <script src="../scripts/fft-demo.ts"></script>

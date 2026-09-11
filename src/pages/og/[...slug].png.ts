@@ -17,10 +17,8 @@ const geistRegular = readFileSync(`${fontDir}geist-latin-400-normal.woff`)
 const geistMedium = readFileSync(`${fontDir}geist-latin-500-normal.woff`)
 
 // The `WV` mark from the source site's <OgImage> component (app/components/
-// OgImage/Vernaillen.takumi.vue in ../vernaillen.new), reused verbatim — both
-// paths rendered in dusk-950 (`BG`) to sit on the gold bottom band, matching
-// the footer's mark.
-const LOGO_SVG = `<svg viewBox="0 0 754 276" width="100" height="37" xmlns="http://www.w3.org/2000/svg"><path fill="${BG}" d="M0 0 H92 V184 H172 V0 H264 V184 H344 V0 H436 V276 H0 Z"/><path fill="${BG}" d="M490 0 H582 V184 H662 V0 H754 V276 H490 Z"/></svg>`
+// OgImage/Vernaillen.takumi.vue in ../vernaillen.new), reused verbatim.
+const LOGO_SVG = `<svg viewBox="0 0 754 276" width="120" height="44" xmlns="http://www.w3.org/2000/svg"><path fill="${ACCENT}" d="M0 0 H92 V184 H172 V0 H264 V184 H344 V0 H436 V276 H0 Z"/><path fill="${FG}" d="M490 0 H582 V184 H662 V0 H754 V276 H490 Z"/></svg>`
 const LOGO_DATA_URI = `data:image/svg+xml;base64,${Buffer.from(LOGO_SVG).toString('base64')}`
 
 // satori accepts plain React-element-like objects (`{ type, props }`) without
@@ -39,13 +37,14 @@ interface OgNode {
   }
 }
 
-function ogImageTree(title: string, description: string, section: string): OgNode {
+function ogImageTree(title: string, description: string): OgNode {
   return {
     type: 'div',
     props: {
       style: {
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between',
         width: '100%',
         height: '100%',
         backgroundColor: BG,
@@ -56,57 +55,14 @@ function ogImageTree(title: string, description: string, section: string): OgNod
         {
           type: 'div',
           props: {
-            style: {
-              position: 'absolute',
-              top: 24,
-              left: 24,
-              right: 24,
-              bottom: 24,
-              borderWidth: 1,
-              borderStyle: 'solid',
-              borderColor: DIM,
-            },
+            style: { position: 'absolute', bottom: 0, left: 64, width: 115, height: 2, backgroundColor: ACCENT },
           },
         },
         {
           type: 'div',
           props: {
-            style: { display: 'flex', flexDirection: 'column', flex: 1, paddingLeft: 64, paddingRight: 64, paddingTop: 56 },
-            children: [
-              {
-                type: 'div',
-                props: {
-                  style: { display: 'flex', alignItems: 'center', gap: 10, fontSize: 16, letterSpacing: 3, textTransform: 'uppercase' },
-                  children: [
-                    { type: 'span', props: { style: { color: ACCENT }, children: 'vernaillen.dev' } },
-                    { type: 'span', props: { style: { color: DIM }, children: '/' } },
-                    { type: 'span', props: { style: { color: MUTED }, children: section } },
-                  ],
-                },
-              },
-              {
-                type: 'div',
-                props: {
-                  style: { display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: 1 },
-                  children: [
-                    {
-                      type: 'span',
-                      props: {
-                        style: { display: 'flex', fontSize: 52, fontWeight: 500, color: FG, lineHeight: 1.3 },
-                        children: title,
-                      },
-                    },
-                    {
-                      type: 'div',
-                      props: {
-                        style: { display: 'flex', fontSize: 24, color: MUTED, marginTop: 20, lineHeight: 1.4 },
-                        children: description,
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
+            style: { display: 'flex', paddingLeft: 64, paddingRight: 64, paddingTop: 56 },
+            children: { type: 'img', props: { src: LOGO_DATA_URI, width: 120, height: 44 } },
           },
         },
         {
@@ -114,17 +70,49 @@ function ogImageTree(title: string, description: string, section: string): OgNod
           props: {
             style: {
               display: 'flex',
-              alignItems: 'center',
-              gap: 20,
-              height: 100,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flex: 1,
               paddingLeft: 64,
               paddingRight: 64,
-              backgroundColor: ACCENT,
             },
             children: [
-              { type: 'img', props: { src: LOGO_DATA_URI, width: 100, height: 37 } },
-              { type: 'span', props: { style: { fontSize: 20, fontWeight: 500, color: BG }, children: 'vernaillen.dev' } },
+              {
+                type: 'div',
+                props: {
+                  style: { display: 'flex', alignItems: 'flex-end', gap: 14 },
+                  children: [
+                    {
+                      type: 'span',
+                      props: {
+                        style: { fontSize: 52, fontWeight: 500, color: FG, lineHeight: 1.3 },
+                        children: title,
+                      },
+                    },
+                    {
+                      type: 'div',
+                      props: {
+                        style: { width: 14, height: 14, marginBottom: 8, borderRadius: 9999, backgroundColor: ACCENT },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                type: 'div',
+                props: {
+                  style: { display: 'flex', fontSize: 24, color: MUTED, marginTop: 20, lineHeight: 1.4 },
+                  children: description,
+                },
+              },
             ],
+          },
+        },
+        {
+          type: 'div',
+          props: {
+            style: { display: 'flex', paddingLeft: 64, paddingRight: 64, paddingBottom: 40 },
+            children: { type: 'span', props: { style: { fontSize: 18, color: DIM }, children: 'vernaillen.dev' } },
           },
         },
       ],
@@ -132,8 +120,8 @@ function ogImageTree(title: string, description: string, section: string): OgNod
   }
 }
 
-async function generateOgPng(title: string, description: string, section: string) {
-  const svg = await satori(ogImageTree(title, description, section), {
+async function generateOgPng(title: string, description: string) {
+  const svg = await satori(ogImageTree(title, description), {
     width: 1200,
     height: 630,
     fonts: [
@@ -185,11 +173,11 @@ export async function getStaticPaths() {
 
   return routes.map((route) => ({
     params: { slug: route.slug },
-    props: { title: route.title, description: route.description, section: route.slug.startsWith('blog') ? 'BLOG' : 'PAGE' },
+    props: { title: route.title, description: route.description },
   }))
 }
 
-export const GET: APIRoute<{ title: string; description: string; section: string }> = async ({ props }) => {
-  const png = await generateOgPng(props.title, props.description, props.section)
+export const GET: APIRoute<{ title: string; description: string }> = async ({ props }) => {
+  const png = await generateOgPng(props.title, props.description)
   return new Response(new Uint8Array(png), { headers: { 'Content-Type': 'image/png' } })
 }

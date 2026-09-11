@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import SectionLabel from '../SectionLabel.astro'
+import SectionHeading from '../SectionHeading.astro'
 import { localImage } from '../../lib/images'
 import type { IndexPage } from '../../content.config'
 
@@ -17,27 +17,22 @@ const testimonials = await Promise.all(
 )
 ---
 
-<section class="grid lg:grid-cols-12 bg-(--color-bg-muted) border-b border-(--color-border)">
-  <div class="lg:col-span-3 p-6 lg:p-8">
-    <SectionLabel index="05" label="kind words" />
+<div class="flex flex-col gap-6">
+  <SectionHeading index="04" eyebrow="kind words" title="Testimonials" align="center" class="mx-auto" />
+  <div class="grid gap-4 sm:grid-cols-3">
+    {testimonials.map((testimonial) => (
+      <figure class="flex flex-col gap-4 rounded-lg border border-(--color-border) p-5">
+        <blockquote class="text-sm text-(--color-text-muted) leading-relaxed flex-1">&ldquo;{testimonial.quote}&rdquo;</blockquote>
+        <figcaption class="flex items-center gap-3">
+          {testimonial.avatar && (
+            <Image src={testimonial.avatar} alt={testimonial.author.name} width={36} height={36} class="size-9 rounded-full object-cover" />
+          )}
+          <div class="text-sm">
+            <p class="text-(--color-text) font-medium">{testimonial.author.name}</p>
+            <p class="text-(--color-text-muted) text-xs">{testimonial.author.description}</p>
+          </div>
+        </figcaption>
+      </figure>
+    ))}
   </div>
-  <div class="lg:col-span-9 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:p-8">
-    <div class="grid sm:grid-cols-3 gap-px bg-(--color-border)">
-      {testimonials.map((testimonial) => (
-        <figure class="flex flex-col gap-4 bg-(--color-bg) p-5">
-          <span class="text-6xl leading-none font-semibold text-vernaillen-500" aria-hidden="true">&ldquo;</span>
-          <blockquote class="text-base leading-relaxed text-(--color-text-muted) flex-1">{testimonial.quote}</blockquote>
-          <figcaption class="flex items-center gap-3">
-            {testimonial.avatar && (
-              <Image src={testimonial.avatar} alt={testimonial.author.avatar.alt} width={40} height={40} class="size-10 object-cover" />
-            )}
-            <div class="text-sm">
-              <p class="text-(--color-text) font-medium">{testimonial.author.name}</p>
-              <p class="font-mono text-xs text-(--color-text-muted)">{testimonial.author.description}</p>
-            </div>
-          </figcaption>
-        </figure>
-      ))}
-    </div>
-  </div>
-</section>
+</div>
