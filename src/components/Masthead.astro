@@ -8,6 +8,7 @@ interface Props {
   class?: string
 }
 const { label, title, description, class: className } = Astro.props
+const hasActions = Astro.slots.has('actions')
 ---
 
 <div class:list={['grid lg:grid-cols-12 border-b border-(--color-border)', className]}>
@@ -17,8 +18,10 @@ const { label, title, description, class: className } = Astro.props
   </div>
   <div class="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-(--color-border) p-6 lg:px-10 lg:py-14 flex flex-col justify-end gap-6">
     {description && <p class="text-base text-(--color-text-muted)">{description}</p>}
-    <div class="flex flex-wrap gap-3">
-      <slot name="actions" />
-    </div>
+    {hasActions && (
+      <div class="flex flex-wrap gap-3">
+        <slot name="actions" />
+      </div>
+    )}
   </div>
 </div>
