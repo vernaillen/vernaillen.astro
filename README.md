@@ -34,7 +34,7 @@ pnpm test:e2e
 
 ## Deployment
 
-The GitHub Actions workflow checks every branch and builds the production Docker image. On `main`, it pushes the image to the private registry and asks Coolify to redeploy it. nginx serves `dist/`; Bunny CDN can cache the public deployment in front of it.
+The GitHub Actions workflow checks every branch and builds the production Docker image. On `main`, it pushes the image to the private registry and asks Coolify to redeploy it. nginx serves `dist/` directly; no CDN sits in front of it.
 
 The build accepts `GITHUB_TOKEN` as a BuildKit secret to refresh open-source contribution data, with a checked-in snapshot as fallback. `PUBLIC_RADIO_URL` sets the FFT demo's audio proxy.
 

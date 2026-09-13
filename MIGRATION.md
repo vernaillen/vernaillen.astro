@@ -10,4 +10,4 @@ The published pages, eleven published articles, five projects, public URLs, and 
 - **Drafts:** dot-prefixed Markdown files remain in the Nuxt repository and are deliberately excluded because they are unpublished working drafts.
 - **About gallery:** the decorative project-logo polaroids are omitted; the portrait and projects remain in stronger contexts.
 - **Homepage:** selected enterprise work and the existing FAQ are surfaced, while the career preview is shortened to three entries. The full history remains at `/career`.
-- **Hosting:** the primary Docker deployment is built in GitHub Actions, deployed through Coolify, and may be served through Bunny CDN. Apache rules remain for the legacy Combell static-host path.
+- **Hosting:** the primary Docker deployment is built in GitHub Actions, deployed through Coolify, and served by nginx without a CDN. Apache rules remain for the legacy Combell static-host path.
