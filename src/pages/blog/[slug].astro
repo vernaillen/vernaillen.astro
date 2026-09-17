@@ -160,4 +160,4 @@ const articleSchema = {
 <script src="../../scripts/copy-code.ts"></script>
 <script src="../../scripts/copy-link.ts"></script>
 <script src="../../scripts/toc.ts"></script>
-<script src="../../scripts/fft-demo.ts"></script>
+{post.body?.includes('::fft-visualizer-demo') && <script src="../../scripts/fft-demo.ts"></script>}

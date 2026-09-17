@@ -2,7 +2,10 @@ import { visit } from 'unist-util-visit'
 import type { Image, Paragraph, Root, RootContent } from 'mdast'
 import type {} from 'mdast-util-to-hast'
 import type { Properties } from 'hast'
-import { optimizeLocalImage } from './images'
+import { existsSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { fftControlsHtml } from './fft-demo'
 
 interface CurlyAttrs {
   class?: string
@@ -60,30 +63,43 @@ export function remarkImageAttrs() {
   }
 }
 
+const MAX_BODY_IMAGE_WIDTH = 900
+
 /**
- * Content images reference the Nuxt site's public path (`/images/...`), but in
- * this rebuild the raster files live under `src/assets/images/**` for
- * optimization. Resolve those paths through astro:assets instead of leaving a
- * dead `<img src="/images/...">` in the output.
+ * Content bodies reference the Nuxt site's public path (`/images/...`) while
+ * the rasters live under `src/assets/images/**`. Rewriting the url to a path
+ * relative to the markdown file is all Astro needs: its own `remarkCollectImages`
+ * runs after these plugins, records the relative path as an asset import, and
+ * `rehypeImages` turns the `<img>` into a placeholder that `render(entry)`
+ * resolves through `getImage()` at page render time — in the main build
+ * environment, not during content sync (where calling `getImage()` from a
+ * remark plugin races the sync teardown: "Vite module runner has been closed").
  */
+function assetRelativePath(rootPath: string, from: string | undefined) {
+  if (!rootPath.startsWith('/images/') || !from) return undefined
+  const asset = fileURLToPath(new URL(`../assets/images/${rootPath.slice('/images/'.length)}`, import.meta.url))
+  if (!existsSync(asset)) return undefined
+  return path.relative(path.dirname(from), asset)
+}
+
+function bodyImageProperties(existing?: Properties): Properties {
+  const props: Properties = { ...existing, loading: 'lazy', decoding: 'async', format: 'avif' }
+  // Authored `width`/`height` describe the Nuxt layout; keep the ratio implicit
+  // (Astro derives height from the source) and cap at the prose column width.
+  props.width = Math.min(Number(props.width) || MAX_BODY_IMAGE_WIDTH, MAX_BODY_IMAGE_WIDTH)
+  delete props.height
+  return props
+}
+
 export function remarkLocalImages() {
-  return async (tree: Root) => {
-    const images: Image[] = []
+  return (tree: Root, file: { path?: string }) => {
     visit(tree, 'image', (node: Image) => {
-      if (node.url.startsWith('/images/')) images.push(node)
-    })
-    for (const node of images) {
-      const hProperties: Properties = node.data?.hProperties ?? {}
-      const image = await optimizeLocalImage(node.url)
-      if (!image) continue
+      const url = assetRelativePath(node.url, file.path)
+      if (!url) return
+      node.url = url
       const data = (node.data ??= {})
-      data.hProperties = {
-        ...hProperties,
-        src: image.src,
-        loading: 'lazy',
-        decoding: 'async',
-      }
-    }
+      data.hProperties = bodyImageProperties(data.hProperties)
+    })
   }
 }
 
@@ -106,8 +122,17 @@ function textLine(node: RootContent | undefined): string | undefined {
  * through as `heading` nodes with the `thematicBreak`s consumed into them —
  * matching below tolerates either shape rather than requiring content edits.
  */
+const FFT_OVERLAY_HTML = [
+  '<div class="fft-demo-overlay">',
+  '<button type="button" class="fft-demo-play" data-fft-play aria-label="Play the interactive demo">',
+  '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+  '</button>',
+  '<p class="fft-demo-caption">Interactive demo — press play to listen</p>',
+  '</div>',
+].join('')
+
 export function remarkFftDemoBlock() {
-  return async (tree: Root) => {
+  return (tree: Root, file: { path?: string }) => {
     const matches: { start: number; end: number; poster: string }[] = []
     for (let i = 0; i < tree.children.length; i++) {
       const name = /^::fft-visualizer-demo\s*$/.exec(textLine(tree.children[i]) ?? '')
@@ -122,62 +147,16 @@ export function remarkFftDemoBlock() {
     }
 
     for (const { start, end, poster } of matches.reverse()) {
-      const image = await optimizeLocalImage(poster)
-      const node: RootContent = {
+      const posterImage: Image = {
+        type: 'image',
+        url: assetRelativePath(poster, file.path) ?? poster,
+        alt: 'FFT Visualizer demo',
+        data: { hProperties: bodyImageProperties({ class: 'fft-demo-poster' }) },
+      }
+      const node: Paragraph = {
         type: 'paragraph',
-        children: [],
-        data: {
-          hName: 'div',
-          hProperties: { class: 'fft-demo-shell not-prose', 'data-fft-demo': '' },
-          hChildren: [
-            {
-              type: 'element',
-              tagName: 'img',
-              properties: image
-                ? {
-                    src: image.src,
-                    loading: 'lazy',
-                    decoding: 'async',
-                    alt: 'FFT Visualizer demo',
-                    class: 'fft-demo-poster',
-                  }
-                : { alt: 'FFT Visualizer demo', class: 'fft-demo-poster' },
-              children: [],
-            },
-            {
-              type: 'element',
-              tagName: 'div',
-              properties: { class: 'fft-demo-overlay' },
-              children: [
-                {
-                  type: 'element',
-                  tagName: 'button',
-                  properties: { type: 'button', class: 'fft-demo-play', 'data-fft-play': '', 'aria-label': 'Load interactive demo' },
-                  children: [
-                    {
-                      type: 'element',
-                      tagName: 'svg',
-                      properties: {
-                        xmlns: 'http://www.w3.org/2000/svg',
-                        width: 22,
-                        height: 22,
-                        viewBox: '0 0 24 24',
-                        fill: 'currentColor',
-                      },
-                      children: [{ type: 'element', tagName: 'path', properties: { d: 'M8 5v14l11-7z' }, children: [] }],
-                    },
-                  ],
-                },
-                {
-                  type: 'element',
-                  tagName: 'p',
-                  properties: { class: 'fft-demo-caption' },
-                  children: [{ type: 'text', value: 'Interactive demo — click to load' }],
-                },
-              ],
-            },
-          ],
-        },
+        children: [posterImage, { type: 'html', value: FFT_OVERLAY_HTML + fftControlsHtml() }],
+        data: { hName: 'div', hProperties: { class: 'fft-demo-shell not-prose', 'data-fft-demo': '' } },
       }
       tree.children.splice(start, end - start + 1, node)
     }

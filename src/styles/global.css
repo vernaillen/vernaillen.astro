@@ -361,32 +361,48 @@
   }
 
   /* FFT demo shell — poster image + click-to-load button before boot;
-     fft-demo.ts swaps the poster for a canvas + controls on click. */
+     fft-demo.ts swaps the poster for a canvas + controls on click. The
+     shell sizes to its content (poster or canvas + controls) so the booted
+     controls are never clipped, and the poster carries the same aspect ratio
+     as the stage so swapping one for the other changes no height. */
   .fft-demo-shell {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     margin: 1.75rem 0 1rem;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    border: 1px solid var(--color-border);
-  }
-  .fft-demo-shell[data-fft-stage] {
-    aspect-ratio: 1200 / 630;
-    background: #0a0a12;
   }
   .fft-demo-poster {
     display: block;
     width: 100%;
-    height: auto;
+    aspect-ratio: 1200 / 630;
     object-fit: cover;
+    background: var(--color-bg);
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
   }
+  /* The poster is a dark render; in light mode invert it (hue-rotate keeps
+     the bar colours) so the frame sits on the page background. */
+  html:not(.dark) .fft-demo-poster {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  /* Sized to the poster box rather than the whole shell: on the blog post the
+     controls sit inside the shell, and an overlay spanning it would tint them
+     and swallow their clicks (they boot the demo too). */
   .fft-demo-overlay {
     position: absolute;
-    inset: 0;
+    inset: 0 0 auto 0;
+    aspect-ratio: 1200 / 630;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
+    background: color-mix(in srgb, white 35%, transparent);
+    color: var(--color-text);
+    border-radius: 0.5rem;
+  }
+  .dark .fft-demo-overlay {
     background: color-mix(in srgb, black 35%, transparent);
     color: white;
   }
@@ -397,7 +413,7 @@
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 9999px;
-    background: color-mix(in srgb, white 15%, transparent);
+    background: color-mix(in srgb, currentColor 12%, transparent);
     backdrop-filter: blur(4px);
     border: 0;
     padding: 0;
@@ -405,7 +421,7 @@
     cursor: pointer;
   }
   .fft-demo-play:hover {
-    background: color-mix(in srgb, white 25%, transparent);
+    background: color-mix(in srgb, currentColor 22%, transparent);
   }
   .fft-demo-play:disabled {
     opacity: 0.6;
@@ -440,8 +456,27 @@
     object-fit: cover;
   }
 
-  /* Booted FFT demo — canvas + controls injected by fft-demo-core.ts */
+  /* Booted FFT demo — stage + canvas + controls injected by fft-demo-core.ts.
+     The visualizer sizes the canvas to its parent with a ResizeObserver, so
+     that parent must never derive its size from the canvas: the stage gets
+     its height from width + aspect-ratio and the canvas is out of flow.
+     (With the canvas directly in the shell, shell height = canvas + controls
+     → canvas grows to that → shell grows again, without end.) */
+  .fft-demo-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    background: var(--color-bg);
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+  .dark .fft-demo-stage {
+    background: #0a0a12;
+  }
   .fft-demo-canvas {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
@@ -456,7 +491,9 @@
   .fft-demo-btn {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    padding: 0.4rem 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.5rem 0.875rem;
     border-radius: 0.375rem;
     border: 1px solid var(--color-border);
     background: var(--color-bg-muted);
@@ -475,28 +512,71 @@
     color: var(--color-vernaillen-500);
     border-color: var(--color-vernaillen-500);
   }
+  /* Visual-style stepper — three ruled cells: chevron, name, chevron. The
+     square end columns match the row height so the chevrons read as their own
+     buttons, and every preset name sits in the same grid cell with the
+     inactive ones hidden, so the box is as wide as the longest name and
+     stepping never moves the chevrons. */
   .fft-demo-preset {
     margin-left: auto;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    padding: 0.4rem 0.75rem;
+    display: grid;
+    grid-template-columns: 2.125rem 1fr 2.125rem;
     border-radius: 0.375rem;
     border: 1px solid var(--color-border);
     background: var(--color-bg-muted);
+    overflow: hidden;
+  }
+  .fft-demo-step {
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+  .fft-demo-step:hover {
+    color: var(--color-vernaillen-500);
+    background: var(--color-bg-elevated);
+  }
+  .fft-demo-preset-name {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    padding: 0.5rem 0.875rem;
+    border-inline: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--color-text);
   }
-  .fft-demo-status {
-    min-height: 1.25rem;
+  .fft-demo-preset-name > span {
+    grid-area: 1 / 1;
+    visibility: hidden;
+  }
+  .fft-demo-preset-name > span[data-current] {
+    visibility: visible;
+  }
+  /* Scoped under the panel so these beat the blog's `.blog-prose p` rules —
+     reserve two lines up front so the longest status strings (e.g. the
+     microphone-live message) never wrap without room, which would push the
+     panel taller and shift the layout. */
+  .fft-demo-panel .fft-demo-status {
+    min-height: 2.25rem;
+    line-height: 1.125rem;
     margin-top: 0.625rem;
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--color-text-muted);
   }
-  .fft-demo-attribution {
+  .fft-demo-panel .fft-demo-attribution {
     margin-top: 0.25rem;
+    line-height: 1.125rem;
     font-family: var(--font-mono);
     font-size: 0.7rem;
     color: var(--color-text-dimmed);
+    margin-bottom: 1rem;
   }
   .fft-demo-attribution a {
     color: var(--color-vernaillen-500);
