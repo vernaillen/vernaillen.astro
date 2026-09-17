@@ -9,31 +9,31 @@ const page = await getEntry('pages', 'about')
 const data = page!.data as AboutPage
 const { Content } = await render(page!)
 
-const images = await Promise.all(
-  data.images.map(async (image) => ({ ...image, asset: await localImage(image.src) })),
-)
+const portrait = await localImage(data.image.src)
 ---
 
 <Base title={data.title} description={data.description} path="/about">
   <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-    <h1 class="text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
-    <p class="pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
-
-    <div class="flex flex-wrap gap-6 pt-10 pb-4">
-      {images.map((image, index) => image.asset && (
-        <div
-          class:list={[
-            'bg-white p-2 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out hover:scale-105 hover:rotate-0 hover:z-10',
-            index % 2 === 0 ? '-rotate-3 hover:-translate-x-4' : 'rotate-3 hover:translate-x-4',
-          ]}
-        >
-          <Image src={image.asset} alt={image.alt} width={128} height={128} format="avif" loading="lazy" class="size-32 object-cover" />
-          <span class="w-32 text-xs text-black font-medium text-center mt-2">{image.alt}</span>
-        </div>
-      ))}
+    {/* Mirrors the UPageHero + UColorModeAvatar layout of the Nuxt site. */}
+    <div class="flex flex-col items-center gap-16 sm:flex-row sm:items-start">
+      <div>
+        <h1 class="fade-in text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+        <p class="fade-in [--fade-delay:90ms] pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
+      </div>
+      {portrait && (
+        <Image
+          src={portrait}
+          alt={data.image.alt}
+          width={400}
+          height={400}
+          format="avif"
+          loading="eager"
+          class="fade-in [--fade-delay:180ms] size-36 shrink-0 -mt-4 rounded-lg object-cover ring ring-(--color-border) ring-offset-3 ring-offset-(--color-bg) rotate-4"
+        />
+      )}
     </div>
 
-    <div class="blog-prose pt-6">
+    <div class="blog-prose pt-12">
       <Content />
     </div>
   </section>

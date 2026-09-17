@@ -124,9 +124,11 @@ export function fftControlsHtml(): string {
   const names = PRESETS.map((preset, i) => `<span${i ? '' : ' data-current'}>${preset.name}</span>`).join('')
   return [
     '<div class="fft-demo-panel" data-fft-controls>',
-    '<div class="fft-demo-controls">',
-    `<button type="button" class="fft-demo-btn" data-source="radio">${SOURCE_LABEL.radio}</button>`,
-    `<button type="button" class="fft-demo-btn" data-source="mic">${SOURCE_LABEL.mic}</button>`,
+    '<div class="fft-demo-controls flex flex-col gap-2">',
+    '<div class="flex gap-2">',
+    `<button type="button" class="fft-demo-btn flex-1" data-source="radio">${SOURCE_LABEL.radio}</button>`,
+    `<button type="button" class="fft-demo-btn flex-1" data-source="mic">${SOURCE_LABEL.mic}</button>`,
+    '</div>',
     '<div class="fft-demo-preset" role="group" aria-label="Visual style" data-fft-preset data-index="0">',
     `<button type="button" class="fft-demo-step" data-preset-step="-1" aria-label="Previous visual style">${chevron('m15 18-6-6 6-6')}</button>`,
     `<span class="fft-demo-preset-name" aria-live="polite">${names}</span>`,

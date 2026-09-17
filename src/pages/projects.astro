@@ -24,8 +24,8 @@ const cardImages = await Promise.all(
 
 <Base title={data.title} description={data.description} path="/projects">
   <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-    <h1 class="text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
-    <p class="pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
+    <h1 class="fade-in text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+    <p class="fade-in [--fade-delay:90ms] pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
 
     <div class="flex flex-wrap gap-2 pt-6">
       {data.links.map((link) => (
@@ -46,8 +46,7 @@ const cardImages = await Promise.all(
                 <span class="fft-demo-caption">Interactive demo — press play to listen</span>
               </div>
             </div>
-            {/* In the narrow column the preset stepper takes its own full row instead of floating right. */}
-            <div class="flex flex-col gap-2 lg:[&_.fft-demo-preset]:basis-full">
+            <div class="flex flex-col gap-2">
               <span class="font-mono text-xs text-(--color-text-muted)">{project.data.date.getUTCFullYear()}</span>
               <h2 class="text-lg font-semibold">{project.data.title}</h2>
               <p class="text-sm text-(--color-text-muted)">{project.data.description}</p>

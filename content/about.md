@@ -1,11 +1,9 @@
 ---
 title: About Me
 description: Developer, open source maker, sound healer. Building things that bridge worlds.
-images:
-  - src: /images/woutervernaillen.jpg
-    alt: Wouter Vernaillen
-  - src: /images/projects/wpnuxt-logo-dark.png
-    alt: WPNuxt
+image:
+  src: /images/woutervernaillen.jpg
+  alt: Wouter Vernaillen
 ---
 
 I wrote my first line of code in the late 90s. Back then, it was static HTML and the occasional Java applet. Almost 30 years later, I'm still at it — though the stack has gotten considerably better.

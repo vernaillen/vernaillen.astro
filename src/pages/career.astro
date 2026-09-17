@@ -17,8 +17,8 @@ const groups = CATEGORY_ORDER.map((category) => ({
 
 <Base title={data.title} description={data.description} path="/career">
   <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24">
-    <h1 class="text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
-    <p class="pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
+    <h1 class="fade-in text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+    <p class="fade-in [--fade-delay:90ms] pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
     <div class="flex flex-wrap gap-2 pt-6">
       {data.links.map((link) => (
         <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant} size={link.size} target={link.target} />
