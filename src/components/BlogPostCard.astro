@@ -20,6 +20,7 @@ const horizontal = orientation === 'horizontal'
 <Reveal class={horizontal ? '' : 'h-full'}>
 <a
   href={`/blog/${post.id}`}
+  data-astro-prefetch
   class:list={[
     'card-glow group rounded-lg border border-(--color-border) p-1 transition-transform',
     horizontal ? 'flex flex-col sm:flex-row gap-4 sm:items-start' : 'flex flex-col h-full hover:scale-[1.01] duration-400',

@@ -1,7 +1,5 @@
 # build output
 dist/
-test-results/
-playwright-report/
 # generated types
 .astro/
 
@@ -24,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# lighthouse reports (scripts/lighthouse.sh)
+.lighthouse/

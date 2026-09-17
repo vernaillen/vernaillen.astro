@@ -86,9 +86,15 @@ function bodyImageProperties(existing?: Properties): Properties {
   const props: Properties = { ...existing, loading: 'lazy', decoding: 'async', format: 'avif' }
   // Authored `width`/`height` describe the Nuxt layout; keep the ratio implicit
   // (Astro derives height from the source) and cap at the prose column width.
-  props.width = Math.min(Number(props.width) || MAX_BODY_IMAGE_WIDTH, MAX_BODY_IMAGE_WIDTH)
+  const width = Math.min(Number(props.width) || MAX_BODY_IMAGE_WIDTH, MAX_BODY_IMAGE_WIDTH)
+  props.width = width
   delete props.height
-  return props
+  // A 2x candidate for high-density screens — also what the lightbox
+  // (lightbox.ts) enlarges. Astro drops widths the source can't fill. hast
+  // types `widths` as the SVG string attribute; Astro's getImage() wants the
+  // number array, which the JSON round trip preserves.
+  props.sizes = `(min-width: 64rem) ${width}px, calc(100vw - 2rem)`
+  return Object.assign(props, { widths: [width, width * 2] })
 }
 
 export function remarkLocalImages() {

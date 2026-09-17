@@ -1,0 +1,48 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<dialog class="search-dialog" data-search aria-label="Search the site">
+  <div class="flex max-h-[inherit] flex-col">
+    <div class="flex h-14 shrink-0 items-center gap-3 border-b border-(--color-border) px-4">
+      <Icon name="lucide:search" class="size-4 shrink-0 text-(--color-text-muted)" />
+      <input
+        data-search-input
+        type="text"
+        placeholder="Search posts, projects, pages…"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        enterkeyhint="go"
+        role="combobox"
+        aria-label="Search"
+        aria-expanded="true"
+        aria-controls="search-results"
+        aria-autocomplete="list"
+        autofocus
+        class="min-w-0 flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-(--color-text-dimmed)"
+      />
+      <button
+        type="button"
+        data-search-close
+        class="rounded border border-(--color-border) px-1.5 py-0.5 font-mono text-[11px] text-(--color-text-muted) transition-colors hover:text-(--color-text)"
+      >
+        esc
+      </button>
+    </div>
+
+    <ul id="search-results" data-search-results role="listbox" class="min-h-0 flex-1 overflow-y-auto py-2"></ul>
+    <p data-search-empty hidden class="px-4 py-10 text-center font-mono text-sm text-(--color-text-muted)">
+      No results for “<span data-search-query></span>”
+    </p>
+
+    <div class="hidden shrink-0 items-center gap-4 border-t border-(--color-border) px-4 py-2 font-mono text-[11px] text-(--color-text-dimmed) sm:flex">
+      <span><kbd>↑</kbd> <kbd>↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</dialog>
+
+<script src="../scripts/search.ts"></script>

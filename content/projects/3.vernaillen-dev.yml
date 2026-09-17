@@ -1,7 +1,8 @@
 title: Vernaillen.dev
 description: This very website — my developer portfolio and blog. Built with Nuxt 4, Nuxt UI, and Nuxt Content. Open source on GitHub.
 image: /images/projects/vernaillendev.png
-url: https://vernaillen.dev
+website: https://vernaillen.dev
+code: https://github.com/vernaillen/vernaillen.dev
 tags:
   - Nuxt
   - Nuxt UI

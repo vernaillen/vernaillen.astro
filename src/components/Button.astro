@@ -14,6 +14,7 @@ interface Props {
 
 const { label, to, icon, variant = 'solid', size = 'md', target, class: className } = Astro.props
 const Tag = to ? 'a' : 'button'
+const internal = !!to && to.startsWith('/') && !to.startsWith('//')
 
 const sizeClasses: Record<string, string> = {
   xs: 'text-xs px-2 py-1 gap-1',
@@ -36,6 +37,7 @@ const variantClasses: Record<string, string> = {
   href={to}
   target={target}
   rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+  data-astro-prefetch={internal ? '' : undefined}
   class:list={[
     'inline-flex items-center justify-center rounded-md font-medium transition-colors',
     sizeClasses[size] ?? sizeClasses.md,

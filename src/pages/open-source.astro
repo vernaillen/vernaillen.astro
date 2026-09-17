@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 import Base from '../layouts/Base.astro'
 import Button from '../components/Button.astro'
-import { authoredGroups, contributedProjects, type GitHubProject } from '../lib/github'
+import { authoredGroups, contributedProjects, snapshotDate, type GitHubProject } from '../lib/github'
 import type { LinksPage } from '../content.config'
 
 const page = await getEntry('pages', 'open-source')
@@ -78,6 +78,10 @@ const data = page!.data as LinksPage
           ))}
         </div>
       </div>
+    )}
+
+    {snapshotDate && (
+      <p class="pt-10 font-mono text-xs text-(--color-text-dimmed)">snapshot · {snapshotDate}</p>
     )}
   </section>
 </Base>

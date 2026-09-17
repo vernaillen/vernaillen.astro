@@ -4,8 +4,12 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Cross-document navigations run as a typed (`page`) view transition so the
+   160ms crossfade below only applies to them — same-document transitions
+   started from JS (theme wipe, image lightbox) keep the root static. */
 @view-transition {
   navigation: auto;
+  types: page;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -27,6 +31,28 @@
 }
 ::view-transition-new(root) {
   z-index: 2;
+}
+
+:root:active-view-transition-type(page)::view-transition-old(root) {
+  animation: 160ms ease-out both page-out;
+  mix-blend-mode: plus-lighter;
+}
+:root:active-view-transition-type(page)::view-transition-new(root) {
+  animation: 160ms ease-in both page-in;
+  mix-blend-mode: plus-lighter;
+}
+
+/* Blog image lightbox — the clicked image morphs into the enlarged one. */
+::view-transition-group(lightbox-image) {
+  animation-duration: 240ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(lightbox-image),
+::view-transition-new(lightbox-image) {
+  animation: none;
+  mix-blend-mode: normal;
+  height: 100%;
+  object-fit: contain;
 }
 
 @theme static {
@@ -178,12 +204,39 @@
     opacity: 0.2;
   }
 
-  /* Fixed-position radial gold glow behind the hero — CSS replacement for the
-     dropped WebGL shader background. The hero's text stays the LCP element. */
+  /* Pointer-reactive layer over the dot grid (Hero.astro, hero-spotlight.ts):
+     the same grid in gold, masked to a soft circle at the cursor and to the
+     grid's own fade-out, so dots light up under the pointer. Fine-pointer
+     devices only; the JS never runs elsewhere. */
+  .hero-spotlight {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: radial-gradient(circle, var(--color-vernaillen-500) 1.2px, transparent 1.2px);
+    background-size: 14px 14px;
+    mask-image:
+      radial-gradient(180px circle at var(--mx, 50%) var(--my, 50%), black 0%, transparent 100%),
+      radial-gradient(ellipse at center, black, transparent 70%);
+    mask-composite: intersect;
+    -webkit-mask-image:
+      radial-gradient(180px circle at var(--mx, 50%) var(--my, 50%), black 0%, transparent 100%),
+      radial-gradient(ellipse at center, black, transparent 70%);
+    -webkit-mask-composite: source-in;
+    opacity: 0;
+    transition: opacity 600ms ease;
+  }
+  .hero-spotlight.is-active {
+    opacity: 0.8;
+  }
+
+  /* Radial gold glow behind the hero — CSS replacement for the dropped WebGL
+     shader background. Lives on ::after so it stacks with the dot grid's
+     ::before on the same section. The hero's text stays the LCP element. */
   .hero-glow {
     position: relative;
   }
-  .hero-glow::before {
+  .hero-glow::after {
     content: '';
     position: absolute;
     top: -10vh;
@@ -195,7 +248,7 @@
     opacity: 0.35;
     pointer-events: none;
   }
-  .dark .hero-glow::before {
+  .dark .hero-glow::after {
     background: radial-gradient(50% 40% at 50% 50%, rgba(140, 120, 21, 0.1) 0%, rgba(140, 120, 21, 0.03) 45%, transparent 75%);
     opacity: 0.4;
   }
@@ -606,10 +659,100 @@
   .toc-active {
     color: var(--color-text);
   }
+
+  /* ⌘K search palette — a native <dialog> (Search.astro, search.ts) */
+  .search-dialog {
+    inset: 0;
+    margin: 12vh auto auto;
+    width: min(38rem, calc(100vw - 2rem));
+    max-height: min(70vh, 40rem);
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-bg-elevated);
+    color: var(--color-text);
+    box-shadow: 0 24px 64px -16px rgb(0 0 0 / 0.45);
+    overflow: hidden;
+  }
+  .search-dialog::backdrop {
+    background: rgb(10 9 8 / 0.5);
+    backdrop-filter: blur(3px);
+  }
+  .search-dialog[open] {
+    animation: dialog-in 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .search-dialog[open]::backdrop {
+    animation: backdrop-in 160ms ease-out;
+  }
+  .search-dialog mark {
+    background: transparent;
+    color: var(--color-vernaillen-500);
+    font-weight: 600;
+  }
+  .search-item[aria-selected='true'] {
+    background: var(--color-bg-muted);
+    box-shadow: inset 2px 0 0 var(--color-vernaillen-500);
+  }
+
+  /* Blog image lightbox (lightbox.ts) */
+  html.js .blog-prose img[data-lightbox] {
+    cursor: zoom-in;
+  }
+  .lightbox {
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-dusk-100);
+  }
+  .lightbox::backdrop {
+    background: rgb(10 9 8 / 0.94);
+  }
+  .lightbox[open]::backdrop {
+    animation: backdrop-in 200ms ease-out;
+  }
+  .lightbox img {
+    width: auto;
+    height: auto;
+    max-width: min(100vw - 2rem, 90rem);
+    max-height: calc(100dvh - 4rem);
+    object-fit: contain;
+    cursor: zoom-out;
+  }
 }
 
 @keyframes fade-in {
   from {
     opacity: 0.75;
+  }
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
   }
 }

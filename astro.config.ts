@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync, statSync, unlinkSync } from 'node:fs'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
 import sitemap from '@astrojs/sitemap'
@@ -46,13 +47,33 @@ function pruneUnreferencedImageOriginals() {
   }
 }
 
+// Blog post publish dates keyed by slug, read straight from the markdown
+// frontmatter (content collections aren't available at config time).
+function blogPostDates() {
+  const dir = fileURLToPath(new URL('content/blog', import.meta.url))
+  const dates = new Map<string, Date>()
+  for (const file of readdirSync(dir)) {
+    const slug = /^\d+\.(.+)\.md$/.exec(file)?.[1]
+    const date = /^date:\s*["']?(\d{4}-\d{2}-\d{2})/m.exec(readFileSync(join(dir, file), 'utf-8'))?.[1]
+    if (slug && date) dates.set(slug, new Date(date))
+  }
+  return dates
+}
+
+const SITE = 'https://vernaillen.dev'
+const postDates = blogPostDates()
+
 export default defineConfig({
-  site: 'https://vernaillen.dev',
+  site: SITE,
   trailingSlash: 'never',
   compressHTML: true,
   build: {
     format: 'directory',
     inlineStylesheets: 'always',
+  },
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: 'hover',
   },
   vite: {
     plugins: [tailwindcss()],
@@ -61,6 +82,11 @@ export default defineConfig({
     icon(),
     sitemap({
       filter: (page) => !page.includes('/404'),
+      serialize: (item) => {
+        const slug = new URL(item.url).pathname.match(/^\/blog\/([^/]+)$/)?.[1]
+        const date = slug && postDates.get(slug)
+        return date ? { ...item, lastmod: date.toISOString() } : item
+      },
     }),
     pruneUnreferencedImageOriginals(),
   ],

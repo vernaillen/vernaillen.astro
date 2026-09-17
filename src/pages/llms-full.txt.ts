@@ -61,7 +61,8 @@ export const GET: APIRoute = async () => {
     const sorted = [...projects].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
     const blocks = sorted.map((p) => {
       const tags = p.data.tags.length ? `\n\nTags: ${p.data.tags.join(', ')}` : ''
-      return `## [${p.data.title}](${p.data.url})\n\n${p.data.description}${tags}`
+      const code = p.data.code ? `\n\nCode: ${p.data.code}` : ''
+      return `## [${p.data.title}](${p.data.website})\n\n${p.data.description}${tags}${code}`
     })
     contents.push(`# Projects\n\nSource: ${site.url}/projects\n\n${blocks.join('\n\n')}`)
   }

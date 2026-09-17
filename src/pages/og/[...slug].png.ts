@@ -37,6 +37,41 @@ interface OgNode {
   }
 }
 
+// One span per word in a wrapping row so the accent dot stays glued to the
+// last word instead of sitting at the end of the first line when the title
+// wraps. The column gap stands in for the word spaces.
+function titleWithDot(title: string): OgNode {
+  const words = title.split(/\s+/).filter(Boolean)
+  const last = words.pop() ?? ''
+  const wordStyle = { fontSize: 52, fontWeight: 500, color: FG, lineHeight: 1.3 }
+  const word = (text: string): OgNode => ({ type: 'span', props: { style: wordStyle, children: text } })
+
+  return {
+    type: 'div',
+    props: {
+      style: { display: 'flex', flexWrap: 'wrap', columnGap: 14 },
+      children: [
+        ...words.map(word),
+        {
+          type: 'div',
+          props: {
+            style: { display: 'flex', alignItems: 'flex-end', gap: 14 },
+            children: [
+              word(last),
+              {
+                type: 'div',
+                props: {
+                  style: { width: 14, height: 14, marginBottom: 8, borderRadius: 9999, backgroundColor: ACCENT },
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  }
+}
+
 function ogImageTree(title: string, description: string): OgNode {
   return {
     type: 'div',
@@ -77,27 +112,7 @@ function ogImageTree(title: string, description: string): OgNode {
               paddingRight: 64,
             },
             children: [
-              {
-                type: 'div',
-                props: {
-                  style: { display: 'flex', alignItems: 'flex-end', gap: 14 },
-                  children: [
-                    {
-                      type: 'span',
-                      props: {
-                        style: { fontSize: 52, fontWeight: 500, color: FG, lineHeight: 1.3 },
-                        children: title,
-                      },
-                    },
-                    {
-                      type: 'div',
-                      props: {
-                        style: { width: 14, height: 14, marginBottom: 8, borderRadius: 9999, backgroundColor: ACCENT },
-                      },
-                    },
-                  ],
-                },
-              },
+              titleWithDot(title),
               {
                 type: 'div',
                 props: {

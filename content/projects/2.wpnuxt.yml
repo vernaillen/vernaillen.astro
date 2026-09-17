@@ -1,7 +1,8 @@
 title: WPNuxt
 description: A Nuxt module to use WordPress as a headless CMS with a Nuxt frontend. Connects via GraphQL for the best of both worlds — familiar editing for content creators, cutting-edge frontend for developers.
 image: /images/projects/wpnuxt-logo-dark.png
-url: https://wpnuxt.com
+website: https://wpnuxt.com
+code: https://github.com/wpnuxt/wpnuxt
 tags:
   - Nuxt
   - WordPress

@@ -21,20 +21,18 @@ const posts = (await getCollection('blog'))
 <Base title={data.seo.title} description={data.seo.description} path="/">
   <Hero data={data} />
 
-  <Reveal>
-    <Stats data={data} />
-  </Reveal>
+  <Stats data={data} />
 
   <Reveal class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28 grid gap-16 lg:grid-cols-2 lg:gap-12 section-divider">
     <About data={data} />
     <WorkExperience data={data} />
   </Reveal>
 
-  <Reveal class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28 section-divider">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28 section-divider">
     <Blog data={data} posts={posts} />
-  </Reveal>
+  </div>
 
-  <Reveal class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28 section-divider">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28 section-divider">
     <Testimonials data={data} />
-  </Reveal>
+  </div>
 </Base>

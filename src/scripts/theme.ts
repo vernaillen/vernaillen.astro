@@ -1,4 +1,6 @@
 const STORAGE_KEY = 'color-mode'
+const THEME_COLOR = { light: '#f9f8f5', dark: '#0a0908' }
+const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
 
 function isDark() {
   return document.documentElement.classList.contains('dark')
@@ -6,6 +8,7 @@ function isDark() {
 
 function applyTheme(next: 'light' | 'dark') {
   document.documentElement.classList.toggle('dark', next === 'dark')
+  if (themeMeta) themeMeta.content = THEME_COLOR[next]
   localStorage.setItem(STORAGE_KEY, next)
 }
 

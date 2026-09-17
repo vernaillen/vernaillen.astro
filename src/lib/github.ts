@@ -183,16 +183,24 @@ async function fetchLiveContributions(token: string): Promise<{ authored: GitHub
   return { authored, contributed }
 }
 
-async function loadContributions(): Promise<{ authored: GitHubProject[]; contributed: GitHubProject[] }> {
+interface Contributions {
+  authored: GitHubProject[]
+  contributed: GitHubProject[]
+  // Set when the data comes from the committed snapshot instead of the API.
+  snapshotDate?: string
+}
+
+async function loadContributions(): Promise<Contributions> {
   const token = process.env.GITHUB_TOKEN
-  if (!token) return snapshot
+  const fallback: Contributions = { ...snapshot, snapshotDate: snapshot.fetchedAt }
+  if (!token) return fallback
   try {
     const data = await fetchLiveContributions(token)
     if (!data.authored.length) throw new Error('live fetch returned 0 authored repos')
     return data
   } catch (error) {
     console.warn(`[github] live fetch failed, falling back to snapshot: ${(error as Error).message}`)
-    return snapshot
+    return fallback
   }
 }
 
@@ -200,6 +208,7 @@ const contributions = await loadContributions()
 
 export const authoredProjects = contributions.authored
 export const contributedProjects = contributions.contributed
+export const snapshotDate = contributions.snapshotDate
 
 export const authoredGroups = AUTHORED_GROUPS.map((group) => ({
   ...group,

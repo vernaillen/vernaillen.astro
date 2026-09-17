@@ -1,25 +1,21 @@
 const items = document.querySelectorAll<HTMLElement>('.reveal')
+const STEP_MS = 40
+const MAX_DELAY_MS = 240
 
 if (items.length) {
-  const groups = new Map<Element | null, HTMLElement[]>()
-  items.forEach((el) => {
-    const group = groups.get(el.parentElement) ?? []
-    group.push(el)
-    groups.set(el.parentElement, group)
-  })
-  for (const group of groups.values()) {
-    group.forEach((el, i) => {
-      el.style.transitionDelay = `${Math.min(i * 60, 120)}ms`
-    })
-  }
-
+  // Elements entering the viewport together cascade in DOM order, so grid
+  // children (stat cells, cards, testimonials) reveal one after another.
   const observer = new IntersectionObserver(
     (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue
-        entry.target.classList.add('revealed')
-        observer.unobserve(entry.target)
-      }
+      const batch = entries
+        .filter((entry) => entry.isIntersecting)
+        .map((entry) => entry.target as HTMLElement)
+        .sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1))
+      batch.forEach((el, i) => {
+        el.style.transitionDelay = `${Math.min(i * STEP_MS, MAX_DELAY_MS)}ms`
+        el.classList.add('revealed')
+        observer.unobserve(el)
+      })
     },
     { threshold: 0.15 },
   )

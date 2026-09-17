@@ -21,6 +21,7 @@ const pathname = new URL(Astro.request.url).pathname
       {navLinks.map((link) => (
         <a
           href={link.href}
+          data-astro-prefetch
           class:list={[
             'px-2 py-1 rounded transition-colors',
             isNavLinkActive(link, pathname)
@@ -34,6 +35,15 @@ const pathname = new URL(Astro.request.url).pathname
     </nav>
 
     <div class="flex items-center gap-1">
+      <button
+        type="button"
+        data-search-open
+        aria-label="Search (⌘K)"
+        class="inline-flex h-9 items-center gap-2 rounded-full px-2.5 font-mono text-xs text-(--color-text-muted) hover:bg-(--color-bg-muted) hover:text-(--color-text) transition-colors"
+      >
+        <Icon name="lucide:search" class="size-4" />
+        <kbd class="hidden md:inline rounded border border-(--color-border) px-1 text-[10px] leading-4">⌘K</kbd>
+      </button>
       <button
         type="button"
         data-theme-toggle
@@ -59,6 +69,7 @@ const pathname = new URL(Astro.request.url).pathname
     {navLinks.map((link) => (
       <a
         href={link.href}
+        data-astro-prefetch
         class:list={[
           'flex items-center gap-2 px-2 py-2 rounded transition-colors',
           isNavLinkActive(link, pathname)

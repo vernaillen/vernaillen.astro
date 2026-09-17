@@ -18,10 +18,10 @@ const testimonials = await Promise.all(
 ---
 
 <div class="flex flex-col gap-6">
-  <SectionHeading title="Testimonials" align="center" class="mx-auto" />
+  <SectionHeading title="Testimonials" align="center" class="reveal mx-auto" />
   <div class="grid gap-4 sm:grid-cols-3">
     {testimonials.map((testimonial) => (
-      <figure class="flex flex-col gap-4 rounded-lg border border-(--color-border) p-5">
+      <figure class="reveal flex flex-col gap-4 rounded-lg border border-(--color-border) p-5">
         <blockquote class="text-sm text-(--color-text-muted) leading-relaxed flex-1">&ldquo;{testimonial.quote}&rdquo;</blockquote>
         <figcaption class="flex items-center gap-3">
           {testimonial.avatar && (

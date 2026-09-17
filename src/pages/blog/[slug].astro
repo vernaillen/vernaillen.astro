@@ -47,7 +47,7 @@ const articleSchema = {
   <JsonLd data={articleSchema} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16">
-    <a href="/blog" class="font-mono text-xs text-(--color-text-muted) flex items-center gap-1.5 hover:text-(--color-text) transition-colors">
+    <a href="/blog" data-astro-prefetch class="font-mono text-xs text-(--color-text-muted) flex items-center gap-1.5 hover:text-(--color-text) transition-colors">
       <span class="text-vernaillen-500/70">&gt;_</span>
       <span>blog</span>
     </a>
@@ -126,14 +126,14 @@ const articleSchema = {
 
       <div class="grid sm:grid-cols-2 gap-3 pt-6">
         {prev && (
-          <a href={`/blog/${prev.id}`} class="card-glow rounded-lg border border-(--color-border) p-4">
+          <a href={`/blog/${prev.id}`} data-astro-prefetch class="card-glow rounded-lg border border-(--color-border) p-4">
             <p class="font-mono text-xs text-(--color-text-muted)">&larr; Previous</p>
             <p class="text-sm mt-1">{prev.data.title}</p>
             <p class="text-xs text-(--color-text-muted) line-clamp-2 mt-1">{prev.data.description}</p>
           </a>
         )}
         {next && (
-          <a href={`/blog/${next.id}`} class:list={['card-glow rounded-lg border border-(--color-border) p-4', !prev && 'sm:col-start-2']}>
+          <a href={`/blog/${next.id}`} data-astro-prefetch class:list={['card-glow rounded-lg border border-(--color-border) p-4', !prev && 'sm:col-start-2']}>
             <p class="font-mono text-xs text-(--color-text-muted) text-right">Next &rarr;</p>
             <p class="text-sm mt-1 text-right">{next.data.title}</p>
             <p class="text-xs text-(--color-text-muted) line-clamp-2 mt-1 text-right">{next.data.description}</p>
@@ -155,9 +155,24 @@ const articleSchema = {
       </nav>
     )}
   </div>
+
+  <dialog class="lightbox" data-lightbox-dialog aria-label="Enlarged image">
+    <div class="flex h-full w-full items-center justify-center p-4" data-lightbox-stage>
+      <img alt="" data-lightbox-image />
+    </div>
+    <button
+      type="button"
+      data-lightbox-close
+      aria-label="Close"
+      class="absolute right-4 top-4 inline-flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+    >
+      <Icon name="lucide:x" class="size-4" />
+    </button>
+  </dialog>
 </Base>
 
 <script src="../../scripts/copy-code.ts"></script>
 <script src="../../scripts/copy-link.ts"></script>
 <script src="../../scripts/toc.ts"></script>
+<script src="../../scripts/lightbox.ts"></script>
 {post.body?.includes('::fft-visualizer-demo') && <script src="../../scripts/fft-demo.ts"></script>}

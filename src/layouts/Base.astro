@@ -6,7 +6,10 @@ import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import Seo from '../components/Seo.astro'
 import JsonLd from '../components/JsonLd.astro'
-import { site } from '../lib/site'
+import Search from '../components/Search.astro'
+import { getImage } from 'astro:assets'
+import { site, socialLinks } from '../lib/site'
+import { localImage } from '../lib/images'
 
 interface Props {
   title: string
@@ -19,13 +22,20 @@ interface Props {
 
 const { title, description, image, path = new URL(Astro.request.url).pathname, type, publishedTime } = Astro.props
 
+const portrait = await localImage('/images/woutervernaillen.jpg')
+const portraitUrl = portrait
+  ? new URL((await getImage({ src: portrait, width: 400, height: 400, format: 'jpg' })).src, site.url).href
+  : undefined
+
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: site.name,
   url: site.url,
-  jobTitle: 'Full Stack Developer',
+  image: portraitUrl,
+  jobTitle: site.jobTitle,
   email: `mailto:${site.email}`,
+  sameAs: socialLinks.map((link) => link.href),
 }
 
 const websiteSchema = {
@@ -57,6 +67,7 @@ const websiteSchema = {
       try {
         if (localStorage.getItem('color-mode') === 'light') {
           document.documentElement.classList.remove('dark')
+          document.querySelector('meta[name="theme-color"]').content = '#f9f8f5'
         }
       } catch {}
     </script>
@@ -71,6 +82,7 @@ const websiteSchema = {
       <slot />
     </main>
     <Footer />
+    <Search />
     <script src="../scripts/reveal.ts"></script>
   </body>
 </html>

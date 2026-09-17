@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import Button from '../Button.astro'
-import { socialLinks } from '../../lib/site'
+import { site, socialLinks } from '../../lib/site'
 import { Icon } from 'astro-icon/components'
 import { resolveIcon } from '../../lib/icons'
 import { localImage } from '../../lib/images'
@@ -16,6 +16,7 @@ const avatar = await localImage('/images/woutervernaillen.jpg')
 ---
 
 <section class="hero-glow dot-pattern relative overflow-hidden py-20 sm:py-28 text-center">
+  <div class="hero-spotlight" data-hero-spotlight aria-hidden="true"></div>
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-5">
     {avatar && (
       <Image
@@ -23,24 +24,39 @@ const avatar = await localImage('/images/woutervernaillen.jpg')
         alt="Wouter Vernaillen"
         width={72}
         height={72}
-        class="size-18 rounded-full ring-2 ring-(--color-border) ring-offset-4 ring-offset-(--color-bg) object-cover"
+        class="fade-in size-18 rounded-full ring-2 ring-(--color-border) ring-offset-4 ring-offset-(--color-bg) object-cover"
       />
     )}
 
+    {site.availability && (
+      <a
+        href={site.meetingLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="fade-in inline-flex items-center gap-2 rounded-full border border-(--color-border) px-3 py-1 font-mono text-xs text-(--color-text-muted) transition-colors hover:border-(--color-vernaillen-400) hover:text-(--color-text)"
+      >
+        <span class="relative flex size-2" aria-hidden="true">
+          <span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex size-2 rounded-full bg-emerald-500"></span>
+        </span>
+        {site.availability}
+      </a>
+    )}
+
     <div>
-      <h1 class="text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
-      <p class="pt-4 text-xl sm:text-2xl lg:text-3xl font-mono text-(--color-text-muted)">{data.title2}</p>
+      <h1 class="fade-in text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+      <p class="fade-in [--fade-delay:40ms] pt-4 text-xl sm:text-2xl lg:text-3xl font-mono text-(--color-text-muted)">{data.title2}</p>
     </div>
 
-    <p class="text-(--color-text-muted)">{data.description}</p>
+    <p class="fade-in [--fade-delay:90ms] text-(--color-text-muted)">{data.description}</p>
 
-    <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+    <div class="fade-in [--fade-delay:140ms] flex flex-wrap items-center justify-center gap-2 pt-2">
       {data.hero.links.map((link) => (
         <Button label={link.label} to={link.to} icon={link.icon} variant={link.variant} size={link.size ?? 'lg'} />
       ))}
     </div>
 
-    <div class="flex items-center gap-3 pt-2">
+    <div class="fade-in [--fade-delay:180ms] flex items-center gap-3 pt-2">
       {socialLinks.map((link) => (
         <a
           href={link.href}
@@ -55,3 +71,5 @@ const avatar = await localImage('/images/woutervernaillen.jpg')
     </div>
   </div>
 </section>
+
+<script src="../../scripts/hero-spotlight.ts"></script>
