@@ -118,12 +118,12 @@ const chevron = (d: string) =>
  * before the demo is booted (no layout shift when it loads). The core wires
  * them up on boot; before that, a source button click boots the demo.
  */
-export function fftControlsHtml(panelClass = ''): string {
+export function fftControlsHtml(): string {
   // Every preset name is rendered and the inactive ones only hidden, so the
   // name box is as wide as the longest and stepping never shifts the arrows.
   const names = PRESETS.map((preset, i) => `<span${i ? '' : ' data-current'}>${preset.name}</span>`).join('')
   return [
-    `<div class="fft-demo-panel${panelClass && ` ${panelClass}`}" data-fft-controls>`,
+    '<div class="fft-demo-panel" data-fft-controls>',
     '<div class="fft-demo-controls">',
     `<button type="button" class="fft-demo-btn" data-source="radio">${SOURCE_LABEL.radio}</button>`,
     `<button type="button" class="fft-demo-btn" data-source="mic">${SOURCE_LABEL.mic}</button>`,

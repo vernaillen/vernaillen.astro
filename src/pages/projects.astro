@@ -35,10 +35,9 @@ const cardImages = await Promise.all(
 
     <div class="flex flex-col gap-16 pt-16">
       {projects.map((project, index) => project.data.demo === 'fft' ? (
-        <Reveal class="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-x-8 sm:items-center">
-          {/* The stage and its controls are separate grid rows so the text centres on the stage alone. */}
-          <div class="contents" data-fft-demo>
-            <div class="fft-demo-shell my-0 sm:col-span-2" data-fft-stage>
+        <Reveal>
+          <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8 lg:items-center" data-fft-demo>
+            <div class="fft-demo-shell my-0 lg:col-span-2" data-fft-stage>
               {fftPoster && <Image src={fftPoster} alt={project.data.title} width={1200} height={630} format="avif" class="fft-demo-poster" />}
               <div class="fft-demo-overlay">
                 <button type="button" class="fft-demo-play" data-fft-play aria-label="Play the interactive demo">
@@ -47,16 +46,17 @@ const cardImages = await Promise.all(
                 <span class="fft-demo-caption">Interactive demo — press play to listen</span>
               </div>
             </div>
-            <Fragment set:html={fftControlsHtml('sm:col-span-2')} />
-          </div>
-          <div class="flex flex-col gap-2 sm:col-start-3 sm:row-start-1">
-            <span class="font-mono text-xs text-(--color-text-muted)">{project.data.date.getUTCFullYear()}</span>
-            <h2 class="text-lg font-semibold">{project.data.title}</h2>
-            <p class="text-sm text-(--color-text-muted)">{project.data.description}</p>
-            <a href={project.data.url} target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 text-sm text-vernaillen-500">
-              View Project
-              <Icon name="lucide:arrow-right" class="size-4 transition-transform opacity-0 group-hover:translate-x-1 group-hover:opacity-100" />
-            </a>
+            {/* In the narrow column the preset stepper takes its own full row instead of floating right. */}
+            <div class="flex flex-col gap-2 lg:[&_.fft-demo-preset]:basis-full">
+              <span class="font-mono text-xs text-(--color-text-muted)">{project.data.date.getUTCFullYear()}</span>
+              <h2 class="text-lg font-semibold">{project.data.title}</h2>
+              <p class="text-sm text-(--color-text-muted)">{project.data.description}</p>
+              <a href={project.data.url} target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 text-sm text-vernaillen-500">
+                View Project
+                <Icon name="lucide:arrow-right" class="size-4 transition-transform opacity-0 group-hover:translate-x-1 group-hover:opacity-100" />
+              </a>
+              <Fragment set:html={fftControlsHtml()} />
+            </div>
           </div>
         </Reveal>
       ) : (
