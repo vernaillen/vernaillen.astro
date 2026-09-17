@@ -1,10 +1,11 @@
 const links = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')
 
 if (links.length) {
-  const headingMap = new Map<string, HTMLAnchorElement>()
+  // Each heading has two links: the mobile <details> list and the sidebar.
+  const headingMap = new Map<string, HTMLAnchorElement[]>()
   links.forEach((link) => {
     const id = link.getAttribute('href')?.slice(1)
-    if (id) headingMap.set(id, link)
+    if (id) headingMap.set(id, [...(headingMap.get(id) ?? []), link])
   })
 
   const headings = [...headingMap.keys()]
@@ -15,10 +16,10 @@ if (links.length) {
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue
-        const link = headingMap.get(entry.target.id)
-        if (!link) continue
+        const active = headingMap.get(entry.target.id)
+        if (!active) continue
         links.forEach((l) => l.classList.remove('toc-active'))
-        link.classList.add('toc-active')
+        active.forEach((l) => l.classList.add('toc-active'))
       }
     },
     { rootMargin: '-80px 0px -70% 0px', threshold: 0 },

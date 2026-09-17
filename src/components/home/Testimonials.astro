@@ -22,7 +22,7 @@ const testimonials = await Promise.all(
   <div class="grid gap-4 sm:grid-cols-3">
     {testimonials.map((testimonial) => (
       <figure class="reveal flex flex-col gap-4 rounded-lg border border-(--color-border) p-5">
-        <blockquote class="text-sm text-(--color-text-muted) leading-relaxed flex-1">&ldquo;{testimonial.quote}&rdquo;</blockquote>
+        <blockquote class="flex-1 text-sm text-(--color-text-muted) leading-relaxed before:content-[open-quote] before:block before:h-6 before:-mt-1 before:font-semibold before:text-5xl before:leading-none before:text-vernaillen-500/40">{testimonial.quote}</blockquote>
         <figcaption class="flex items-center gap-3">
           {testimonial.avatar && (
             <Image src={testimonial.avatar} alt={testimonial.author.name} width={36} height={36} class="size-9 rounded-full object-cover" />

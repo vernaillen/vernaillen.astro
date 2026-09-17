@@ -1,0 +1,16 @@
+---
+import type { MarkdownHeading } from 'astro'
+
+interface Props {
+  headings: MarkdownHeading[]
+}
+const { headings } = Astro.props
+---
+
+<ul class="flex flex-col gap-1.5 border-l border-(--color-border)">
+  {headings.map((heading) => (
+    <li style={{ paddingLeft: `${(heading.depth - 2) * 0.75 + 0.75}rem` }}>
+      <a href={`#${heading.slug}`} data-toc-link class="text-(--color-text-muted) hover:text-(--color-text) transition-colors">{heading.text}</a>
+    </li>
+  ))}
+</ul>

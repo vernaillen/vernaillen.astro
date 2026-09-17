@@ -40,7 +40,7 @@ const groups = CATEGORY_ORDER.map((category) => ({
                 <h3 class="text-lg font-semibold">{event.title}</h3>
                 <div class="mt-2 flex flex-wrap gap-1.5">
                   {event.stack.map((tech) => (
-                    <span class="inline-flex items-center rounded-lg bg-vernaillen-500/10 px-1.5 py-1 text-[10px]/3 font-medium text-vernaillen-700 dark:text-vernaillen-500">{tech}</span>
+                    <span class="inline-flex items-center rounded-lg bg-vernaillen-500/10 px-1.5 py-1 text-[10px]/3 font-medium text-(--color-accent)">{tech}</span>
                   ))}
                 </div>
               </div>

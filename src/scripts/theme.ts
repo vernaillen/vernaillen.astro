@@ -6,15 +6,27 @@ function isDark() {
   return document.documentElement.classList.contains('dark')
 }
 
+const toggles = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]')
+
+function labelToggles() {
+  const label = `Switch to ${isDark() ? 'light' : 'dark'} mode`
+  toggles.forEach((button) => button.setAttribute('aria-label', label))
+}
+
 function applyTheme(next: 'light' | 'dark') {
   document.documentElement.classList.toggle('dark', next === 'dark')
   if (themeMeta) themeMeta.content = THEME_COLOR[next]
   localStorage.setItem(STORAGE_KEY, next)
+  labelToggles()
 }
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+// The markup ships the dark-mode label; the inline head script may already
+// have switched to light before this module runs.
+labelToggles()
+
+toggles.forEach((button) => {
   button.addEventListener('click', (event) => {
     const next = isDark() ? 'light' : 'dark'
 

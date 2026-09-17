@@ -1,10 +1,10 @@
 title: Vernaillen.dev
-description: This very website — my developer portfolio and blog. Built with Nuxt 4, Nuxt UI, and Nuxt Content. Open source on GitHub.
+description: This very website — my developer portfolio and blog. Built with Astro 7 and Tailwind CSS v4, served by nginx on Coolify. Open source on GitHub.
 image: /images/projects/vernaillendev.png
 website: https://vernaillen.dev
-code: https://github.com/vernaillen/vernaillen.dev
+code: https://github.com/vernaillen/vernaillen.astro
 tags:
-  - Nuxt
-  - Nuxt UI
-  - Nuxt Content
+  - Astro
+  - Tailwind CSS
+  - Coolify
 date: 2026-01-01

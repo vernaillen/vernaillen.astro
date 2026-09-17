@@ -5,6 +5,6 @@
 export function renderInlineMarkdown(text: string): string {
   return text.replace(
     /\[([^\]]+)\]\(([^)]+)\)/g,
-    '<a href="$2" class="underline underline-offset-4 hover:text-vernaillen-500" target="_blank" rel="noopener noreferrer">$1</a>',
+    '<a href="$2" class="underline underline-offset-4 hover:text-(--color-accent)" target="_blank" rel="noopener noreferrer">$1</a>',
   )
 }

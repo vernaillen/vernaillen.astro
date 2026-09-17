@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 import Base from '../layouts/Base.astro'
 import Button from '../components/Button.astro'
+import SectionHeading from '../components/SectionHeading.astro'
 import { authoredGroups, contributedProjects, snapshotDate, type GitHubProject } from '../lib/github'
 import type { LinksPage } from '../content.config'
 
@@ -23,13 +24,10 @@ const data = page!.data as LinksPage
 
     {authoredGroups.length > 0 && (
       <div class="pt-16 flex flex-col gap-10">
-        <div class="flex flex-col gap-1">
-          <h2 class="text-xl font-semibold">Authored</h2>
-          <p class="text-sm text-(--color-text-muted)">Modules, tools, and starters I built and maintain.</p>
-        </div>
+        <SectionHeading title="Authored" description="Modules, tools, and starters I built and maintain." align="center" class="mx-auto" />
         {authoredGroups.map((group) => (
           <div>
-            <h3 class="mb-4 text-base font-semibold">{group.title}</h3>
+            <h3 class="mb-6 text-center text-lg font-semibold">{group.title}</h3>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {group.projects.map((project: GitHubProject) => (
                 <a href={project.url} target="_blank" rel="noopener noreferrer" class="card-glow group block h-full rounded-lg border border-(--color-border) p-4 transition-colors hover:bg-(--color-bg-muted)">
@@ -55,11 +53,8 @@ const data = page!.data as LinksPage
     )}
 
     {contributedProjects.length > 0 && (
-      <div class="pt-16 flex flex-col gap-4">
-        <div class="flex flex-col gap-1">
-          <h2 class="text-xl font-semibold">Contributed To</h2>
-          <p class="text-sm text-(--color-text-muted)">Pull requests merged into open source projects across the ecosystem.</p>
-        </div>
+      <div class="pt-16 flex flex-col gap-10">
+        <SectionHeading title="Contributed To" description="Pull requests merged into open source projects across the ecosystem." align="center" class="mx-auto" />
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {contributedProjects.map((project) => (
             <a href={project.pr || project.url} target="_blank" rel="noopener noreferrer" class="card-glow group block h-full rounded-lg border border-(--color-border) p-4 transition-colors hover:bg-(--color-bg-muted)">

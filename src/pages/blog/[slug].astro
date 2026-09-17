@@ -4,6 +4,7 @@ import { Image } from 'astro:assets'
 import { Icon } from 'astro-icon/components'
 import Base from '../../layouts/Base.astro'
 import JsonLd from '../../components/JsonLd.astro'
+import TocList from '../../components/TocList.astro'
 import { formatPostDate } from '../../lib/date'
 import { localImage } from '../../lib/images'
 import { site, ogImagePath } from '../../lib/site'
@@ -19,6 +20,7 @@ export async function getStaticPaths() {
 
 const { post, prev, next } = Astro.props
 const { Content, headings } = await render(post)
+const tocHeadings = headings.filter((h) => h.depth <= 3)
 const image = await localImage(post.data.image.src)
 const authorAvatar = await localImage(post.data.author.avatar.src)
 const articleLink = new URL(`/blog/${post.id}`, site.url).toString()
@@ -87,12 +89,21 @@ const articleSchema = {
   </div>
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 pb-20 grid gap-10 lg:grid-cols-10 lg:items-start">
+    {tocHeadings.length > 0 && (
+      <details class="lg:hidden rounded-lg border border-(--color-border) px-4 py-3 text-sm">
+        <summary class="cursor-pointer font-mono text-xs uppercase tracking-wide text-(--color-text-muted)">On this page</summary>
+        <div class="mt-3">
+          <TocList headings={tocHeadings} />
+        </div>
+      </details>
+    )}
+
     <article class="blog-prose min-w-0 lg:col-span-8">
       <Content />
 
       {post.data.social && post.data.social.length > 0 && (
         <div class="mt-10 rounded-lg border border-vernaillen-500/25 bg-vernaillen-500/5 p-3">
-          <p class="flex items-center gap-1.5 font-mono text-xs text-vernaillen-500">
+          <p class="flex items-center gap-1.5 font-mono text-xs text-(--color-accent)">
             <Icon name="lucide:message-square-text" class="size-4 shrink-0" />
             comment //
           </p>
@@ -104,7 +115,7 @@ const articleSchema = {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Join the conversation on ${socialNetworks[s.name]?.label ?? s.name}`}
-                class="inline-flex items-center justify-center rounded-md bg-vernaillen-500/10 hover:bg-vernaillen-500/20 transition-colors size-8 text-vernaillen-500"
+                class="inline-flex items-center justify-center rounded-md bg-vernaillen-500/10 hover:bg-vernaillen-500/20 transition-colors size-8 text-(--color-accent)"
               >
                 <Icon name={s.icon ? resolveIcon(s.icon) : (socialNetworks[s.name]?.icon ?? `simple-icons:${s.name}`)} class="size-4" />
               </a>
@@ -148,16 +159,10 @@ const articleSchema = {
       </div>
     </article>
 
-    {headings.length > 0 && (
+    {tocHeadings.length > 0 && (
       <nav id="toc" class="hidden lg:block lg:col-span-2 sticky top-24 text-sm">
         <p class="font-mono text-xs uppercase tracking-wide text-(--color-text-muted) mb-2">On this page</p>
-        <ul class="flex flex-col gap-1.5 border-l border-(--color-border)">
-          {headings.filter((h) => h.depth <= 3).map((heading) => (
-            <li style={{ paddingLeft: `${(heading.depth - 2) * 0.75 + 0.75}rem` }}>
-              <a href={`#${heading.slug}`} data-toc-link class="text-(--color-text-muted) hover:text-(--color-text) transition-colors">{heading.text}</a>
-            </li>
-          ))}
-        </ul>
+        <TocList headings={tocHeadings} />
       </nav>
     )}
   </div>

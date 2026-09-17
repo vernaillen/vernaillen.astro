@@ -58,6 +58,12 @@
 @theme static {
   --font-sans: 'Geist Variable', sans-serif;
   --font-mono: 'Geist Mono Variable', monospace;
+  /* Geist at 600 with tight tracking reads heavier than the old site's
+     Poppins headings did. The variable font allows an in-between weight, and
+     `tracking-tight` stays only mildly tight; both apply to every
+     `font-semibold` / `tracking-tight` utility and to the heading rules below. */
+  --font-weight-semibold: 550;
+  --tracking-tight: -0.015em;
 
   --color-dusk-50: #f9f8f5;
   --color-dusk-100: #f0efea;
@@ -90,11 +96,16 @@
   --color-bg-muted: #f0efea;
   --color-bg-elevated: #ffffff;
   --color-border: #dfddd6;
-  --color-text: #131210;
+  /* dusk-800 rather than 900: softer ink on the warm paper in light mode. */
+  --color-text: #201e1a;
   --color-text-muted: #656158;
   /* Quietest text step; still >= 4.5:1 on bg and bg-elevated in both modes,
      since it is used at 10-12px (captions, search hints). */
   --color-text-dimmed: #75716a;
+  /* Brand gold for readable text: vernaillen-700 on the light background
+     (4.5:1), the vernaillen-500 brand tone in dark mode. Large or decorative
+     gold (stats, the h1 dot, borders) keeps vernaillen-500 in both modes. */
+  --color-accent: #755d0f;
 }
 
 :root {
@@ -110,6 +121,7 @@
   --color-text: var(--color-dusk-50);
   --color-text-muted: var(--color-dusk-400);
   --color-text-dimmed: #848076;
+  --color-accent: var(--color-vernaillen-500);
   --color-selection-bg: #474747;
   --color-selection-text: #ffffff;
 }
@@ -130,8 +142,8 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-sans);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.01em;
     line-height: 1.2;
   }
   h1::after,
@@ -260,14 +272,14 @@
 
     & h2 {
       font-size: 1.5rem;
-      font-weight: 600;
+      font-weight: var(--font-weight-semibold);
       letter-spacing: -0.01em;
       margin-top: 2.5rem;
       margin-bottom: 1rem;
     }
     & h3 {
       font-size: 1.25rem;
-      font-weight: 600;
+      font-weight: var(--font-weight-semibold);
       letter-spacing: -0.01em;
       margin-top: 2rem;
       margin-bottom: 0.75rem;
@@ -286,7 +298,7 @@
       font-weight: 600;
     }
     & a {
-      color: var(--color-vernaillen-700);
+      color: var(--color-accent);
       text-decoration: underline;
       text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
       text-underline-offset: 4px;
@@ -294,9 +306,6 @@
     }
     & a:hover {
       text-decoration-color: currentColor;
-    }
-    .dark & a {
-      color: var(--color-vernaillen-500);
     }
     & blockquote {
       border-left: 2px solid var(--color-teal-500);
@@ -572,7 +581,7 @@
     cursor: default;
   }
   .fft-demo-btn.is-active {
-    color: var(--color-vernaillen-500);
+    color: var(--color-accent);
     border-color: var(--color-vernaillen-500);
   }
   /* Visual-style stepper — three ruled cells: chevron, name, chevron. The
@@ -598,7 +607,7 @@
     transition: color 0.15s ease, background-color 0.15s ease;
   }
   .fft-demo-step:hover {
-    color: var(--color-vernaillen-500);
+    color: var(--color-accent);
     background: var(--color-bg-elevated);
   }
   .fft-demo-preset-name {
@@ -641,11 +650,8 @@
     margin-bottom: 1rem;
   }
   .fft-demo-attribution a {
-    color: var(--color-vernaillen-700);
+    color: var(--color-accent);
     text-decoration: none;
-  }
-  .dark .fft-demo-attribution a {
-    color: var(--color-vernaillen-500);
   }
   .fft-demo-attribution a:hover {
     text-decoration: underline;
@@ -695,7 +701,7 @@
   }
   .search-dialog mark {
     background: transparent;
-    color: var(--color-vernaillen-500);
+    color: var(--color-accent);
     font-weight: 600;
   }
   .search-item[aria-selected='true'] {
