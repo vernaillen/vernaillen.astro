@@ -26,7 +26,7 @@ const horizontal = orientation === 'horizontal'
   data-astro-prefetch
   class:list={[
     'card-glow group rounded-lg border border-(--color-border) p-1 transition-transform',
-    horizontal ? 'flex flex-col sm:flex-row gap-4 sm:items-start' : 'flex flex-col h-full hover:scale-[1.01] duration-400',
+    horizontal ? 'flex flex-col sm:flex-row sm:items-start' : 'flex flex-col h-full hover:scale-[1.01] duration-400',
   ]}
 >
   {image && (
@@ -44,7 +44,7 @@ const horizontal = orientation === 'horizontal'
       ]}
     />
   )}
-  <div class="flex flex-col gap-1.5 pt-2 flex-1 min-w-0">
+  <div class="flex flex-col gap-1.5 p-3 sm:p-4 flex-1 min-w-0">
     <p class="font-mono text-xs text-(--color-text-muted)">
       {formatPostDate(post.data.date)} <span class="text-vernaillen-500/60">//</span> {post.data.minRead} min read
     </p>
