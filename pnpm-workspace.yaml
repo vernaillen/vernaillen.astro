@@ -1,2 +1,8 @@
+# pnpm 12 reads its settings from here instead of the "pnpm" field in package.json.
+packages:
+  - .
+
 allowBuilds:
   esbuild: true
+  sharp: true
+  '@resvg/resvg-js': true

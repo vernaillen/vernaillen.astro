@@ -1,113 +1,47 @@
 name: ci
 
-# Two chained jobs on every branch:
+# check -> build -> smoke test -> push -> redeploy, all of it in
+# vernaillen/workflows. This file only says what is different about this
+# repository; the pipeline itself is maintained in one place for every app that
+# deploys to the Coolify server.
 #
-#   check  ──▶  build-deploy
-#   (lint,      (docker build; on main only: push to the registry on Coolify
-#    typecheck)  and ask Coolify to redeploy)
+# What `check` does lives in package.json, not here. Today that is
+# `pnpm lint && pnpm typecheck && pnpm build`. Adding or reordering a check is
+# a package.json change and needs no edit to any workflow.
 #
-# `needs: check` means a lint or type error never reaches the build. The image
-# is built on every branch so a broken `pnpm build` is caught on feature
-# branches too; only the push and the redeploy are gated on main.
-#
-# The image (./Dockerfile) contains nginx + dist/, so the build runs on the
-# GitHub runner and the Coolify server only pulls ~25 MB. nginx.conf replaces
-# public/.htaccess, which the container ignores.
+# Repository configuration (Settings -> Secrets and variables -> Actions), all
+# set by vernaillen/workflows/scripts/configure-repo.sh:
+#   Secrets:   REGISTRY_USERNAME, REGISTRY_PASSWORD  registry on Coolify
+#              COOLIFY_TOKEN                         deploy permission
+#              BUILD_SECRETS                         github_token=<read-only PAT>;
+#                                                    mounted into the build, never
+#                                                    stored in a layer
+#   Variables: COOLIFY_URL, COOLIFY_APP_UUID         which app to redeploy
+#              RADIO_ORIGIN_URL                      public stream proxy URL
 
 on:
   push:
   workflow_dispatch:
 
-# Required repository configuration (Settings -> Secrets and variables -> Actions):
-#   Secrets:
-#     REGISTRY_USER / REGISTRY_PASSWORD - htpasswd credentials of the registry
-#                       service on Coolify (registry.apps.vernaillen.dev).
-#     NUXT_GITHUB_TOKEN - read-only GitHub token; bakes the Open Source page
-#                       data into the static build (read as `GITHUB_TOKEN` by
-#                       src/lib/github.ts). Same secret the Nuxt site's workflow
-#                       already uses, so nothing new to create.
-#     COOLIFY_TOKEN   - Coolify API token (Keys & Tokens) with deploy permission.
-#   Variables:
-#     RADIO_ORIGIN_URL  - absolute URL of the radio app's stream proxy
-#                         (https://origin.apps.vernaillen.dev/api/radio)
-#     COOLIFY_URL       - Coolify instance URL without trailing slash.
-#     COOLIFY_APP_UUID  - UUID of the Docker Image application in Coolify that
-#                         runs registry.apps.vernaillen.dev/vernaillen-astro:latest.
-
-env:
-  REGISTRY: registry.apps.vernaillen.dev
-  IMAGE: registry.apps.vernaillen.dev/vernaillen-astro
+concurrency:
+  group: ci-${{ github.ref }}
+  # A main-branch run pushes the image and redeploys, so it always finishes.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-
-      - name: Install node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 26
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Typecheck
-        run: pnpm typecheck
-
-  build-deploy:
-    needs: check
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      # docker-container driver: needed for the GitHub Actions layer cache.
-      - name: Set up Buildx
-        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
-
-      - name: Log in to the registry
-        if: github.ref == 'refs/heads/main'
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.REGISTRY_USER }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-
-      # The build arg and the secret are consumed by the discarded build stage
-      # only (see Dockerfile); the secret is mounted, never stored in a layer.
-      # `provenance: false` pushes a plain image instead of an OCI index with
-      # an attestation manifest. The Coolify server is amd64; add `platforms`
-      # (plus setup-qemu-action) if that ever changes.
-      - name: Build image (push on main)
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
-        with:
-          context: .
-          push: ${{ github.ref == 'refs/heads/main' }}
-          provenance: false
-          tags: |
-            ${{ env.IMAGE }}:latest
-            ${{ env.IMAGE }}:${{ github.sha }}
-          build-args: |
-            PUBLIC_RADIO_URL=${{ vars.RADIO_ORIGIN_URL }}
-          secrets: |
-            github_token=${{ secrets.NUXT_GITHUB_TOKEN }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      # Coolify pulls :latest again and restarts the container.
-      - name: Redeploy on Coolify
-        if: github.ref == 'refs/heads/main'
-        run: |
-          curl -fsS "${{ vars.COOLIFY_URL }}/api/v1/deploy?uuid=${{ vars.COOLIFY_APP_UUID }}&force=true" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}"
+  pipeline:
+    uses: vernaillen/workflows/.github/workflows/coolify-deploy.yml@v1
+    with:
+      image-name: vernaillen-astro
+      # nginx serving dist/, not a node server: 8080 is what nginx.conf listens
+      # on and what the Dockerfile exposes.
+      smoke-port: 8080
+      smoke-path: /
+      # A variable, not a secret: `vars.X` silently evaluates to an empty string
+      # when X exists only as a secret, which is how this has been baked in empty.
+      # Public value -- it is the URL the browser fetches the stream from.
+      build-args: |
+        PUBLIC_RADIO_URL=${{ vars.RADIO_ORIGIN_URL }}
+      coolify-url: ${{ vars.COOLIFY_URL }}
+      coolify-app-uuid: ${{ vars.COOLIFY_APP_UUID }}
+    secrets: inherit
