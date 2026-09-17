@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 # lighthouse reports (scripts/lighthouse.sh)
 .lighthouse/
+.unlighthouse/

@@ -43,6 +43,16 @@
   mix-blend-mode: plus-lighter;
 }
 
+/* The header keeps still while the page crossfades. Scoped to page
+   navigations so the theme wipe (which clips the root) still covers it. */
+:root:active-view-transition-type(page) .site-header {
+  view-transition-name: header;
+}
+::view-transition-old(header),
+::view-transition-new(header) {
+  animation: none;
+}
+
 /* Blog image lightbox — the clicked image morphs into the enlarged one. */
 ::view-transition-group(lightbox-image) {
   animation-duration: 240ms;
