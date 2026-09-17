@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 import Base from '../layouts/Base.astro'
 import Button from '../components/Button.astro'
+import Reveal from '../components/Reveal.astro'
 import SectionHeading from '../components/SectionHeading.astro'
 import { authoredGroups, contributedProjects, snapshotDate, type GitHubProject } from '../lib/github'
 import type { LinksPage } from '../content.config'
@@ -13,7 +14,7 @@ const data = page!.data as LinksPage
 
 <Base title={data.title} description={data.description} path="/open-source">
   <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-    <h1 class="fade-in text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+    <h1 class="fade-in text-3xl sm:text-5xl">{data.title}</h1>
     <p class="fade-in [--fade-delay:90ms] pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
 
     <div class="flex flex-wrap gap-2 pt-6">
@@ -30,21 +31,23 @@ const data = page!.data as LinksPage
             <h3 class="mb-6 text-center text-lg font-semibold">{group.title}</h3>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {group.projects.map((project: GitHubProject) => (
-                <a href={project.url} target="_blank" rel="noopener noreferrer" class="card-glow group block h-full rounded-lg border border-(--color-border) p-4 transition-colors hover:bg-(--color-bg-muted)">
-                  <div class="flex items-start justify-between gap-2">
-                    <div class="flex items-center gap-2 text-sm font-medium">
-                      <Icon name="simple-icons:github" class="size-4 shrink-0" />
-                      <span class="truncate">{project.repo}</span>
-                    </div>
-                    {project.stars > 0 && (
-                      <div class="flex shrink-0 items-center gap-1 text-xs text-(--color-text-muted)">
-                        <Icon name="lucide:star" class="size-3" />
-                        {project.stars.toLocaleString('en-US')}
+                <Reveal class="h-full">
+                  <a href={project.url} target="_blank" rel="noopener noreferrer" class="card-glow group block h-full rounded-lg border border-(--color-border) p-4 transition-colors hover:bg-(--color-bg-muted)">
+                    <div class="flex items-start justify-between gap-2">
+                      <div class="flex items-center gap-2 text-sm font-medium text-(--color-text-highlighted)">
+                        <Icon name="simple-icons:github" class="size-4 shrink-0" />
+                        <span class="truncate">{project.repo}</span>
                       </div>
-                    )}
-                  </div>
-                  <p class="mt-1 text-sm text-(--color-text-muted)">{project.description}</p>
-                </a>
+                      {project.stars > 0 && (
+                        <div class="flex shrink-0 items-center gap-1 text-xs text-(--color-text-muted)">
+                          <Icon name="lucide:star" class="size-3" />
+                          {project.stars.toLocaleString('en-US')}
+                        </div>
+                      )}
+                    </div>
+                    <p class="mt-1 text-sm text-(--color-text-muted)">{project.description}</p>
+                  </a>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -57,19 +60,21 @@ const data = page!.data as LinksPage
         <SectionHeading title="Contributed To" description="Pull requests merged into open source projects across the ecosystem." align="center" class="mx-auto" />
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {contributedProjects.map((project) => (
-            <a href={project.pr || project.url} target="_blank" rel="noopener noreferrer" class="card-glow group block h-full rounded-lg border border-(--color-border) p-4 transition-colors hover:bg-(--color-bg-muted)">
-              <div class="flex items-start justify-between gap-2">
-                <div class="flex items-center gap-2 text-sm font-medium">
-                  <Icon name="simple-icons:github" class="size-4 shrink-0" />
-                  <span class="truncate">{project.repo}</span>
+            <Reveal class="h-full">
+              <a href={project.pr || project.url} target="_blank" rel="noopener noreferrer" class="card-glow group block h-full rounded-lg border border-(--color-border) p-4 transition-colors hover:bg-(--color-bg-muted)">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-2 text-sm font-medium text-(--color-text-highlighted)">
+                    <Icon name="simple-icons:github" class="size-4 shrink-0" />
+                    <span class="truncate">{project.repo}</span>
+                  </div>
+                  <div class="flex shrink-0 items-center gap-1 text-xs text-(--color-text-muted)">
+                    <Icon name="lucide:star" class="size-3" />
+                    {project.stars.toLocaleString('en-US')}
+                  </div>
                 </div>
-                <div class="flex shrink-0 items-center gap-1 text-xs text-(--color-text-muted)">
-                  <Icon name="lucide:star" class="size-3" />
-                  {project.stars.toLocaleString('en-US')}
-                </div>
-              </div>
-              <p class="mt-1 text-sm text-(--color-text-muted)">{project.description}</p>
-            </a>
+                <p class="mt-1 text-sm text-(--color-text-muted)">{project.description}</p>
+              </a>
+            </Reveal>
           ))}
         </div>
       </div>

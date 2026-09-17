@@ -1,5 +1,5 @@
 const STORAGE_KEY = 'color-mode'
-const THEME_COLOR = { light: '#f9f8f5', dark: '#0a0908' }
+const THEME_COLOR = { light: '#ffffff', dark: '#0a0908' }
 const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
 
 function isDark() {

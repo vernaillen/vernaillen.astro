@@ -9,6 +9,6 @@ const { title, description, align = 'left', class: className } = Astro.props
 ---
 
 <div class:list={['flex flex-col gap-2', align === 'center' ? 'items-center text-center' : 'items-start text-left', className]}>
-  <h2 class="section-title text-2xl sm:text-2xl lg:text-3xl tracking-tight">{title}</h2>
+  <h2 class="section-title text-2xl sm:text-2xl lg:text-3xl">{title}</h2>
   {description && <p class="text-sm sm:text-base text-(--color-text-muted)">{description}</p>}
 </div>

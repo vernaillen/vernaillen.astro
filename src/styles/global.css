@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "@fontsource-variable/geist";
 @import "@fontsource-variable/geist-mono";
+@import "@fontsource/poppins/600.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -57,13 +58,10 @@
 
 @theme static {
   --font-sans: 'Geist Variable', sans-serif;
+  /* Headings only, 600 is the single weight shipped (Poppins has no variable
+     cut); everything else is Geist. */
+  --font-heading: 'Poppins', sans-serif;
   --font-mono: 'Geist Mono Variable', monospace;
-  /* Geist at 600 with tight tracking reads heavier than the old site's
-     Poppins headings did. The variable font allows an in-between weight, and
-     `tracking-tight` stays only mildly tight; both apply to every
-     `font-semibold` / `tracking-tight` utility and to the heading rules below. */
-  --font-weight-semibold: 550;
-  --tracking-tight: -0.015em;
 
   --color-dusk-50: #f9f8f5;
   --color-dusk-100: #f0efea;
@@ -92,12 +90,14 @@
   /* Semantic tokens — light values here, overridden per-mode below. `static`
      keeps these as real custom properties instead of literal-inlined utility
      values, which is required for the dark-mode override to work. */
-  --color-bg: #f9f8f5;
+  --color-bg: #ffffff;
   --color-bg-muted: #f0efea;
   --color-bg-elevated: #ffffff;
   --color-border: #dfddd6;
-  /* dusk-800 rather than 900: softer ink on the warm paper in light mode. */
-  --color-text: #201e1a;
+  /* Two ink steps, as on the Nuxt site: dusk-700 for running text and UI
+     (13:1 on white), dusk-900 for headings, strong text and card titles. */
+  --color-text: #33312b;
+  --color-text-highlighted: #131210;
   --color-text-muted: #656158;
   /* Quietest text step; still >= 4.5:1 on bg and bg-elevated in both modes,
      since it is used at 10-12px (captions, search hints). */
@@ -119,6 +119,7 @@
   --color-bg-elevated: var(--color-dusk-900);
   --color-border: color-mix(in srgb, var(--color-dusk-800) 60%, transparent);
   --color-text: var(--color-dusk-50);
+  --color-text-highlighted: var(--color-dusk-50);
   --color-text-muted: var(--color-dusk-400);
   --color-text-dimmed: #848076;
   --color-accent: var(--color-vernaillen-500);
@@ -140,10 +141,14 @@
     background-color: var(--color-selection-bg);
     color: var(--color-selection-text);
   }
+  /* Headings never carry a `tracking-*` utility: this is the one place their
+     letter-spacing is set. Poppins is geometric and wide, so it is tracked
+     out rather than in. */
   h1, h2, h3, h4 {
-    font-family: var(--font-sans);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: -0.01em;
+    color: var(--color-text-highlighted);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: 0.05em;
     line-height: 1.2;
   }
   h1::after,
@@ -272,14 +277,14 @@
 
     & h2 {
       font-size: 1.5rem;
-      font-weight: var(--font-weight-semibold);
+      font-weight: 600;
       letter-spacing: -0.01em;
       margin-top: 2.5rem;
       margin-bottom: 1rem;
     }
     & h3 {
       font-size: 1.25rem;
-      font-weight: var(--font-weight-semibold);
+      font-weight: 600;
       letter-spacing: -0.01em;
       margin-top: 2rem;
       margin-bottom: 0.75rem;
@@ -294,7 +299,7 @@
       line-height: 1.75;
     }
     & strong {
-      color: var(--color-text);
+      color: var(--color-text-highlighted);
       font-weight: 600;
     }
     & a {

@@ -12,7 +12,7 @@ const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf()
 
 <Base title={data.title} description={data.description} path="/blog">
   <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-    <h1 class="fade-in text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+    <h1 class="fade-in text-3xl sm:text-5xl">{data.title}</h1>
     <p class="fade-in [--fade-delay:90ms] pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12">

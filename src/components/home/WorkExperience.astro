@@ -11,7 +11,7 @@ const { data } = Astro.props
 
 <div class="flex flex-col gap-4 rounded-lg border border-(--color-border) bg-(--color-bg-elevated)/40 p-6">
   <div class="flex flex-col gap-2">
-    <h2 class="section-title text-2xl sm:text-2xl lg:text-3xl tracking-tight">{data.experience.title}</h2>
+    <h2 class="section-title text-2xl sm:text-2xl lg:text-3xl">{data.experience.title}</h2>
   </div>
   <div class="flex flex-col gap-3">
     {data.experience.items.map((item) => (
@@ -20,7 +20,7 @@ const { data } = Astro.props
         <div class="hidden sm:block flex-1 border-t border-(--color-border)" />
         <a href={item.company.url} target="_blank" rel="noopener noreferrer" class="flex flex-wrap items-baseline gap-x-1 text-sm hover:text-(--color-text) transition-colors">
           <span>{item.position}</span>
-          <span class="text-(--color-text) font-medium inline-flex items-center gap-1">
+          <span class="text-(--color-text-highlighted) font-medium inline-flex items-center gap-1">
             {item.company.name}
             <Icon name={resolveIcon(item.company.logo)} style={{ color: item.company.color }} class="size-3.5 shrink-0" />
           </span>
