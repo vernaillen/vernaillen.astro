@@ -5,7 +5,7 @@ import tseslint from 'typescript-eslint'
 
 export default defineConfig(
   {
-    ignores: ['dist/**', '.astro/**', 'content/**/*.md'],
+    ignores: ['dist/**', '.astro/**', '.lighthouse/**', 'content/**/*.md'],
   },
   tseslint.configs.recommended,
   eslintPluginAstro.configs['flat/recommended'],

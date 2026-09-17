@@ -92,7 +92,9 @@
   --color-border: #dfddd6;
   --color-text: #131210;
   --color-text-muted: #656158;
-  --color-text-dimmed: #918d82;
+  /* Quietest text step; still >= 4.5:1 on bg and bg-elevated in both modes,
+     since it is used at 10-12px (captions, search hints). */
+  --color-text-dimmed: #75716a;
 }
 
 :root {
@@ -107,7 +109,7 @@
   --color-border: color-mix(in srgb, var(--color-dusk-800) 60%, transparent);
   --color-text: var(--color-dusk-50);
   --color-text-muted: var(--color-dusk-400);
-  --color-text-dimmed: var(--color-dusk-600);
+  --color-text-dimmed: #848076;
   --color-selection-bg: #474747;
   --color-selection-text: #ffffff;
 }
@@ -284,12 +286,17 @@
       font-weight: 600;
     }
     & a {
-      color: var(--color-vernaillen-500);
+      color: var(--color-vernaillen-700);
+      text-decoration: underline;
+      text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
       text-underline-offset: 4px;
-      text-decoration: none;
+      transition: text-decoration-color 150ms;
     }
     & a:hover {
-      text-decoration: underline;
+      text-decoration-color: currentColor;
+    }
+    .dark & a {
+      color: var(--color-vernaillen-500);
     }
     & blockquote {
       border-left: 2px solid var(--color-teal-500);
@@ -354,7 +361,6 @@
     margin-left: auto;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    opacity: 0.6;
   }
   .terminal-copy {
     position: absolute;
@@ -635,8 +641,11 @@
     margin-bottom: 1rem;
   }
   .fft-demo-attribution a {
-    color: var(--color-vernaillen-500);
+    color: var(--color-vernaillen-700);
     text-decoration: none;
+  }
+  .dark .fft-demo-attribution a {
+    color: var(--color-vernaillen-500);
   }
   .fft-demo-attribution a:hover {
     text-decoration: underline;

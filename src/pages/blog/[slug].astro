@@ -23,12 +23,12 @@ const image = await localImage(post.data.image.src)
 const authorAvatar = await localImage(post.data.author.avatar.src)
 const articleLink = new URL(`/blog/${post.id}`, site.url).toString()
 
-const socialIcons: Record<string, string> = {
-  mastodon: 'simple-icons:mastodon',
-  x: 'simple-icons:x',
-  bluesky: 'simple-icons:bluesky',
-  linkedin: 'simple-icons:linkedin',
-  github: 'simple-icons:github',
+const socialNetworks: Record<string, { icon: string; label: string }> = {
+  mastodon: { icon: 'simple-icons:mastodon', label: 'Mastodon' },
+  x: { icon: 'simple-icons:x', label: 'X' },
+  bluesky: { icon: 'simple-icons:bluesky', label: 'Bluesky' },
+  linkedin: { icon: 'simple-icons:linkedin', label: 'LinkedIn' },
+  github: { icon: 'simple-icons:github', label: 'GitHub' },
 }
 
 const articleSchema = {
@@ -99,8 +99,14 @@ const articleSchema = {
           <p class="mt-1.5 text-xs text-(--color-text-muted) leading-snug">Got thoughts on this post? Join the conversation:</p>
           <div class="mt-2.5 flex flex-wrap gap-2">
             {post.data.social.map((s) => (
-              <a href={s.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md bg-vernaillen-500/10 hover:bg-vernaillen-500/20 transition-colors size-8 text-vernaillen-500">
-                <Icon name={s.icon ? resolveIcon(s.icon) : (socialIcons[s.name] ?? `simple-icons:${s.name}`)} class="size-4" />
+              <a
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Join the conversation on ${socialNetworks[s.name]?.label ?? s.name}`}
+                class="inline-flex items-center justify-center rounded-md bg-vernaillen-500/10 hover:bg-vernaillen-500/20 transition-colors size-8 text-vernaillen-500"
+              >
+                <Icon name={s.icon ? resolveIcon(s.icon) : (socialNetworks[s.name]?.icon ?? `simple-icons:${s.name}`)} class="size-4" />
               </a>
             ))}
           </div>
@@ -109,13 +115,13 @@ const articleSchema = {
 
       <div class="flex items-center justify-end gap-2 mt-10 pt-6 border-t border-(--color-border)">
         <span class="font-mono text-xs text-(--color-text-muted) mr-1">share //</span>
-        <a href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(articleLink)}`} target="_blank" rel="noopener noreferrer" class="inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
+        <a href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(articleLink)}`} aria-label="Share on X" target="_blank" rel="noopener noreferrer" class="inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
           <Icon name="simple-icons:x" class="size-3.5" />
         </a>
-        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleLink)}`} target="_blank" rel="noopener noreferrer" class="inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleLink)}`} aria-label="Share on LinkedIn" target="_blank" rel="noopener noreferrer" class="inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
           <Icon name="simple-icons:linkedin" class="size-3.5" />
         </a>
-        <a href={`https://bsky.app/intent/compose?text=${encodeURIComponent(`${post.data.title} ${articleLink}`)}`} target="_blank" rel="noopener noreferrer" class="inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
+        <a href={`https://bsky.app/intent/compose?text=${encodeURIComponent(`${post.data.title} ${articleLink}`)}`} aria-label="Share on Bluesky" target="_blank" rel="noopener noreferrer" class="inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">
           <Icon name="simple-icons:bluesky" class="size-3.5" />
         </a>
         <button type="button" data-copy-link={articleLink} aria-label="Copy link" class="copy-btn inline-flex size-8 items-center justify-center rounded-md border border-(--color-border) hover:bg-(--color-bg-muted) transition-colors">

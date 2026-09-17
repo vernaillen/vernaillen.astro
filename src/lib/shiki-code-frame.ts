@@ -24,15 +24,43 @@ function el(tagName: string, properties: Properties, children: ElementContent[] 
   return { type: 'element', tagName, properties, children }
 }
 
+// Comment tokens in both Material themes sit under 3:1 against the code
+// background (#90A4AE on light, #676E95 on dark) and Lighthouse flags each
+// one. Astro's highlighter does not forward Shiki's `colorReplacements`, so
+// the swap happens on the emitted token styles instead; the replacements keep
+// the hue and reach 4.5:1.
+const COLOR_REPLACEMENTS: Record<string, string> = {
+  '#90a4ae': '#607079',
+  '#676e95': '#949bbd',
+}
+
+function replaceColor(value: string) {
+  return COLOR_REPLACEMENTS[value.toLowerCase()] ?? value
+}
+
 /**
  * Wraps Shiki's `<pre>` output in the terminal-style code frame used across
- * blog posts (dots + filename + language + copy button). Markup only this
- * pass — the copy-to-clipboard behaviour is a client script added later.
+ * blog posts (dots + filename + language + copy button) and lifts the
+ * low-contrast comment colour. Markup only this pass — the copy-to-clipboard
+ * behaviour is a client script added later.
  */
 export function shikiCodeFrame(): ShikiTransformer {
   return {
     name: 'terminal-code-frame',
+    tokens(lines) {
+      for (const line of lines) {
+        for (const token of line) {
+          if (!token.htmlStyle) continue
+          for (const [key, value] of Object.entries(token.htmlStyle)) token.htmlStyle[key] = replaceColor(value)
+        }
+      }
+    },
     pre(node) {
+      // The lighter theme's foreground is the same #90A4AE; unscoped tokens
+      // inherit it from here.
+      if (typeof node.properties.style === 'string') {
+        node.properties.style = node.properties.style.replace(/#[0-9a-f]{6}/gi, replaceColor)
+      }
       const raw = (this.options.meta?.__raw ?? '').trim()
       const filename = /\[(.+)\]/.exec(raw)?.[1]
       const lang = this.options.lang
