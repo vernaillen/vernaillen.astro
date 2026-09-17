@@ -2,7 +2,6 @@
 import { getEntry, render } from 'astro:content'
 import { Image } from 'astro:assets'
 import Base from '../layouts/Base.astro'
-import Eyebrow from '../components/Eyebrow.astro'
 import { localImage } from '../lib/images'
 import type { AboutPage } from '../content.config'
 
@@ -16,10 +15,9 @@ const images = await Promise.all(
 ---
 
 <Base title={data.title} description={data.description} path="/about">
-  <section class="mx-auto max-w-3xl px-4 sm:px-6 py-16 sm:py-24">
-    <Eyebrow index="01" label="about" />
-    <h1 class="pt-2 text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
-    <p class="pt-4 text-(--color-text-muted) max-w-xl">{data.description}</p>
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+    <h1 class="text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+    <p class="pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
 
     <div class="flex flex-wrap gap-6 pt-10 pb-4">
       {images.map((image, index) => image.asset && (

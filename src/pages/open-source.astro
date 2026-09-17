@@ -2,7 +2,6 @@
 import { getEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 import Base from '../layouts/Base.astro'
-import Eyebrow from '../components/Eyebrow.astro'
 import Button from '../components/Button.astro'
 import { authoredGroups, contributedProjects, type GitHubProject } from '../lib/github'
 import type { LinksPage } from '../content.config'
@@ -12,10 +11,9 @@ const data = page!.data as LinksPage
 ---
 
 <Base title={data.title} description={data.description} path="/open-source">
-  <section class="mx-auto max-w-5xl px-4 sm:px-6 py-16 sm:py-24">
-    <Eyebrow index="01" label="open source" />
-    <h1 class="pt-2 text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
-    <p class="pt-4 text-(--color-text-muted) max-w-2xl">{data.description}</p>
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+    <h1 class="text-3xl sm:text-5xl tracking-tight">{data.title}</h1>
+    <p class="pt-4 font-mono text-(--color-text-muted)">{data.description}</p>
 
     <div class="flex flex-wrap gap-2 pt-6">
       {data.links.map((link) => (

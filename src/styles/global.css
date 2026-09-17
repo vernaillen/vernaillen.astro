@@ -194,7 +194,6 @@
 
   /* Blog prose — constrained width, refined typography */
   .blog-prose {
-    max-width: 900px;
 
     & h2 {
       font-size: 1.5rem;
@@ -261,7 +260,7 @@
   /* Terminal-style code frame around Shiki output */
   .terminal-block {
     position: relative;
-    margin: 1.75rem 0;
+    margin: 1.75rem 0 1rem;
     border-radius: 0.5rem;
     overflow: hidden;
     border: 1px solid var(--color-border);
@@ -365,12 +364,12 @@
      fft-demo.ts swaps the poster for a canvas + controls on click. */
   .fft-demo-shell {
     position: relative;
-    margin: 1.75rem 0;
+    margin: 1.75rem 0 1rem;
     border-radius: 0.5rem;
     overflow: hidden;
     border: 1px solid var(--color-border);
   }
-  .fft-demo-shell[data-fft-demo] {
+  .fft-demo-shell[data-fft-stage] {
     aspect-ratio: 1200 / 630;
     background: #0a0a12;
   }

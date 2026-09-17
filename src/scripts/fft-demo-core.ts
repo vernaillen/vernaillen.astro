@@ -12,12 +12,11 @@ const SOMA = {
 
 type AudioSource = 'radio' | 'mic'
 
-// Same-origin `/api/radio` only exists on the old Nitro deploy; this static
-// site needs PUBLIC_RADIO_URL to point at an absolute proxy origin instead
-// (SomaFM 403s the Range header every <audio> fetch sends, so the stream must
-// go through a proxy that strips it — see the source project's radio.get.ts).
+// SomaFM 403s the Range header every <audio> fetch sends, so the stream goes
+// through a proxy that strips it (the Nuxt project's radio.get.ts).
+// PUBLIC_RADIO_URL overrides the proxy origin at build time.
 function resolveStreamUrl() {
-  return import.meta.env.PUBLIC_RADIO_URL || '/api/radio'
+  return import.meta.env.PUBLIC_RADIO_URL || 'https://radio.vernaillen.dev/api/radio'
 }
 
 interface DemoAudio {
@@ -215,9 +214,12 @@ function webglAvailable(): boolean {
 
 const sourceLabel: Record<AudioSource, string> = { radio: 'Play radio', mic: 'Microphone' }
 
-export function boot(shell: HTMLElement) {
-  shell.innerHTML = `
-    <canvas class="fft-demo-canvas"></canvas>
+export function boot(root: HTMLElement) {
+  // The stage keeps its fixed aspect ratio and overflow clipping, so the
+  // canvas lives there and the controls are appended as a sibling.
+  const stage = root.querySelector<HTMLElement>('[data-fft-stage]')!
+  stage.innerHTML = '<canvas class="fft-demo-canvas"></canvas>'
+  stage.insertAdjacentHTML('afterend', `
     <div class="fft-demo-controls">
       <button type="button" class="fft-demo-btn" data-source="radio">${sourceLabel.radio}</button>
       <button type="button" class="fft-demo-btn" data-source="mic">${sourceLabel.mic}</button>
@@ -229,12 +231,12 @@ export function boot(shell: HTMLElement) {
       <a href="https://somafm.com" target="_blank" rel="noopener noreferrer">SomaFM</a> ·
       <a href="${SOMA.support}" target="_blank" rel="noopener noreferrer">support them</a>
     </p>
-  `
+  `)
 
-  const canvas = shell.querySelector<HTMLCanvasElement>('.fft-demo-canvas')!
-  const status = shell.querySelector<HTMLParagraphElement>('.fft-demo-status')!
-  const select = shell.querySelector<HTMLSelectElement>('.fft-demo-preset')!
-  const buttons = [...shell.querySelectorAll<HTMLButtonElement>('[data-source]')]
+  const canvas = stage.querySelector<HTMLCanvasElement>('.fft-demo-canvas')!
+  const status = root.querySelector<HTMLParagraphElement>('.fft-demo-status')!
+  const select = root.querySelector<HTMLSelectElement>('.fft-demo-preset')!
+  const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-source]')]
 
   for (const preset of PRESETS) {
     const option = document.createElement('option')
@@ -244,7 +246,7 @@ export function boot(shell: HTMLElement) {
 
   if (!webglAvailable()) {
     status.textContent = 'Visualizer needs WebGL, which is not available in this browser.'
-    shell.querySelector('.fft-demo-controls')?.remove()
+    root.querySelector('.fft-demo-controls')?.remove()
     return
   }
 

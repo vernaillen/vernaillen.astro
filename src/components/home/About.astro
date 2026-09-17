@@ -13,7 +13,7 @@ const { data } = Astro.props
 
 <div class="flex flex-col gap-4">
   <div class="flex flex-col gap-4 rounded-lg border border-(--color-border) bg-(--color-bg-elevated)/40 p-6">
-    <SectionHeading index="01" eyebrow="about" title={data.about.title} />
+    <SectionHeading title={data.about.title} />
     <p class="text-sm text-(--color-text-muted) leading-relaxed" set:html={renderInlineMarkdown(data.about.description)} />
   </div>
   <div class="flex flex-wrap items-center gap-3 rounded-lg border border-(--color-border) bg-(--color-bg-elevated)/40 p-6">
