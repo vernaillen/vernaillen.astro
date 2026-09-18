@@ -28,7 +28,7 @@ const data = page!.data as LinksPage
         <SectionHeading title="Authored" description="Modules, tools, and starters I built and maintain." align="center" class="mx-auto" />
         {authoredGroups.map((group) => (
           <div>
-            <h3 class="mb-6 text-center text-lg font-semibold">{group.title}</h3>
+            <h3 class="mb-6 text-center text-xl sm:text-xl lg:text-2xl font-semibold">{group.title}</h3>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {group.projects.map((project: GitHubProject) => (
                 <Reveal class="h-full">

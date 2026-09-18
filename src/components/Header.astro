@@ -9,7 +9,7 @@ const pathname = new URL(Astro.request.url).pathname
 <header class="site-header sticky top-0 z-50 backdrop-blur-md bg-(--color-bg)/80 border-b border-(--color-border)">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-16 justify-between gap-4">
     <a href="/" aria-label="Wouter Vernaillen, home" class="shrink-0">
-      <svg viewBox="0 0 754 276" class="h-7 w-auto cursor-pointer" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+      <svg viewBox="0 0 754 276" class="h-8 w-auto cursor-pointer" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
         <g fill="none">
           <path class="fill-black dark:fill-vernaillen-500" d="M0 0 H92 V184 H172 V0 H264 V184 H344 V0 H436 V276 H0 Z" />
           <path class="fill-vernaillen-500 dark:fill-white" d="M490 0 H582 V184 H662 V0 H754 V276 H490 Z" />
@@ -65,7 +65,10 @@ const pathname = new URL(Astro.request.url).pathname
     </div>
   </div>
 
-  <nav data-menu-panel hidden class="md:hidden border-t border-(--color-border) px-4 py-3 flex flex-col gap-1 font-mono text-sm">
+  <!-- Overlay below the bar: the header is the containing block (sticky +
+       backdrop-filter), so the backdrop is positioned from it rather than fixed. -->
+  <div data-menu-backdrop hidden class="md:hidden absolute inset-x-0 top-full h-screen bg-black/20 dark:bg-black/50"></div>
+  <nav data-menu-panel hidden class="md:hidden absolute inset-x-0 top-full border-b border-(--color-border) bg-(--color-bg-elevated) shadow-lg px-4 py-3 flex flex-col gap-1 font-mono text-sm">
     {navLinks.map((link) => (
       <a
         href={link.href}
