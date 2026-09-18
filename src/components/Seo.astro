@@ -20,6 +20,7 @@ const fullTitle = path === '/' ? title : `${title} - ${site.name}`
 <meta name="description" content={description} />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <link rel="canonical" href={canonical} />
+<link rel="alternate" type="application/rss+xml" title={`${site.name} — Blog`} href="/rss.xml" />
 
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content={site.name} />
