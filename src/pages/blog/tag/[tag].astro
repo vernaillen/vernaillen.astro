@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content'
+import Base from '../../../layouts/Base.astro'
+import BlogPostCard from '../../../components/BlogPostCard.astro'
+import TagList from '../../../components/TagList.astro'
+import { collectTags } from '../../../lib/tags'
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  const tags = collectTags(posts)
+  return tags.map(({ tag, slug }) => ({
+    params: { tag: slug },
+    props: { tag, tags, posts: posts.filter((post) => post.data.tags.includes(tag)) },
+  }))
+}
+
+const { tag, tags, posts } = Astro.props
+const { tag: slug } = Astro.params
+const description = `${posts.length} ${posts.length === 1 ? 'post' : 'posts'} tagged "${tag}".`
+---
+
+<Base title={`${tag} posts`} description={description} path={`/blog/tag/${slug}`}>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-20">
+    <a href="/blog" data-astro-prefetch class="font-mono text-xs text-(--color-text-muted) flex items-center gap-1.5 hover:text-(--color-text) transition-colors">
+      <span class="text-vernaillen-500/70">&gt;_</span>
+      <span>blog</span>
+    </a>
+
+    <h1 class="fade-in mt-8 text-3xl sm:text-5xl">Tagged &ldquo;{tag}&rdquo;</h1>
+    <p class="fade-in [--fade-delay:90ms] pt-4 font-mono text-(--color-text-muted)">{description}</p>
+    <TagList tags={tags} active={tag} class="fade-in [--fade-delay:180ms] pt-6" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12">
+      {posts.map((post, index) => (
+        <BlogPostCard post={post} orientation="vertical" eager={index === 0} headingLevel="h2" />
+      ))}
+    </div>
+  </div>
+</Base>

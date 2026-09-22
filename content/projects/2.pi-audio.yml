@@ -1,0 +1,9 @@
+title: Pi Audio
+description: The control panel for the Raspberry Pi 5 that handles audio routing and DSP in my living room. A Nuxt app that switches between sources like Roon, AirPlay, Lyrion and Spotify, manages CamillaDSP configurations with a 10-band EQ, balance and crossfeed, and shows a server-side FFT spectrum. It runs on the Pi's touchscreen and in any browser in the house, and it is the project the FFT Visualizer grew out of. Home use only, so no public link.
+image: /images/projects/pi-audio.mp4
+video: true
+tags:
+  - Nuxt
+  - Audio
+  - Raspberry Pi
+date: 2026-06-01

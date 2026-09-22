@@ -1,0 +1,78 @@
+title: Toolbox
+description: The technologies I reach for, grouped by layer. Depth varies; breadth is the point.
+groups:
+  - title: Backend
+    items:
+      - label: Java
+        icon: i-simple-icons-openjdk
+        note: since 2000
+        featured: true
+      - label: Spring Boot
+        icon: i-simple-icons-spring
+        featured: true
+      - label: Spring Security
+      - label: Hibernate / JPA
+        icon: i-simple-icons-hibernate
+      - label: REST, GraphQL, SOAP APIs
+        icon: i-simple-icons-graphql
+        featured: true
+      - label: OpenAPI
+        icon: i-simple-icons-openapiinitiative
+      - label: PostgreSQL
+        icon: i-simple-icons-postgresql
+      - label: Oracle DB
+        icon: i-simple-icons-oracle
+  - title: Frontend
+    items:
+      - label: Vue
+        icon: i-simple-icons-vuedotjs
+        featured: true
+      - label: Nuxt
+        icon: i-simple-icons-nuxt
+        featured: true
+      - label: TypeScript
+        icon: i-simple-icons-typescript
+        featured: true
+      - label: Tailwind CSS
+        icon: i-simple-icons-tailwindcss
+      - label: Angular
+        icon: i-simple-icons-angular
+        featured: true
+  - title: DevOps & hosting
+    items:
+      - label: Docker
+        icon: i-simple-icons-docker
+        featured: true
+      - label: Kubernetes
+        icon: i-simple-icons-kubernetes
+        featured: true
+      - label: Jenkins
+        icon: i-simple-icons-jenkins
+        featured: true
+      - label: GitHub Actions
+        icon: i-simple-icons-githubactions
+      - label: Coolify
+        icon: i-simple-icons-coolify
+        note: self-hosted on Hetzner
+      - label: nginx
+        icon: i-simple-icons-nginx
+      - label: SonarQube
+        icon: i-simple-icons-sonarqube
+  - title: AI-enabled development
+    items:
+      - label: Claude Code
+        icon: i-simple-icons-claude
+        featured: true
+      - label: Hermes Agent
+      - label: MCP servers
+        featured: true
+      - label: Agentic workflows
+        featured: true
+      - label: AI-assisted code review
+  - title: Platforms & CMS
+    items:
+      - label: Headless WordPress (WPNuxt)
+        icon: i-simple-icons-wordpress
+        featured: true
+      - label: Liferay
+      - label: WebSphere Portal

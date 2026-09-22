@@ -9,6 +9,7 @@ import { formatPostDate } from '../../lib/date'
 import { localImage } from '../../lib/images'
 import { site, ogImagePath } from '../../lib/site'
 import { resolveIcon } from '../../lib/icons'
+import { slugify } from '../../lib/slug'
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -42,6 +43,7 @@ const articleSchema = {
   datePublished: post.data.date.toISOString(),
   dateModified: post.data.date.toISOString(),
   author: { '@type': 'Person', name: post.data.author.name },
+  ...(post.data.tags.length > 0 ? { keywords: post.data.tags.join(', ') } : {}),
 }
 ---
 
@@ -60,6 +62,22 @@ const articleSchema = {
         <span class="text-vernaillen-500/50">//</span>
         <span>{post.data.minRead} min read</span>
       </div>
+
+      {post.data.tags.length > 0 && (
+        <ul class="flex flex-wrap justify-center gap-2">
+          {post.data.tags.map((tag) => (
+            <li>
+              <a
+                href={`/blog/tag/${slugify(tag)}`}
+                data-astro-prefetch
+                class="inline-flex items-center rounded-lg bg-vernaillen-500/10 px-2 py-1 text-xs font-medium text-(--color-accent) transition-colors hover:bg-vernaillen-500/20"
+              >
+                {tag}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <h1 class="text-3xl sm:text-4xl text-center mx-auto leading-tight">{post.data.title}</h1>
       <p class="font-mono text-(--color-text-muted) text-center mx-auto text-base leading-relaxed">{post.data.description}</p>

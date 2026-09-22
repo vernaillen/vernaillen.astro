@@ -1,0 +1,66 @@
+---
+import { Icon } from 'astro-icon/components'
+import { resolveIcon } from '../lib/icons'
+import { slugify } from '../lib/slug'
+import type { ToolboxPage } from '../content.config'
+
+interface Props {
+  data: ToolboxPage
+  // The home page shows only the featured items in one dense block; the
+  // about page shows every item, with notes, as one card per group.
+  compact?: boolean
+}
+const { data, compact = false } = Astro.props
+
+const groups = data.groups.map((group) => {
+  const items = compact ? group.items.filter((item) => item.featured) : group.items
+  return { ...group, items, slug: slugify(group.title), hidden: group.items.length - items.length }
+})
+---
+
+{compact ? (
+  <div class="grid gap-px rounded-lg border border-(--color-border) overflow-hidden sm:grid-cols-2 lg:grid-cols-5 bg-(--color-border)">
+    {groups.map((group) => (
+      <div class="reveal flex flex-col gap-3 p-5 bg-(--color-bg) dark:bg-(--color-bg-elevated)/40">
+        <h3 class="font-mono text-xs text-(--color-text-muted)">
+          <span class="text-vernaillen-500/70">//</span> {group.title}
+        </h3>
+        <ul class="flex flex-wrap gap-1.5">
+          {group.items.map((item) => (
+            <li class="inline-flex items-center gap-1.5 rounded-lg bg-vernaillen-500/10 px-2 py-1 text-xs font-medium text-(--color-accent)">
+              {item.icon && <Icon name={resolveIcon(item.icon)} class="size-3.5" />}
+              {item.label}
+            </li>
+          ))}
+        </ul>
+        <a
+          href={`/about#toolbox-${group.slug}`}
+          data-astro-prefetch
+          aria-label={`All ${group.title} tools`}
+          class="mt-auto self-start font-mono text-xs text-(--color-text-muted) transition-colors hover:text-(--color-accent)"
+        >
+          {group.hidden > 0 ? `+${group.hidden} more` : 'more'} &rarr;
+        </a>
+      </div>
+    ))}
+  </div>
+) : (
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {groups.map((group) => (
+      <div id={`toolbox-${group.slug}`} class="reveal flex flex-col gap-4 rounded-lg border border-(--color-border) bg-(--color-bg-elevated)/40 p-5 scroll-mt-24">
+        <h3 class="font-mono text-xs text-(--color-text-muted)">
+          <span class="text-vernaillen-500/70">//</span> {group.title}
+        </h3>
+        <ul class="flex flex-wrap gap-1.5">
+          {group.items.map((item) => (
+            <li class="inline-flex items-center gap-1.5 rounded-lg bg-vernaillen-500/10 px-2 py-1 text-xs font-medium text-(--color-accent)">
+              {item.icon && <Icon name={resolveIcon(item.icon)} class="size-3.5" />}
+              {item.label}
+              {item.note && <span class="font-mono text-[10px] text-(--color-text-muted)">{item.note}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+)}

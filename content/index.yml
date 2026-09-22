@@ -120,6 +120,13 @@ testimonials:
       avatar:
         src: /images/testimonials/bjorn-minne.jpeg
         alt: Björn Minne
+  - quote: "Extremely skilled developer that delivers high output and excellent quality."
+    author:
+      name: "Davy Vanherbergen"
+      description: "IT Team Lead at UPM-Kymmene"
+      avatar:
+        src: /images/testimonials/davy-vanherbergen.jpeg
+        alt: Davy Vanherbergen
   - quote: "Wouter is a dedicated professional with who I had the pleasure to work with on two strategic projects at Van Marcke. He was the go to IT professional and project leader. I would recommend him without hesitation."
     author:
       name: "Philip Borremans"
@@ -134,6 +141,13 @@ testimonials:
       avatar:
         src: /images/testimonials/jonathan-bosmans.jpeg
         alt: Jonathan Bosmans
+  - quote: "I had the pleasure of working with Wouter on the IDEWE customer portal project. His calm, pleasant way of consulting is a real asset amid the rush of deadlines and unexpected issues. He has a sharp analytical mind and explains problems and solutions in plain language to the whole team, including the non-software people. He delivers exactly what is asked and thinks independently about alternatives to earlier decisions. I'm already looking forward to our next collaboration."
+    author:
+      name: "Kurt Eeckhout"
+      description: "Key Account Manager at Group Idewe"
+      avatar:
+        src: /images/testimonials/kurt-eeckhout.jpeg
+        alt: Kurt Eeckhout
 blog:
   title: "Latest Articles"
   description: "Thoughts on development, open source, and the tools I use"
@@ -148,7 +162,7 @@ faq:
             I specialize in full stack web development with Java/Spring backends and Nuxt/Vue frontends. This includes API development & integration, building modern web portals, setting up CI/CD pipelines, and DevOps with Docker and Kubernetes. I also build headless WordPress solutions using my open source WPNuxt module.
         - label: What is your tech stack?
           content: |
-            My primary stack is Java and Spring Framework on the backend, with Nuxt and Vue.js on the frontend. For DevOps I work with Docker, Kubernetes, and Jenkins. I deploy to Vercel for frontend projects and have extensive experience with Liferay portal platforms.
+            My primary stack is Java and Spring Boot on the backend, with Nuxt and Vue.js on the frontend. For DevOps I work with Docker, Kubernetes, Jenkins and GitHub Actions, and I self-host my own projects on Coolify. I have extensive previous experience with Liferay & WebSphere portal platforms. AI tooling like Claude Code and MCP servers is part of my daily workflow, with tests and CI keeping the output honest.
         - label: Do you work with startups or only enterprises?
           content: |
             Both! While much of my career has been in enterprise environments (government, large corporations), I also enjoy working with smaller teams and startups. My open source work on WPNuxt is a good example of building developer tools from the ground up.

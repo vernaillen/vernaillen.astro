@@ -1,0 +1,10 @@
+title: Radio
+description: A small Nuxt radio app that streams my favourite internet stations through a same-origin proxy, with a live audioMotion spectrum analyzer. Its /api/radio endpoint also feeds the FFT demo on this page.
+image: /images/projects/radio.png
+website: https://radio.vernaillen.dev/
+code: https://github.com/vernaillen/radio.vernaillen.dev
+tags:
+  - Nuxt
+  - Audio
+  - Self-hosted
+date: 2023-07-01

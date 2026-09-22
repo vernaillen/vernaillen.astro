@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getCollection, getEntry } from 'astro:content'
 import { site } from '../lib/site'
-import type { IndexPage, CareerPage } from '../content.config'
+import type { IndexPage, CareerPage, ToolboxPage } from '../content.config'
 
 export const GET: APIRoute = async () => {
   const contents: string[] = []
@@ -48,6 +48,16 @@ export const GET: APIRoute = async () => {
     contents.push(`# About\n\nSource: ${site.url}/about\n\n${aboutEntry.body.trim()}`)
   }
 
+  const toolboxEntry = await getEntry('pages', 'toolbox')
+  const toolbox = toolboxEntry?.data as ToolboxPage
+  if (toolbox?.groups?.length) {
+    const lines = toolbox.groups.map((group) => {
+      const items = group.items.map((item) => (item.note ? `${item.label} (${item.note})` : item.label))
+      return `- **${group.title}**: ${items.join(', ')}`
+    })
+    contents.push(`# ${toolbox.title}\n\nSource: ${site.url}/about\n\n${toolbox.description}\n\n${lines.join('\n')}`)
+  }
+
   const careerEntry = await getEntry('pages', 'career')
   const career = careerEntry?.data as CareerPage
   if (career?.events?.length) {
@@ -62,7 +72,8 @@ export const GET: APIRoute = async () => {
     const blocks = sorted.map((p) => {
       const tags = p.data.tags.length ? `\n\nTags: ${p.data.tags.join(', ')}` : ''
       const code = p.data.code ? `\n\nCode: ${p.data.code}` : ''
-      return `## [${p.data.title}](${p.data.website})\n\n${p.data.description}${tags}${code}`
+      const heading = p.data.website ? `[${p.data.title}](${p.data.website})` : p.data.title
+      return `## ${heading}\n\n${p.data.description}${tags}${code}`
     })
     contents.push(`# Projects\n\nSource: ${site.url}/projects\n\n${blocks.join('\n\n')}`)
   }
@@ -72,7 +83,8 @@ export const GET: APIRoute = async () => {
     const blocks = posts.map((post) => {
       const url = `${site.url}/blog/${post.id}`
       const body = post.body?.trim() ?? ''
-      return `## [${post.data.title}](${url})\n\nSource: ${url}\n\n${post.data.description}\n\n${body}`
+      const tags = post.data.tags.length ? `\n\nTags: ${post.data.tags.join(', ')}` : ''
+      return `## [${post.data.title}](${url})\n\nSource: ${url}\n\n${post.data.description}${tags}\n\n${body}`
     })
     contents.push(`# Blog\n\nSource: ${site.url}/blog\n\n${blocks.join('\n\n')}`)
   }

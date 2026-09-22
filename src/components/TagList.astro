@@ -1,0 +1,27 @@
+---
+import { slugify } from '../lib/slug'
+import type { TagSummary } from '../lib/tags'
+
+interface Props {
+  tags: TagSummary[]
+  active?: string
+  class?: string
+}
+const { tags, active, class: className } = Astro.props
+---
+
+<ul class:list={['flex flex-wrap gap-2', className]}>
+  {tags.map(({ tag, slug, count }) => (
+    <li>
+      <a
+        href={`/blog/tag/${slug}`}
+        data-astro-prefetch
+        aria-current={active && slugify(active) === slug ? 'page' : undefined}
+        class="inline-flex items-center gap-1.5 rounded-lg border border-(--color-border) px-2.5 py-1 text-xs font-medium text-(--color-text-muted) transition-colors hover:border-vernaillen-500/50 hover:text-(--color-text) aria-[current=page]:border-vernaillen-500/60 aria-[current=page]:bg-vernaillen-500/10 aria-[current=page]:text-(--color-accent)"
+      >
+        {tag}
+        <span class="font-mono text-[10px] opacity-70">{count}</span>
+      </a>
+    </li>
+  ))}
+</ul>

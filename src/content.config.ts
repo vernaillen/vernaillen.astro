@@ -42,6 +42,7 @@ const blog = defineCollection({
         }),
       )
       .optional(),
+    tags: z.array(z.string()).default([]),
   }),
 })
 
@@ -55,7 +56,7 @@ const projects = defineCollection({
     title: z.string(),
     description: z.string(),
     image: z.string(),
-    website: z.string(),
+    website: z.string().optional(),
     code: z.string().optional(),
     tags: z.array(z.string()),
     date: z.coerce.date(),
@@ -142,6 +143,26 @@ const careerSchema = z
   })
   .strict()
 
+const toolboxSchema = z
+  .object({
+    title: z.string(),
+    description: z.string(),
+    groups: z.array(
+      z.object({
+        title: z.string(),
+        items: z.array(
+          z.object({
+            label: z.string(),
+            icon: z.string().optional(),
+            note: z.string().optional(),
+            featured: z.boolean().optional(),
+          }),
+        ),
+      }),
+    ),
+  })
+  .strict()
+
 const linksPageSchema = z
   .object({
     title: z.string(),
@@ -159,13 +180,14 @@ const blogMetaSchema = z
 
 const pages = defineCollection({
   loader: glob({ pattern: '*.{yml,md}', base: './content' }),
-  schema: z.union([aboutSchema, indexSchema, careerSchema, linksPageSchema, blogMetaSchema]),
+  schema: z.union([aboutSchema, indexSchema, careerSchema, toolboxSchema, linksPageSchema, blogMetaSchema]),
 })
 
 export const collections = { blog, projects, pages }
 
 export type IndexPage = z.infer<typeof indexSchema>
 export type CareerPage = z.infer<typeof careerSchema>
+export type ToolboxPage = z.infer<typeof toolboxSchema>
 export type AboutPage = z.infer<typeof aboutSchema>
 export type LinksPage = z.infer<typeof linksPageSchema>
 export type BlogMeta = z.infer<typeof blogMetaSchema>

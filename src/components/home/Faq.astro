@@ -1,0 +1,58 @@
+---
+import { Icon } from 'astro-icon/components'
+import SectionHeading from '../SectionHeading.astro'
+import JsonLd from '../JsonLd.astro'
+import { renderInlineMarkdown } from '../../lib/inline-markdown'
+import type { IndexPage } from '../../content.config'
+
+interface Props {
+  data: IndexPage
+}
+const { data } = Astro.props
+const { faq } = data
+
+// FAQPage rich results want plain text; the answers only use markdown links.
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.categories.flatMap((category) =>
+    category.questions.map((question) => ({
+      '@type': 'Question',
+      name: question.label,
+      acceptedAnswer: { '@type': 'Answer', text: stripMarkdown(question.content) },
+    })),
+  ),
+}
+---
+
+<JsonLd data={faqSchema} />
+
+<div class="flex flex-col gap-10">
+  <SectionHeading title={faq.title} description={faq.description} align="center" class="reveal mx-auto" />
+  <div class="grid gap-8 lg:grid-cols-3">
+    {faq.categories.map((category) => (
+      <div class="reveal flex flex-col">
+        <h3 class="font-mono text-xs text-(--color-text-muted) pb-2">
+          <span class="text-vernaillen-500/70">//</span> {category.title}
+        </h3>
+        {category.questions.map((question) => (
+          <details class="group border-t border-(--color-border) py-3 last:border-b">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-medium text-(--color-text) [&::-webkit-details-marker]:hidden">
+              {question.label}
+              <Icon name="lucide:chevron-down" class="size-4 shrink-0 text-(--color-text-muted) transition-transform group-open:rotate-180" />
+            </summary>
+            <p class="pt-3 text-sm text-(--color-text-muted) leading-relaxed" set:html={renderInlineMarkdown(question.content)} />
+          </details>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>

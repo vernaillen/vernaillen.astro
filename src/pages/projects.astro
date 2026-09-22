@@ -15,10 +15,13 @@ const data = page!.data as LinksPage
 const projects = (await getCollection('projects')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 
 const fftPoster = await localImage('/images/fft-demo-poster.png')
-const videoPoster = await localImage('/images/projects/vue-audiomotion-analyzer-poster.png')
 
+// A video project ships `<name>.mp4` + `<name>.webm` in public/ and a
+// `<name>-poster.png` raster next to the other project images.
 const cardImages = await Promise.all(
-  projects.map(async (project) => (project.data.video ? undefined : await localImage(project.data.image))),
+  projects.map(async (project) =>
+    localImage(project.data.video ? project.data.image.replace(/\.mp4$/, '-poster.png') : project.data.image),
+  ),
 )
 ---
 
@@ -54,7 +57,9 @@ const cardImages = await Promise.all(
                 {project.data.code && (
                   <Button label="View code" to={project.data.code} target="_blank" icon="i-simple-icons-github" variant="outline" size="sm" />
                 )}
-                <Button label="View website" to={project.data.website} target="_blank" icon="i-lucide-arrow-up-right" variant="outline" size="sm" />
+                {project.data.website && (
+                  <Button label="View website" to={project.data.website} target="_blank" icon="i-lucide-arrow-up-right" variant="outline" size="sm" />
+                )}
               </div>
               <Fragment set:html={fftControlsHtml()} />
             </div>
@@ -66,10 +71,17 @@ const cardImages = await Promise.all(
           id={project.id}
           class:list={['flex flex-col gap-4 sm:gap-8 sm:items-center', index % 2 === 1 ? 'sm:flex-row-reverse' : 'sm:flex-row']}
         >
-          <a href={project.data.website} target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true" class="sm:w-1/2 shrink-0">
+          <a
+            href={project.data.website}
+            target={project.data.website ? '_blank' : undefined}
+            rel={project.data.website ? 'noopener noreferrer' : undefined}
+            tabindex="-1"
+            aria-hidden="true"
+            class="sm:w-1/2 shrink-0"
+          >
             {project.data.video ? (
               <div class="video-shell" data-project-video>
-                {videoPoster && <Image src={videoPoster} alt={project.data.title} width={640} height={192} format="avif" class="video-poster" />}
+                {cardImages[index] && <Image src={cardImages[index]!} alt={project.data.title} width={640} height={192} format="avif" class="video-poster" />}
                 <video muted loop playsinline preload="none" aria-hidden="true" width="640" height="192" class="video-el">
                   <source src={project.data.image.replace(/\.mp4$/, '.webm')} type="video/webm" />
                   <source src={project.data.image} type="video/mp4" />
@@ -95,7 +107,9 @@ const cardImages = await Promise.all(
               {project.data.code && (
                 <Button label="View code" to={project.data.code} target="_blank" icon="i-simple-icons-github" variant="outline" size="sm" />
               )}
-              <Button label="View website" to={project.data.website} target="_blank" icon="i-lucide-arrow-up-right" variant="outline" size="sm" />
+              {project.data.website && (
+                <Button label="View website" to={project.data.website} target="_blank" icon="i-lucide-arrow-up-right" variant="outline" size="sm" />
+              )}
             </div>
           </div>
         </div>
