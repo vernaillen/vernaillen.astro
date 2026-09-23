@@ -23,29 +23,29 @@
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
     "@fontsource/poppins": "^5.3.0",
-    "@iconify-json/lucide": "^1.2.129",
-    "@iconify-json/simple-icons": "^1.2.94",
+    "@iconify-json/lucide": "^1.2.135",
+    "@iconify-json/simple-icons": "^1.2.97",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.3.1",
+    "astro": "^7.3.3",
     "astro-icon": "^1.2.0",
     "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@astrojs/markdown-remark": "^7.3.0",
+    "@astrojs/markdown-remark": "^7.3.1",
     "@fontsource/geist": "^5.3.0",
     "@resvg/resvg-js": "^2.6.2",
     "@types/hast": "^3.0.5",
     "@types/mdast": "^4.0.4",
-    "eslint": "^10.10.0",
-    "eslint-plugin-astro": "^3.1.0",
+    "eslint": "^10.11.0",
+    "eslint-plugin-astro": "^3.2.1",
     "mdast-util-to-hast": "^13.2.1",
     "satori": "^0.33.4",
     "shiki": "^4.4.3",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.69.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.1",
     "unist-util-visit": "^5.1.0"
   },
-  "packageManager": "pnpm@12.4.2"
+  "packageManager": "pnpm@12.5.1"
 }

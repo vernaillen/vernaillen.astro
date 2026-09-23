@@ -20,7 +20,7 @@ const { tags, active, class: className } = Astro.props
         class="inline-flex items-center gap-1.5 rounded-lg border border-(--color-border) px-2.5 py-1 text-xs font-medium text-(--color-text-muted) transition-colors hover:border-vernaillen-500/50 hover:text-(--color-text) aria-[current=page]:border-vernaillen-500/60 aria-[current=page]:bg-vernaillen-500/10 aria-[current=page]:text-(--color-accent)"
       >
         {tag}
-        <span class="font-mono text-[10px] opacity-70">{count}</span>
+        <span class="font-mono text-[10px]">{count}</span>
       </a>
     </li>
   ))}
