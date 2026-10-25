@@ -7,8 +7,12 @@ FROM node:26-alpine AS build
 WORKDIR /app
 # Node 25+ no longer bundles Corepack; pin the pnpm major from pnpm-lock.yaml.
 RUN npm install -g pnpm@12
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install --frozen-lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+# @vernaillen/* comes from private GitHub Packages. pnpm ignores tokens in the
+# repository's .npmrc, so the BuildKit secret is passed as config to this
+# command only and never lands in a layer.
+RUN --mount=type=secret,id=github_packages_token,env=GITHUB_PACKAGES_TOKEN,required=true \
+    env "npm_config_//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}" pnpm install --frozen-lockfile
 COPY . .
 # Build-time only; this stage is discarded. PUBLIC_RADIO_URL is baked into
 # src/scripts/fft-demo-core.ts. The GitHub token (src/lib/github.ts, snapshot

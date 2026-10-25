@@ -26,6 +26,7 @@
     "@iconify-json/lucide": "^1.2.147",
     "@iconify-json/simple-icons": "^1.2.100",
     "@tailwindcss/vite": "^4.3.3",
+    "@vernaillen/astro-footer": "^0.1.0",
     "astro": "^7.4.1",
     "astro-icon": "^1.2.0",
     "sharp": "^0.35.5",

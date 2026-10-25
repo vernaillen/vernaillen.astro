@@ -6,3 +6,6 @@ allowBuilds:
   esbuild: true
   sharp: true
   '@resvg/resvg-js': true
+
+minimumReleaseAgeExclude:
+  - '@vernaillen/astro-footer@0.1.0'

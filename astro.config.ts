@@ -5,6 +5,7 @@ import { defineConfig } from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
 import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
+import vernaillenFooter from '@vernaillen/astro-footer'
 import { unified } from '@astrojs/markdown-remark'
 import { remarkImageAttrs, remarkLocalImages, remarkFftDemoBlock } from './src/lib/markdown'
 import { shikiCodeFrame } from './src/lib/shiki-code-frame'
@@ -89,6 +90,7 @@ export default defineConfig({
       },
     }),
     pruneUnreferencedImageOriginals(),
+    vernaillenFooter(),
   ],
   markdown: {
     shikiConfig: {
