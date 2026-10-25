@@ -45,3 +45,19 @@ jobs:
       coolify-url: ${{ vars.COOLIFY_URL }}
       coolify-app-uuid: ${{ vars.COOLIFY_APP_UUID }}
     secrets: inherit
+
+  # TEMPORARY: the install 401s in CI with a token that works locally. Remove
+  # once the cause is known.
+  debug-packages:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - env:
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+          ACTIONS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          url=https://npm.pkg.github.com/@vernaillen%2Fastro-footer
+          echo "PACKAGES_TOKEN length ${#PACKAGES_TOKEN}, prefix ${PACKAGES_TOKEN:0:4}"
+          curl -s -o /dev/null -w "PACKAGES_TOKEN: HTTP %{http_code}\n" -H "Authorization: Bearer ${PACKAGES_TOKEN}" "$url"
+          curl -s -o /dev/null -w "GITHUB_TOKEN:   HTTP %{http_code}\n" -H "Authorization: Bearer ${ACTIONS_TOKEN}" "$url"
