@@ -9,10 +9,13 @@ WORKDIR /app
 RUN npm install -g pnpm@12
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 # @vernaillen/* comes from private GitHub Packages. pnpm ignores tokens in the
-# repository's .npmrc, so the BuildKit secret is passed as config to this
-# command only and never lands in a layer.
+# repository's .npmrc and, on Linux, an npm_config_ environment variable too,
+# so the BuildKit secret goes in the user-level ~/.npmrc for this one step and
+# is removed before the layer is committed (a failed step commits no layer).
 RUN --mount=type=secret,id=github_packages_token,env=GITHUB_PACKAGES_TOKEN,required=true \
-    env "npm_config_//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}" pnpm install --frozen-lockfile
+    echo "//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}" > /root/.npmrc \
+    && pnpm install --frozen-lockfile \
+    && rm /root/.npmrc
 COPY . .
 # Build-time only; this stage is discarded. PUBLIC_RADIO_URL is baked into
 # src/scripts/fft-demo-core.ts. The GitHub token (src/lib/github.ts, snapshot
