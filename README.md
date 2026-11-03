@@ -57,4 +57,4 @@ pnpm docker:preview   # build the image and serve it on http://localhost:8080
 
 ## License
 
-[MIT](./LICENSE)
+[MIT](./LICENSE). Changes land on `main` through pull requests.
