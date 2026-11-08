@@ -9,10 +9,13 @@ name: ci
 # `pnpm lint && pnpm typecheck && pnpm build`. Adding or reordering a check is
 # a package.json change and needs no edit to any workflow.
 #
-# Repository configuration (Settings -> Secrets and variables -> Actions), all
-# set by vernaillen/workflows/scripts/configure-repo.sh:
-#   Secrets:   REGISTRY_USERNAME, REGISTRY_PASSWORD  registry on Coolify
+# Repository configuration, all set by
+# vernaillen/workflows/scripts/configure-repo.sh:
+#   Environment `production` (Settings -> Environments), main only, so a
+#   branch never sees the deploy credentials:
+#              REGISTRY_USERNAME, REGISTRY_PASSWORD  registry on Coolify
 #              COOLIFY_TOKEN                         deploy permission
+#   Secrets (Settings -> Secrets and variables -> Actions):
 #              BUILD_SECRETS                         github_token=<read-only PAT>;
 #                                                    mounted into the build, never
 #                                                    stored in a layer
