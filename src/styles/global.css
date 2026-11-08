@@ -284,19 +284,27 @@
 
   /* Blog prose — constrained width, refined typography */
   .blog-prose {
+    font-size: 1.0625rem;
+
+    & hr {
+      border-color: var(--color-border);
+      margin-block: 2.5rem;
+    }
 
     & h2 {
-      font-size: 1.5rem;
+      font-size: 1.625rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
-      margin-top: 2.5rem;
+      letter-spacing: 0;
+      line-height: 1.3;
+      margin-top: 3.5rem;
       margin-bottom: 1rem;
     }
     & h3 {
       font-size: 1.25rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
-      margin-top: 2rem;
+      letter-spacing: 0;
+      line-height: 1.35;
+      margin-top: 2.5rem;
       margin-bottom: 0.75rem;
     }
     & p {
@@ -304,9 +312,25 @@
       line-height: 1.75;
       margin-bottom: 1.25rem;
     }
+    & ul,
+    & ol {
+      padding-left: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    & ul {
+      list-style: disc;
+    }
+    & ol {
+      list-style: decimal;
+    }
     & li {
       color: var(--color-text-muted);
       line-height: 1.75;
+      margin-top: 0.5rem;
+      padding-left: 0.25rem;
+    }
+    & li::marker {
+      color: var(--color-vernaillen-500);
     }
     & strong {
       color: var(--color-text-highlighted);
@@ -323,7 +347,7 @@
       text-decoration-color: currentColor;
     }
     & blockquote {
-      border-left: 2px solid var(--color-teal-500);
+      border-left: 2px solid var(--color-vernaillen-500);
       padding-left: 1rem;
       margin: 1.5rem 0;
       font-style: italic;
@@ -334,10 +358,17 @@
     & :not(pre) > code {
       font-family: var(--font-mono);
       font-size: 0.85em;
-      color: var(--color-vernaillen-400);
+      color: var(--color-accent);
       background: color-mix(in srgb, var(--color-vernaillen-500) 8%, transparent);
       padding: 0.15em 0.4em;
       border-radius: 0.25rem;
+    }
+    & a > code {
+      text-decoration: inherit;
+      text-underline-offset: 4px;
+    }
+    & a:hover > code {
+      text-decoration-color: currentColor;
     }
   }
   .dark .blog-prose :not(pre) > code {
@@ -346,7 +377,7 @@
   }
   .dark .blog-prose p,
   .dark .blog-prose li {
-    color: color-mix(in srgb, var(--color-dusk-50) 90%, var(--color-dusk-950));
+    color: var(--color-dusk-300);
   }
 
   /* Terminal-style code frame around Shiki output */
