@@ -379,6 +379,15 @@
   .dark .blog-prose li {
     color: var(--color-dusk-300);
   }
+  .blog-prose img.diagram {
+    margin-inline: auto;
+    @variant sm {
+      width: 50%;
+    }
+  }
+  .dark .blog-prose img.invert-dark {
+    filter: invert(1) hue-rotate(180deg);
+  }
 
   /* Terminal-style code frame around Shiki output */
   .terminal-block {
