@@ -10,6 +10,7 @@ import { localImage } from '../../lib/images'
 import { site, ogImagePath } from '../../lib/site'
 import { resolveIcon } from '../../lib/icons'
 import { slugify } from '../../lib/slug'
+import { repliesSource } from '../../lib/social-counts'
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -127,17 +128,23 @@ const articleSchema = {
           </p>
           <p class="mt-1.5 text-xs text-(--color-text-muted) leading-snug">Got thoughts on this post? Join the conversation:</p>
           <div class="mt-2.5 flex flex-wrap gap-2">
-            {post.data.social.map((s) => (
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Join the conversation on ${socialNetworks[s.name]?.label ?? s.name}`}
-                class="inline-flex items-center justify-center rounded-md bg-vernaillen-500/10 hover:bg-vernaillen-500/20 transition-colors size-8 text-(--color-accent)"
-              >
-                <Icon name={s.icon ? resolveIcon(s.icon) : (socialNetworks[s.name]?.icon ?? `simple-icons:${s.name}`)} class="size-4" />
-              </a>
-            ))}
+            {post.data.social.map((s) => {
+              const replies = repliesSource(s.url)
+              return (
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Join the conversation on ${socialNetworks[s.name]?.label ?? s.name}`}
+                  data-replies-url={replies?.url}
+                  data-replies-field={replies?.field}
+                  class="inline-flex items-center justify-center gap-1.5 rounded-md bg-vernaillen-500/10 hover:bg-vernaillen-500/20 transition-colors h-8 min-w-8 px-2 text-(--color-accent)"
+                >
+                  <Icon name={s.icon ? resolveIcon(s.icon) : (socialNetworks[s.name]?.icon ?? `simple-icons:${s.name}`)} class="size-4" />
+                  {replies && <span data-replies-count hidden class="font-mono text-xs" />}
+                </a>
+              )
+            })}
           </div>
         </div>
       )}
@@ -204,4 +211,5 @@ const articleSchema = {
 <script src="../../scripts/copy-link.ts"></script>
 <script src="../../scripts/toc.ts"></script>
 <script src="../../scripts/lightbox.ts"></script>
+{post.data.social?.some((s) => repliesSource(s.url)) && <script src="../../scripts/social-counts.ts"></script>}
 {post.body?.includes('::fft-visualizer-demo') && <script src="../../scripts/fft-demo.ts"></script>}
