@@ -138,10 +138,10 @@ const articleSchema = {
                   aria-label={`Join the conversation on ${socialNetworks[s.name]?.label ?? s.name}`}
                   data-replies-url={replies?.url}
                   data-replies-field={replies?.field}
-                  class="inline-flex items-center justify-center gap-1.5 rounded-md bg-vernaillen-500/10 hover:bg-vernaillen-500/20 transition-colors h-8 min-w-8 px-2 text-(--color-accent)"
+                  class="relative inline-flex size-8 items-center justify-center rounded-md bg-vernaillen-500/10 hover:bg-vernaillen-500/20 transition-colors text-(--color-accent)"
                 >
                   <Icon name={s.icon ? resolveIcon(s.icon) : (socialNetworks[s.name]?.icon ?? `simple-icons:${s.name}`)} class="size-4" />
-                  {replies && <span data-replies-count hidden class="font-mono text-xs" />}
+                  {replies && <span data-replies-count hidden class="absolute -top-1.5 -right-1.5 min-w-4 h-4 px-1 rounded-full bg-(--color-text-highlighted) text-(--color-bg) font-mono text-[10px] font-semibold leading-4 text-center" />}
                 </a>
               )
             })}
