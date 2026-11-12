@@ -9,16 +9,18 @@ name: ci
 # `pnpm lint && pnpm typecheck && pnpm build`. Adding or reordering a check is
 # a package.json change and needs no edit to any workflow.
 #
-# Repository configuration, all set by
-# vernaillen/workflows/scripts/configure-repo.sh:
+# Repository configuration, set by vernaillen/workflows/scripts/configure-repo.sh
+# except BUILD_SECRETS, which that script would make a repository secret:
 #   Environment `production` (Settings -> Environments), main only, so a
-#   branch never sees the deploy credentials:
+#   branch never sees a secret. This repository has no repository secrets.
 #              REGISTRY_USERNAME, REGISTRY_PASSWORD  registry on Coolify
 #              COOLIFY_TOKEN                         deploy permission
-#   Secrets (Settings -> Secrets and variables -> Actions):
 #              BUILD_SECRETS                         github_token=<read-only PAT>;
 #                                                    mounted into the build, never
-#                                                    stored in a layer
+#                                                    stored in a layer; branch
+#                                                    builds use the snapshot
+#   @vernaillen/astro-footer is installed with the run's own GITHUB_TOKEN: the
+#   package grants this repository Read under "Manage Actions access".
 #   Variables: COOLIFY_URL, COOLIFY_APP_UUID         which app to redeploy
 #              RADIO_ORIGIN_URL                      public stream proxy URL
 
