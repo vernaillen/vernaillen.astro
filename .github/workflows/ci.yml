@@ -19,8 +19,6 @@ name: ci
 #                                                    mounted into the build, never
 #                                                    stored in a layer; branch
 #                                                    builds use the snapshot
-#   @vernaillen/astro-footer is installed with the run's own GITHUB_TOKEN: the
-#   package grants this repository Read under "Manage Actions access".
 #   Variables: COOLIFY_URL, COOLIFY_APP_UUID         which app to redeploy
 #              RADIO_ORIGIN_URL                      public stream proxy URL
 
