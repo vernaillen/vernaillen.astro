@@ -9,3 +9,9 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - '@vernaillen/astro-footer@0.1.0'
+
+# 2.0.0-beta.2 of the emnapi runtime breaks `astro check` (setLastError is not a function)
+overrides:
+  '@emnapi/core': '^1.11.3'
+  '@emnapi/runtime': '^1.11.3'
+  '@emnapi/wasi-threads': '^1.2.3'
